@@ -77,7 +77,7 @@ public class NewsFragment extends BaseFragment {
      */
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_news;
+        return R.layout.fragment_event;
     }
 
     /**
