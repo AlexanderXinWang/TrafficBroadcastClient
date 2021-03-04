@@ -132,7 +132,7 @@ public class NewsFragment extends BaseFragment {
         };
 
         //资讯
-        mNewsAdapter = new BroccoliSimpleDelegateAdapter<NewInfo>(R.layout.adapter_news_card_view_list_item, new LinearLayoutHelper(), DemoDataProvider.getEmptyNewInfo()) {
+        mNewsAdapter = new BroccoliSimpleDelegateAdapter<NewInfo>(R.layout.adapter_event_card_view_list_item, new LinearLayoutHelper(), DemoDataProvider.getEmptyNewInfo()) {
             @Override
             protected void onBindData(RecyclerViewHolder holder, NewInfo model, int position) {
                 if (model != null) {
@@ -140,10 +140,10 @@ public class NewsFragment extends BaseFragment {
                     holder.text(R.id.tv_tag, model.getTag());
                     holder.text(R.id.tv_title, model.getTitle());
                     holder.text(R.id.tv_summary, model.getSummary());
-                    holder.text(R.id.tv_praise, model.getPraise() == 0 ? "点赞" : String.valueOf(model.getPraise()));
-                    holder.text(R.id.tv_comment, model.getComment() == 0 ? "评论" : String.valueOf(model.getComment()));
-                    holder.text(R.id.tv_read, "阅读量 " + model.getRead());
-                    holder.image(R.id.iv_image, model.getImageUrl());
+//                    holder.text(R.id.tv_praise, model.getPraise() == 0 ? "点赞" : String.valueOf(model.getPraise()));
+//                    holder.text(R.id.tv_comment, model.getComment() == 0 ? "评论" : String.valueOf(model.getComment()));
+//                    holder.text(R.id.tv_read, "阅读量 " + model.getRead());
+//                    holder.image(R.id.iv_image, model.getImageUrl());
 
                     holder.click(R.id.card_view, v -> Utils.goWeb(getContext(), model.getDetailUrl()));
                 }
@@ -155,11 +155,11 @@ public class NewsFragment extends BaseFragment {
                         holder.findView(R.id.tv_user_name),
                         holder.findView(R.id.tv_tag),
                         holder.findView(R.id.tv_title),
-                        holder.findView(R.id.tv_summary),
-                        holder.findView(R.id.tv_praise),
-                        holder.findView(R.id.tv_comment),
-                        holder.findView(R.id.tv_read),
-                        holder.findView(R.id.iv_image)
+                        holder.findView(R.id.tv_summary)
+//                        holder.findView(R.id.tv_praise),
+//                        holder.findView(R.id.tv_comment),
+//                        holder.findView(R.id.tv_read),
+//                        holder.findView(R.id.iv_image)
                 );
             }
         };

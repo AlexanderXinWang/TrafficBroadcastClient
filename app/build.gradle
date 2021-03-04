@@ -44,7 +44,9 @@ android {
             keyPassword "123456"
         }
     }
-
+    lintOptions {
+        abortOnError false
+    }
     buildTypes {
         release {
             minifyEnabled true

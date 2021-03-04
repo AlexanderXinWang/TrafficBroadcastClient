@@ -61,7 +61,7 @@
                     style="@style/TextStyle.Explain"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginStart="4dp"
-                    android:text="xuexiangjys"
+                    android:text="周星星"
                     android:textColor="@color/xui_config_color_pure_black" />
             </LinearLayout>
 
@@ -69,14 +69,14 @@
                 android:id="@+id/tv_tag"
                 style="@style/TextStyle.Explain"
                 android:layout_gravity="end|center_vertical"
-                android:text="Java" />
+                android:text="09:04" />
 
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:baselineAligned="false" android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -120,7 +120,7 @@
 
         </LinearLayout>
 
-        <FrameLayout
+        <!--<FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp">
@@ -165,7 +165,7 @@
                 android:layout_gravity="center_vertical|end"
                 android:text="阅读量 123" />
 
-        </FrameLayout>
+        </FrameLayout>-->
 
 
     </LinearLayout>
