@@ -60,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
-                android:hint="@string/tip_please_input_phone_number"
+                android:hint="@string/tip_please_input_user_name"
                 android:inputType="number"
                 app:met_clearButton="true"
                 app:met_errorMessage="@string/tip_phone_number_error"
@@ -89,7 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
-                android:hint="@string/hint_please_input_verify_code"
+                android:hint="@string/hint_please_input_password"
                 android:inputType="number"
                 app:met_clearButton="false"
                 app:met_errorMessage="@string/tip_verify_code_error"
@@ -98,7 +98,7 @@
                 app:met_maxCharacters="4"
                 app:met_regexp="@string/regex_verify_code" />
 
-            <com.xuexiang.xui.widget.button.roundbutton.RoundButton
+            <!--<com.xuexiang.xui.widget.button.roundbutton.RoundButton
                 android:id="@+id/btn_get_verify_code"
                 style="@style/RoundButton"
                 android:layout_width="wrap_content"
@@ -113,7 +113,7 @@
                 android:textSize="13sp"
                 app:rb_borderColor="@color/selector_round_button_main_theme_color"
                 app:rb_borderWidth="1.5dp"
-                app:rb_radius="15dp" />
+                app:rb_radius="15dp" />-->
 
         </FrameLayout>
 
@@ -152,7 +152,7 @@
         android:id="@+id/btn_login"
         style="@style/SuperButton.Primary.Login"
         android:layout_marginTop="16dp"
-        android:text="@string/title_login_register" />
+        android:text="@string/title_login" />
 
     <FrameLayout
         android:layout_width="match_parent"
