@@ -22,9 +22,11 @@ import android.view.View;
 
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.activity.MainActivity;
+import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.utils.RandomUtils;
 import com.iflytek.vivian.traffic.android.utils.SettingUtils;
+import com.iflytek.vivian.traffic.android.utils.StringUtil;
 import com.iflytek.vivian.traffic.android.utils.TokenUtils;
 import com.iflytek.vivian.traffic.android.utils.Utils;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
@@ -52,12 +54,10 @@ import butterknife.OnClick;
 @Page(anim = CoreAnim.none)
 public class LoginFragment extends BaseFragment {
 
-    @BindView(R.id.et_phone_number)
-    MaterialEditText etPhoneNumber;
-    @BindView(R.id.et_verify_code)
-    MaterialEditText etVerifyCode;
-    @BindView(R.id.btn_get_verify_code)
-    RoundButton btnGetVerifyCode;
+    @BindView(R.id.et_user_name)
+    MaterialEditText etUsername;
+    @BindView(R.id.et_password)
+    MaterialEditText etPassword;
 
     private CountDownButtonHelper mCountDownHelper;
 
@@ -85,7 +85,7 @@ public class LoginFragment extends BaseFragment {
 
     @Override
     protected void initViews() {
-        mCountDownHelper = new CountDownButtonHelper(btnGetVerifyCode, 60);
+        // mCountDownHelper = new CountDownButtonHelper(btnGetVerifyCode, 60);
 
         //隐私政策弹窗
         if (!SettingUtils.isAgreePrivacy()) {
@@ -96,24 +96,21 @@ public class LoginFragment extends BaseFragment {
         }
     }
 
+    /**
+     * 单击事件响应
+     * @param view
+     */
     @SingleClick
-    @OnClick({R.id.btn_get_verify_code, R.id.btn_login, R.id.tv_other_login, R.id.tv_forget_password, R.id.tv_user_protocol, R.id.tv_privacy_protocol})
+    @OnClick({R.id.btn_login, R.id.tv_forget_password, R.id.tv_user_protocol, R.id.tv_privacy_protocol})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.btn_get_verify_code:
-                if (etPhoneNumber.validate()) {
-                    getVerifyCode(etPhoneNumber.getEditValue());
-                }
-                break;
             case R.id.btn_login:
-                if (etPhoneNumber.validate()) {
-                    if (etVerifyCode.validate()) {
-                        loginByVerifyCode(etPhoneNumber.getEditValue(), etVerifyCode.getEditValue());
+                if (etUsername.validate()) {
+                    if (etPassword.validate()) {
+//                        loginByVerifyCode(etUsername.getEditValue(), etPassword.getEditValue());
+                        userLogin(etUsername.getEditValue(), etPassword.getEditValue());
                     }
                 }
-                break;
-            case R.id.tv_other_login:
-                XToastUtils.info("其他登录方式");
                 break;
             case R.id.tv_forget_password:
                 XToastUtils.info("忘记密码");
@@ -127,6 +124,32 @@ public class LoginFragment extends BaseFragment {
             default:
                 break;
         }
+    }
+
+    /**
+     * 用户登录
+     */
+    public void userLogin(String username, String password) {
+        UserClient.userLogin(getString(R.string.server_url),username,password);
+    }
+
+    /**
+     * 登录成功的处理
+     */
+    private void onLoginSuccess() {
+        String token = RandomUtils.getRandomNumbersAndLetters(16);
+        if (TokenUtils.handleLoginSuccess(token)) {
+            popToBack();
+            ActivityUtils.startActivity(MainActivity.class);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (mCountDownHelper != null) {
+            mCountDownHelper.recycle();
+        }
+        super.onDestroyView();
     }
 
     /**
@@ -147,25 +170,6 @@ public class LoginFragment extends BaseFragment {
     private void loginByVerifyCode(String phoneNumber, String verifyCode) {
         // TODO: 2020/8/29 这里只是界面演示而已
         onLoginSuccess();
-    }
-
-    /**
-     * 登录成功的处理
-     */
-    private void onLoginSuccess() {
-        String token = RandomUtils.getRandomNumbersAndLetters(16);
-        if (TokenUtils.handleLoginSuccess(token)) {
-            popToBack();
-            ActivityUtils.startActivity(MainActivity.class);
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        if (mCountDownHelper != null) {
-            mCountDownHelper.recycle();
-        }
-        super.onDestroyView();
     }
 }
 

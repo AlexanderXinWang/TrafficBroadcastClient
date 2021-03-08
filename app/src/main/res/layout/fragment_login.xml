@@ -56,7 +56,7 @@
                 app:srcCompat="@drawable/ic_phone" />
 
             <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
-                android:id="@+id/et_phone_number"
+                android:id="@+id/et_user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
@@ -72,7 +72,7 @@
 
 
         <FrameLayout
-            android:id="@+id/fl_verify_code"
+            android:id="@+id/fl_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp">
@@ -85,7 +85,7 @@
                 app:srcCompat="@drawable/ic_password" />
 
             <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
-                android:id="@+id/et_verify_code"
+                android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
@@ -122,7 +122,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.xuexiang.xui.widget.alpha.XUIAlphaTextView
+            <!--<com.xuexiang.xui.widget.alpha.XUIAlphaTextView
                 android:id="@+id/tv_other_login"
                 style="@style/TextStyle.Explain"
                 android:layout_gravity="start"
@@ -131,7 +131,7 @@
                 android:paddingEnd="10dp"
                 android:paddingBottom="5dp"
                 android:text="其他登录方式"
-                android:textColor="@color/xui_config_color_primary_text" />
+                android:textColor="@color/xui_config_color_primary_text" />-->
 
             <com.xuexiang.xui.widget.alpha.XUIAlphaTextView
                 android:id="@+id/tv_forget_password"
