@@ -34,6 +34,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.iflytek.vivian.traffic.android.fragment.AboutFragment;
+import com.iflytek.vivian.traffic.android.fragment.EventFragment;
 import com.iflytek.vivian.traffic.android.fragment.SettingsFragment;
 import com.iflytek.vivian.traffic.android.fragment.news.NewsFragment;
 import com.iflytek.vivian.traffic.android.fragment.profile.ProfileFragment;
@@ -112,7 +113,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         //主页内容填充
         BaseFragment[] fragments = new BaseFragment[]{
-                new NewsFragment(),
+//                new NewsFragment(),
+                new EventFragment(),
                 new TrendingFragment(),
                 new ProfileFragment()
         };

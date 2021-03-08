@@ -17,6 +17,8 @@
 
 package com.iflytek.vivian.traffic.android.dto;
 
+import java.util.Date;
+
 public class Event {
     private String id;
     private String policemanId;
@@ -25,6 +27,7 @@ public class Event {
     private String event;
     private String eventResult;
     private String astResult;
+    private Date postTime;
     private byte[] mp3;
 
     public String getId() {
@@ -89,6 +92,14 @@ public class Event {
 
     public void setMp3(byte[] mp3) {
         this.mp3 = mp3;
+    }
+
+    public Date getPostTime() {
+        return postTime;
+    }
+
+    public void setPostTime(Date postTime) {
+        this.postTime = postTime;
     }
 
     @Override

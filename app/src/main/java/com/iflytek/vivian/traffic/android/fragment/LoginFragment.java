@@ -1,32 +1,19 @@
-/*
- * Copyright (C) 2021 xuexiangjys(xuexiangjys@163.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
 
 package com.iflytek.vivian.traffic.android.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
 
+import com.alibaba.fastjson.JSON;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.activity.MainActivity;
 import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
+import com.iflytek.vivian.traffic.android.event.UserLoginEvent;
+import com.iflytek.vivian.traffic.android.utils.AlertDialogUtil;
 import com.iflytek.vivian.traffic.android.utils.RandomUtils;
 import com.iflytek.vivian.traffic.android.utils.SettingUtils;
-import com.iflytek.vivian.traffic.android.utils.StringUtil;
 import com.iflytek.vivian.traffic.android.utils.TokenUtils;
 import com.iflytek.vivian.traffic.android.utils.Utils;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
@@ -37,9 +24,13 @@ import com.xuexiang.xui.utils.CountDownButtonHelper;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
-import com.xuexiang.xui.widget.button.roundbutton.RoundButton;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText;
 import com.xuexiang.xutil.app.ActivityUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -77,7 +68,7 @@ public class LoginFragment extends BaseFragment {
         titleBar.addAction(new TitleBar.TextAction(R.string.title_jump_login) {
             @Override
             public void performAction(View view) {
-                onLoginSuccess();
+//                onLoginSuccess();
             }
         });
         return titleBar;
@@ -135,12 +126,30 @@ public class LoginFragment extends BaseFragment {
 
     /**
      * 登录成功的处理
+     * @param event
      */
-    private void onLoginSuccess() {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    private void onLoginSuccess(UserLoginEvent event) {
         String token = RandomUtils.getRandomNumbersAndLetters(16);
         if (TokenUtils.handleLoginSuccess(token)) {
-            popToBack();
-            ActivityUtils.startActivity(MainActivity.class);
+            if (event.isSuccess()) {
+                Intent intent = new Intent();
+                intent.putExtra("data", JSON.toJSONString(event.getData()));
+                popToBack();    // 弹出当前framework
+                /**
+                 * 区分用户类型
+                 * 普通用户 —— 0
+                 * 管理员 —— 1
+                 */
+                if (event.getData().getIsAdmin() == 0) {
+                    ActivityUtils.startActivity(MainActivity.class);
+                } else {
+
+                }
+            } else {
+                new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("登陆失败")
+                        .content(event.getErrorMessage()).positiveText("确定").show();
+            }
         }
     }
 
@@ -169,7 +178,7 @@ public class LoginFragment extends BaseFragment {
      */
     private void loginByVerifyCode(String phoneNumber, String verifyCode) {
         // TODO: 2020/8/29 这里只是界面演示而已
-        onLoginSuccess();
+//        onLoginSuccess();
     }
 }
 

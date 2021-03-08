@@ -21,6 +21,7 @@ public class User {
     private String id;
     private String name;
     private String imageId;
+    private Integer isAdmin;
 
     public String getId() {
         return id;
@@ -44,6 +45,14 @@ public class User {
 
     public void setImageId(String imageId) {
         this.imageId = imageId;
+    }
+
+    public Integer getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Integer isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     @Override
