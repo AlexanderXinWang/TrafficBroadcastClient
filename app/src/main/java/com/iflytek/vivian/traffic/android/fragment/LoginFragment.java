@@ -7,11 +7,9 @@ import android.view.View;
 
 import com.alibaba.fastjson.JSON;
 import com.iflytek.vivian.traffic.android.R;
-import com.iflytek.vivian.traffic.android.activity.MainActivity;
-import com.iflytek.vivian.traffic.android.client.UserClient;
+import com.iflytek.vivian.traffic.android.activity.UserMainActivity;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.event.UserLoginEvent;
-import com.iflytek.vivian.traffic.android.utils.AlertDialogUtil;
 import com.iflytek.vivian.traffic.android.utils.RandomUtils;
 import com.iflytek.vivian.traffic.android.utils.SettingUtils;
 import com.iflytek.vivian.traffic.android.utils.TokenUtils;
@@ -28,7 +26,6 @@ import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText;
 import com.xuexiang.xutil.app.ActivityUtils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -125,7 +122,7 @@ public class LoginFragment extends BaseFragment {
         String token = RandomUtils.getRandomNumbersAndLetters(16);
         if (TokenUtils.handleLoginSuccess(token)) {
             popToBack();
-            ActivityUtils.startActivity(MainActivity.class);
+            ActivityUtils.startActivity(UserMainActivity.class);
         }
     }
 
@@ -146,7 +143,7 @@ public class LoginFragment extends BaseFragment {
                  * 普通用户 —— 0
                  * 管理员 —— 1
                  */
-                ActivityUtils.startActivity(MainActivity.class);
+                ActivityUtils.startActivity(UserMainActivity.class);
                 /*if (event.getData().getIsAdmin() == 0) {
                     ActivityUtils.startActivity(MainActivity.class);
                 } else {

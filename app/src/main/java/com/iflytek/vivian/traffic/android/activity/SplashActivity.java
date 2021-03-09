@@ -70,7 +70,7 @@ public class SplashActivity extends BaseSplashActivity implements CancelAdapt {
 
     private void loginOrGoMainPage() {
         if (TokenUtils.hasToken()) {
-            ActivityUtils.startActivity(MainActivity.class);
+            ActivityUtils.startActivity(UserMainActivity.class);
         } else {
             ActivityUtils.startActivity(LoginActivity.class);
         }

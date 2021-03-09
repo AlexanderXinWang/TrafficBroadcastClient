@@ -36,7 +36,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.iflytek.vivian.traffic.android.fragment.AboutFragment;
 import com.iflytek.vivian.traffic.android.fragment.EventFragment;
 import com.iflytek.vivian.traffic.android.fragment.SettingsFragment;
-import com.iflytek.vivian.traffic.android.fragment.news.NewsFragment;
 import com.iflytek.vivian.traffic.android.fragment.profile.ProfileFragment;
 import com.iflytek.vivian.traffic.android.fragment.trending.TrendingFragment;
 import com.iflytek.vivian.traffic.android.R;
@@ -58,12 +57,9 @@ import com.xuexiang.xutil.display.Colors;
 import butterknife.BindView;
 
 /**
- * 程序主页面,只是一个简单的Tab例子
- *
- * @author xuexiang
- * @since 2019-07-07 23:53
+ * 用户程序主页面
  */
-public class MainActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener, BottomNavigationView.OnNavigationItemSelectedListener, ClickUtils.OnClick2ExitListener, Toolbar.OnMenuItemClickListener {
+public class UserMainActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener, BottomNavigationView.OnNavigationItemSelectedListener, ClickUtils.OnClick2ExitListener, Toolbar.OnMenuItemClickListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -86,7 +82,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_main;
+        return R.layout.activity_user_main;
     }
 
     @Override
