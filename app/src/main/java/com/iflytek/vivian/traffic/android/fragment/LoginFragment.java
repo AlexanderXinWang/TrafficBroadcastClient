@@ -121,7 +121,12 @@ public class LoginFragment extends BaseFragment {
      * 用户登录
      */
     public void userLogin(String username, String password) {
-        UserClient.userLogin(getString(R.string.server_url),username,password);
+//        UserClient.userLogin(getString(R.string.server_url),username,password);
+        String token = RandomUtils.getRandomNumbersAndLetters(16);
+        if (TokenUtils.handleLoginSuccess(token)) {
+            popToBack();
+            ActivityUtils.startActivity(MainActivity.class);
+        }
     }
 
     /**
@@ -141,11 +146,12 @@ public class LoginFragment extends BaseFragment {
                  * 普通用户 —— 0
                  * 管理员 —— 1
                  */
-                if (event.getData().getIsAdmin() == 0) {
+                ActivityUtils.startActivity(MainActivity.class);
+                /*if (event.getData().getIsAdmin() == 0) {
                     ActivityUtils.startActivity(MainActivity.class);
                 } else {
 
-                }
+                }*/
             } else {
                 new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("登陆失败")
                         .content(event.getErrorMessage()).positiveText("确定").show();

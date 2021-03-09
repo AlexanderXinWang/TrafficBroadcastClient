@@ -22,6 +22,7 @@ import java.util.Date;
 public class Event {
     private String id;
     private String policemanId;
+    private String policemanName;
     private String location;
     private String vehicle;
     private String event;
@@ -100,6 +101,14 @@ public class Event {
 
     public void setPostTime(Date postTime) {
         this.postTime = postTime;
+    }
+
+    public String getPolicemanName() {
+        return policemanName;
+    }
+
+    public void setPolicemanName(String policemanName) {
+        this.policemanName = policemanName;
     }
 
     @Override

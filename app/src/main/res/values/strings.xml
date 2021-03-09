@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TrafficBroadcastAndroid</string>
+    <string name="app_name">警易通</string>
     <string name="app_browser_name">通用浏览器</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -76,6 +76,9 @@
     <string name="tip_ignore_message">以后不再提示此类信息</string>
     <string name="tip_title">你知道吗？</string>
     <string name="tip_info">提示</string>
+
+    <!--警情详情-->
+    <string name="event_detail_location">蜀山区金寨南路与紫云路交口</string>
 
     <string name="server_url">http://192.168.0.0.1:8080/traffic-server/</string>
 </resources>

@@ -45,7 +45,7 @@ public class TrendingFragment extends BaseFragment {
      */
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_post;
+        return R.layout.fragment_report;
     }
 
     /**

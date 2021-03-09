@@ -61,7 +61,7 @@
     <style name="RadiusImageView.Circle">
         <item name="android:scaleType">centerCrop</item>
         <item name="riv_is_circle">true</item>
-        <item name="riv_border_width">0dp</item>
+        <item name="riv_border_width">5dp</item>
     </style>
 
     <style name="RadiusImage">
