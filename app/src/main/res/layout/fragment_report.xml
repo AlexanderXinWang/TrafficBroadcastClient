@@ -46,6 +46,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="【发生地点】"
+                            android:textSize="18sp"
                             android:textColor="@color/black"/>
 
                         <EditText
@@ -68,6 +69,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="【车辆类型】"
+                            android:textSize="18sp"
                             android:textColor="@color/black"/>
 
                         <EditText
@@ -89,6 +91,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="【事件描述】"
+                            android:textSize="18sp"
                             android:textColor="@color/black"/>
 
                         <EditText
@@ -110,6 +113,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="【事故结果】"
+                            android:textSize="18sp"
                             android:textColor="@color/black"/>
 
                         <EditText

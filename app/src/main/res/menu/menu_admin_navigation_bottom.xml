@@ -11,11 +11,11 @@
     <item
         android:id="@+id/nav_trending"
         android:icon="@drawable/ic_menu_report"
-        android:title="@string/menu_report" />
+        android:title="@string/menu_event_manage" />
 
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_menu_person"
-        android:title="@string/menu_profile" />
+        android:title="@string/menu_user_manage" />
 
 </menu>
