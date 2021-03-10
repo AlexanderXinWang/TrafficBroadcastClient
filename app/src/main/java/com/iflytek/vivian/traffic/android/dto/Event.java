@@ -31,6 +31,30 @@ public class Event {
     private Date postTime;
     private byte[] mp3;
 
+    public Event(String policemanName, String location, String event, Date postTime) {
+        this.policemanName = policemanName;
+        this.location = location;
+        this.event = event;
+        this.postTime = postTime;
+    }
+
+    public Event(String id, String policemanId, String policemanName, String location, String vehicle, String event, String eventResult, String astResult, Date postTime, byte[] mp3) {
+        this.id = id;
+        this.policemanId = policemanId;
+        this.policemanName = policemanName;
+        this.location = location;
+        this.vehicle = vehicle;
+        this.event = event;
+        this.eventResult = eventResult;
+        this.astResult = astResult;
+        this.postTime = postTime;
+        this.mp3 = mp3;
+    }
+
+    public Event() {
+
+    }
+
     public String getId() {
         return id;
     }

@@ -22,6 +22,7 @@ import android.graphics.drawable.Drawable;
 
 import com.iflytek.vivian.traffic.android.adapter.entity.NewInfo;
 import com.iflytek.vivian.traffic.android.R;
+import com.iflytek.vivian.traffic.android.dto.Event;
 import com.xuexiang.xaop.annotation.MemoryCache;
 import com.xuexiang.xui.adapter.simple.AdapterItem;
 import com.xuexiang.xui.utils.ResUtils;
@@ -29,6 +30,7 @@ import com.xuexiang.xui.widget.banner.widget.banner.BannerItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 演示数据
@@ -102,6 +104,13 @@ public class DemoDataProvider {
         return list;
     }
 
+    @MemoryCache
+    public static List<Event> getDemoEventInfo() {
+        List<Event> eventList = new ArrayList<>();
+        eventList.add(new Event("周星星","今金寨路高架与紫云路交口","撞了，现在人在医院了，电动车还在现场,有人员头部受伤",DateFormatUtil.parse("09:01")));
+        return eventList;
+    }
+
     public static List<AdapterItem> getGridItems(Context context) {
         return getGridItems(context, R.array.grid_titles_entry, R.array.grid_icons_entry);
     }
@@ -130,5 +139,16 @@ public class DemoDataProvider {
         }
         return list;
     }
+
+    @MemoryCache
+    public static List<Event> getEmptyEventInfo() {
+        List<Event> list = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            list.add(new Event());
+        }
+        return list;
+    }
+
+
 
 }

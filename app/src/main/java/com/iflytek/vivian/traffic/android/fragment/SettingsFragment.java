@@ -29,10 +29,7 @@ import com.xuexiang.xutil.XUtil;
 
 import butterknife.BindView;
 
-/**
- * @author xuexiang
- * @since 2019-10-15 22:38
- */
+
 @Page(name = "设置")
 public class SettingsFragment extends BaseFragment implements SuperTextView.OnSuperTextViewClickListener {
 

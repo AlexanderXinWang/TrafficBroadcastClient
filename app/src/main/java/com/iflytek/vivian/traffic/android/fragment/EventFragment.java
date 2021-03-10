@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
+import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.adapter.base.broccoli.BroccoliSimpleDelegateAdapter;
@@ -22,7 +23,11 @@ import com.umeng.commonsdk.debug.E;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
+import com.xuexiang.xui.adapter.simple.AdapterItem;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
+import com.xuexiang.xui.widget.banner.widget.banner.SimpleImageBanner;
+import com.xuexiang.xui.widget.imageview.ImageLoader;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +46,7 @@ public class EventFragment extends BaseFragment {
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
 
-    private SimpleDelegateAdapter<Event> mEventAdapter;
-
-    List<Event> eventList = new ArrayList<>();
+    private SimpleDelegateAdapter<Event> mNewsAdapter;
 
     /**
      * @return 返回为 null意为不需要导航栏
@@ -55,6 +58,8 @@ public class EventFragment extends BaseFragment {
 
     /**
      * 布局的资源id
+     *
+     * @return
      */
     @Override
     protected int getLayoutId() {
@@ -67,6 +72,41 @@ public class EventFragment extends BaseFragment {
     @Override
     protected void initViews() {
         VirtualLayoutManager virtualLayoutManager = new VirtualLayoutManager(getContext());
+        recyclerView.setLayoutManager(virtualLayoutManager);
+        RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
+        recyclerView.setRecycledViewPool(viewPool);
+        viewPool.setMaxRecycledViews(0, 10);
+
+        //轮播条
+        SingleDelegateAdapter bannerAdapter = new SingleDelegateAdapter(R.layout.include_head_view_banner) {
+            @Override
+            public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
+                SimpleImageBanner banner = holder.findViewById(R.id.sib_simple_usage);
+                banner.setSource(DemoDataProvider.getBannerList())
+                        .setOnItemClickListener((view, item, position1) -> XToastUtils.toast("headBanner position--->" + position1)).startScroll();
+            }
+        };
+
+        //九宫格菜单
+        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(4);
+        gridLayoutHelper.setPadding(0, 16, 0, 0);
+        gridLayoutHelper.setVGap(10);
+        gridLayoutHelper.setHGap(0);
+        SimpleDelegateAdapter<AdapterItem> commonAdapter = new SimpleDelegateAdapter<AdapterItem>(R.layout.adapter_common_grid_item, gridLayoutHelper, DemoDataProvider.getGridItems(getContext())) {
+            @Override
+            protected void bindData(@NonNull RecyclerViewHolder holder, int position, AdapterItem item) {
+                if (item != null) {
+                    RadiusImageView imageView = holder.findViewById(R.id.riv_item);
+                    imageView.setCircle(true);
+                    ImageLoader.get().loadImage(imageView, item.getIcon());
+                    holder.text(R.id.tv_title, item.getTitle().toString().substring(0, 1));
+                    holder.text(R.id.tv_sub_title, item.getTitle());
+
+                    holder.click(R.id.ll_container, v -> XToastUtils.toast("点击了：" + item.getTitle()));
+                }
+            }
+        };
+
         //资讯的标题
         SingleDelegateAdapter titleAdapter = new SingleDelegateAdapter(R.layout.adapter_title_item) {
             @Override
@@ -77,21 +117,17 @@ public class EventFragment extends BaseFragment {
             }
         };
 
-
-
-
-        //警情
-        mEventAdapter = new BroccoliSimpleDelegateAdapter<Event>(R.layout.adapter_event_card_view_list_item, new LinearLayoutHelper(), eventList) {
+        //资讯
+        mNewsAdapter = new BroccoliSimpleDelegateAdapter<Event>(R.layout.adapter_event_card_view_list_item, new LinearLayoutHelper(), DemoDataProvider.getEmptyEventInfo()) {
             @Override
-            protected void onBindData(RecyclerViewHolder holder, Event event, int position) {
-                if (event != null) {
-                    holder.text(R.id.tv_user_name, event.getPolicemanName());
-                    holder.text(R.id.tv_tag, DateFormatUtil.format(event.getPostTime()));
-                    holder.text(R.id.tv_title, event.getEvent());
-                    holder.text(R.id.tv_summary, event.getEventResult());
-                    // 打开警情详情页
-                    holder.click(R.id.card_view, view -> openNewPage(EventDetailFragment.class));
-//                    holder.click(R.id.card_view, v -> Utils.goWeb(getContext(), model.getDetailUrl()));
+            protected void onBindData(RecyclerViewHolder holder, Event model, int position) {
+                if (model != null) {
+                    holder.text(R.id.tv_user_name, model.getPolicemanName());
+//                    holder.text(R.id.tv_tag, DateFormatUtil.format(model.getPostTime()));
+                    holder.text(R.id.tv_title, model.getLocation());
+                    holder.text(R.id.tv_summary, model.getEvent());
+
+                    holder.click(R.id.card_view, v -> openNewPage(EventDetailFragment.class));
                 }
             }
 
@@ -107,8 +143,10 @@ public class EventFragment extends BaseFragment {
         };
 
         DelegateAdapter delegateAdapter = new DelegateAdapter(virtualLayoutManager);
+        delegateAdapter.addAdapter(bannerAdapter);
+        delegateAdapter.addAdapter(commonAdapter);
         delegateAdapter.addAdapter(titleAdapter);
-        delegateAdapter.addAdapter(mEventAdapter);
+        delegateAdapter.addAdapter(mNewsAdapter);
 
         recyclerView.setAdapter(delegateAdapter);
     }
@@ -119,7 +157,7 @@ public class EventFragment extends BaseFragment {
         refreshLayout.setOnRefreshListener(refreshLayout -> {
             // TODO: 2020-02-25 这里只是模拟了网络请求
             refreshLayout.getLayout().postDelayed(() -> {
-                mEventAdapter.refresh(eventList);
+                mNewsAdapter.refresh(DemoDataProvider.getDemoEventInfo());
                 refreshLayout.finishRefresh();
             }, 1000);
         });
@@ -127,7 +165,7 @@ public class EventFragment extends BaseFragment {
         refreshLayout.setOnLoadMoreListener(refreshLayout -> {
             // TODO: 2020-02-25 这里只是模拟了网络请求
             refreshLayout.getLayout().postDelayed(() -> {
-                mEventAdapter.loadMore(eventList);
+                mNewsAdapter.loadMore(DemoDataProvider.getDemoEventInfo());
                 refreshLayout.finishLoadMore();
             }, 1000);
         });
