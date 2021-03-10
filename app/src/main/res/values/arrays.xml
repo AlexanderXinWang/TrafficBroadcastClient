@@ -20,8 +20,14 @@
 
     <string-array name="home_titles">
         <item>@string/menu_event</item>
-        <item>@string/menu_post</item>
+        <item>@string/menu_report</item>
         <item>@string/menu_profile</item>
+    </string-array>
+
+    <string-array name="admin_home_titles">
+        <item>@string/menu_event</item>
+        <item>@string/menu_event_manage</item>
+        <item>@string/menu_user_manage</item>
     </string-array>
 
     <string-array name="adBlockUrl">

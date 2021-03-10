@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.alibaba.fastjson.JSON;
 import com.iflytek.vivian.traffic.android.R;
+import com.iflytek.vivian.traffic.android.activity.AdminMainActivity;
 import com.iflytek.vivian.traffic.android.activity.UserMainActivity;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.event.UserLoginEvent;
@@ -122,7 +123,8 @@ public class LoginFragment extends BaseFragment {
         String token = RandomUtils.getRandomNumbersAndLetters(16);
         if (TokenUtils.handleLoginSuccess(token)) {
             popToBack();
-            ActivityUtils.startActivity(UserMainActivity.class);
+//            ActivityUtils.startActivity(UserMainActivity.class);
+            ActivityUtils.startActivity(AdminMainActivity.class);
         }
     }
 
@@ -143,12 +145,11 @@ public class LoginFragment extends BaseFragment {
                  * 普通用户 —— 0
                  * 管理员 —— 1
                  */
-                ActivityUtils.startActivity(UserMainActivity.class);
-                /*if (event.getData().getIsAdmin() == 0) {
-                    ActivityUtils.startActivity(MainActivity.class);
+                if (event.getData().getIsAdmin() == 0) {
+                    ActivityUtils.startActivity(UserMainActivity.class);
                 } else {
-
-                }*/
+                    ActivityUtils.startActivity(AdminMainActivity.class);
+                }
             } else {
                 new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("登陆失败")
                         .content(event.getErrorMessage()).positiveText("确定").show();
