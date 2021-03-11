@@ -41,6 +41,7 @@ import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.display.Colors;
 
 import butterknife.BindView;
+import okhttp3.internal.Util;
 
 /**
  * 管理员程序主页面
@@ -187,7 +188,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_privacy:
+            case R.id.action_search:
                 Utils.showPrivacyDialog(this, null);
                 break;
             default:

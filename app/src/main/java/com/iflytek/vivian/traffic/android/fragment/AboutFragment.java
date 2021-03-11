@@ -32,10 +32,6 @@ import java.util.Locale;
 
 import butterknife.BindView;
 
-/**
- * @author xuexiang
- * @since 2019-10-30 00:02
- */
 @Page(name = "关于")
 public class AboutFragment extends BaseFragment {
 
