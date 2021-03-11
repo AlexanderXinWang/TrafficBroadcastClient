@@ -11,6 +11,7 @@ import com.iflytek.vivian.traffic.android.activity.AdminMainActivity;
 import com.iflytek.vivian.traffic.android.activity.UserMainActivity;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.event.UserLoginEvent;
+import com.iflytek.vivian.traffic.android.utils.DemoDataProvider;
 import com.iflytek.vivian.traffic.android.utils.RandomUtils;
 import com.iflytek.vivian.traffic.android.utils.SettingUtils;
 import com.iflytek.vivian.traffic.android.utils.TokenUtils;
@@ -29,6 +30,8 @@ import com.xuexiang.xutil.app.ActivityUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -123,8 +126,8 @@ public class LoginFragment extends BaseFragment {
         String token = RandomUtils.getRandomNumbersAndLetters(16);
         if (TokenUtils.handleLoginSuccess(token)) {
             popToBack();
-//            ActivityUtils.startActivity(UserMainActivity.class);
             ActivityUtils.startActivity(AdminMainActivity.class);
+//            ActivityUtils.startActivity(UserMainActivity.class, DemoDataProvider.getUserInfo());
         }
     }
 

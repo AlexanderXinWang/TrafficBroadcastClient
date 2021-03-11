@@ -23,14 +23,16 @@ import android.graphics.drawable.Drawable;
 import com.iflytek.vivian.traffic.android.adapter.entity.NewInfo;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.dto.Event;
+import com.iflytek.vivian.traffic.android.dto.User;
 import com.xuexiang.xaop.annotation.MemoryCache;
 import com.xuexiang.xui.adapter.simple.AdapterItem;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.widget.banner.widget.banner.BannerItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 /**
  * 演示数据
@@ -140,6 +142,10 @@ public class DemoDataProvider {
         return list;
     }
 
+    /**
+     * Event占位空信息
+     * @return
+     */
     @MemoryCache
     public static List<Event> getEmptyEventInfo() {
         List<Event> list = new ArrayList<>();
@@ -149,6 +155,15 @@ public class DemoDataProvider {
         return list;
     }
 
-
+    @MemoryCache
+    public static Map<String, Object> getUserInfo() {
+        Map<String, Object> userMap = new HashMap<>();
+        User user = new User();
+        user.setId("20172501203");
+        user.setIsAdmin(0);
+        user.setName("周星星");
+        userMap.put("user", user);
+        return userMap;
+    }
 
 }

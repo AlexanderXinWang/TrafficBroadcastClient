@@ -22,7 +22,9 @@ import com.iflytek.vivian.traffic.android.core.BaseActivity;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.fragment.AboutFragment;
 import com.iflytek.vivian.traffic.android.fragment.EventFragment;
+import com.iflytek.vivian.traffic.android.fragment.EventManagerFragment;
 import com.iflytek.vivian.traffic.android.fragment.SettingsFragment;
+import com.iflytek.vivian.traffic.android.fragment.UserManagerFragment;
 import com.iflytek.vivian.traffic.android.fragment.profile.ProfileFragment;
 import com.iflytek.vivian.traffic.android.fragment.trending.TrendingFragment;
 import com.iflytek.vivian.traffic.android.utils.Utils;
@@ -94,7 +96,9 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         //主页内容填充
         BaseFragment[] fragments = new BaseFragment[]{
 //                new NewsFragment(),
-                new EventFragment()
+                new EventFragment(),
+                new EventManagerFragment(),
+                new UserManagerFragment()
 
         };
         FragmentAdapter<BaseFragment> adapter = new FragmentAdapter<>(getSupportFragmentManager(), fragments);
@@ -129,6 +133,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         // TODO: 2019-10-09 初始化数据
         ivAvatar.setImageResource(R.drawable.ic_default_head);
         tvAvatar.setText(R.string.app_name);
+//        tvAvatar.setText();
         tvSign.setText("这个家伙很懒，什么也没有留下～～");
         navHeader.setOnClickListener(this);
     }
@@ -166,7 +171,6 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
 
     /**
      * 处理侧边栏点击事件
-     *
      * @param menuItem
      * @return
      */

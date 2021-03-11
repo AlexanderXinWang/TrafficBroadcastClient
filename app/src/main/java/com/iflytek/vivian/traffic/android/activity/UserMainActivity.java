@@ -17,6 +17,7 @@
 
 package com.iflytek.vivian.traffic.android.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -33,6 +34,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.iflytek.vivian.traffic.android.dto.User;
 import com.iflytek.vivian.traffic.android.fragment.AboutFragment;
 import com.iflytek.vivian.traffic.android.fragment.EventFragment;
 import com.iflytek.vivian.traffic.android.fragment.SettingsFragment;
@@ -50,6 +52,7 @@ import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xutil.XUtil;
+import com.xuexiang.xutil.app.ActivityUtils;
 import com.xuexiang.xutil.common.ClickUtils;
 import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.display.Colors;
@@ -80,6 +83,11 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
 
     private String[] mTitles;
 
+//    private Bundle bundle = this.getIntent().getExtras();
+//    private User user = bundle.getString("user");
+
+
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_user_main;
@@ -88,6 +96,8 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        savedInstanceState.getSerializable(String.valueOf(1));
 
         initViews();
 
@@ -148,6 +158,9 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
         tvAvatar.setText(R.string.app_name);
         tvSign.setText("这个家伙很懒，什么也没有留下～～");
         navHeader.setOnClickListener(this);
+
+//        tvAvatar.setText(bundle.getString("name"));
+//        tvSign.setText(bundle.getInt("id"));
     }
 
     protected void initListeners() {
