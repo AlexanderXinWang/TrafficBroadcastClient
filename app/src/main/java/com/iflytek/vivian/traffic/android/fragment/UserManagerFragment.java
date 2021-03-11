@@ -9,7 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.iflytek.vivian.traffic.android.R;
+import com.iflytek.vivian.traffic.android.adapter.base.delegate.SimpleDelegateAdapter;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
+import com.iflytek.vivian.traffic.android.dto.Event;
+import com.iflytek.vivian.traffic.android.dto.User;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 
@@ -18,6 +21,8 @@ import com.xuexiang.xpage.enums.CoreAnim;
  */
 @Page(anim = CoreAnim.none)
 public class UserManagerFragment extends BaseFragment {
+
+    private SimpleDelegateAdapter<User> mUserAdapter;
 
 
     @Override

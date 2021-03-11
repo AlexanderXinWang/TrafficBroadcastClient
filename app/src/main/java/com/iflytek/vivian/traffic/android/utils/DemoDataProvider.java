@@ -106,17 +106,9 @@ public class DemoDataProvider {
         return list;
     }
 
-    @MemoryCache
-    public static List<Event> getDemoEventInfo() {
-        List<Event> eventList = new ArrayList<>();
-        eventList.add(new Event("周星星","今金寨路高架与紫云路交口","撞了，现在人在医院了，电动车还在现场,有人员头部受伤",DateFormatUtil.parse("09:01")));
-        return eventList;
-    }
-
     public static List<AdapterItem> getGridItems(Context context) {
         return getGridItems(context, R.array.grid_titles_entry, R.array.grid_icons_entry);
     }
-
 
     private static List<AdapterItem> getGridItems(Context context, int titleArrayId, int iconArrayId) {
         List<AdapterItem> list = new ArrayList<>();
@@ -153,6 +145,18 @@ public class DemoDataProvider {
             list.add(new Event());
         }
         return list;
+    }
+
+    @MemoryCache
+    public static List<Event> getDemoEventInfo() {
+        List<Event> eventList = new ArrayList<>();
+        eventList.add(new Event("周星星","汉基国际学校门口","撞了，现在人在医院了，电动车还在现场,有人员头部受伤",DateFormatUtil.parse("09:01")));
+        eventList.add(new Event("尹天仇","港威大道港威大厦第6座","撞了，现在人在医院了，电动车还在现场,有人员头部受伤",DateFormatUtil.parse("09:01")));
+        eventList.add(new Event("柳飘飘","西贡区将军澳海滨公园","撞了，现在人在医院了，电动车还在现场,有人员头部受伤",DateFormatUtil.parse("09:01")));
+        eventList.add(new Event("包龙星","福田区桃花路与市花路交口","撞了，现在人在医院了，电动车还在现场,有人员头部受伤",DateFormatUtil.parse("09:01")));
+        eventList.add(new Event("周铁","徐汇区龙腾大道与龙恒东路交口","撞了，现在人在医院了，电动车还在现场,有人员头部受伤",DateFormatUtil.parse("09:01")));
+        eventList.add(new Event("周星星","白云区西湾路广雅小学","撞了，现在人在医院了，电动车还在现场,有人员头部受伤",DateFormatUtil.parse("09:01")));
+        return eventList;
     }
 
     @MemoryCache

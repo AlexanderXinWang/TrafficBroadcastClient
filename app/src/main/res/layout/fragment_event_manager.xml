@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/refreshLayout"
+        android:id="@+id/event_manager_refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:srlEnableAutoLoadMore="true"
@@ -20,10 +20,11 @@
             android:layout_height="wrap_content" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/event_manager_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never" />
+            android:overScrollMode="never"
+            tools:listitem="@layout/adapter_event_manager_card_view_list_item"/>
 
         <!--    注意修改包名时，这里也需要修改    -->
         <com.iflytek.vivian.traffic.android.widget.MaterialFooter

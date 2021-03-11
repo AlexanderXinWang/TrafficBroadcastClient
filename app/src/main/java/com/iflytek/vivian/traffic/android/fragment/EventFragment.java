@@ -87,8 +87,6 @@ public class EventFragment extends BaseFragment {
             }
         };
 
-
-
         //资讯的标题
         SingleDelegateAdapter titleAdapter = new SingleDelegateAdapter(R.layout.adapter_title_item) {
             @Override
