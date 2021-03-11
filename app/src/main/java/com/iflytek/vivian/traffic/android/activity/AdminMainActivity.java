@@ -25,8 +25,6 @@ import com.iflytek.vivian.traffic.android.fragment.EventFragment;
 import com.iflytek.vivian.traffic.android.fragment.EventManagerFragment;
 import com.iflytek.vivian.traffic.android.fragment.SettingsFragment;
 import com.iflytek.vivian.traffic.android.fragment.UserManagerFragment;
-import com.iflytek.vivian.traffic.android.fragment.profile.ProfileFragment;
-import com.iflytek.vivian.traffic.android.fragment.trending.TrendingFragment;
 import com.iflytek.vivian.traffic.android.utils.Utils;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.iflytek.vivian.traffic.android.widget.GuideTipsDialog;

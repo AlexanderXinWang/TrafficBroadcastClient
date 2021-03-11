@@ -165,8 +165,6 @@
                         android:onClick="onBtnReportClicked"
                         android:text="点击上报事件 " />
                 </LinearLayout>
-
-
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>

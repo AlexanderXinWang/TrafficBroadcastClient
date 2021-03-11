@@ -37,9 +37,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.iflytek.vivian.traffic.android.dto.User;
 import com.iflytek.vivian.traffic.android.fragment.AboutFragment;
 import com.iflytek.vivian.traffic.android.fragment.EventFragment;
+import com.iflytek.vivian.traffic.android.fragment.EventReportFragment;
 import com.iflytek.vivian.traffic.android.fragment.SettingsFragment;
 import com.iflytek.vivian.traffic.android.fragment.profile.ProfileFragment;
-import com.iflytek.vivian.traffic.android.fragment.trending.TrendingFragment;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.core.BaseActivity;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
@@ -121,7 +121,7 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
         BaseFragment[] fragments = new BaseFragment[]{
 //                new NewsFragment(),
                 new EventFragment(),
-                new TrendingFragment(),
+                new EventReportFragment(),
                 new ProfileFragment()
         };
         FragmentAdapter<BaseFragment> adapter = new FragmentAdapter<>(getSupportFragmentManager(), fragments);
