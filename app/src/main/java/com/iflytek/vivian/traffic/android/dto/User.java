@@ -22,6 +22,24 @@ public class User {
     private String name;
     private String imageId;
     private Integer isAdmin;
+    private String role;
+    private String depart;
+
+    public User(String id, String name, String role, String depart) {
+        this.id = id;
+        this.name = name;
+        this.role = role;
+        this.depart = depart;
+    }
+
+    public User(String id, String name, String imageId, Integer isAdmin, String role, String depart) {
+        this.id = id;
+        this.name = name;
+        this.imageId = imageId;
+        this.isAdmin = isAdmin;
+        this.role = role;
+        this.depart = depart;
+    }
 
     public String getId() {
         return id;
@@ -53,6 +71,22 @@ public class User {
 
     public void setIsAdmin(Integer isAdmin) {
         this.isAdmin = isAdmin;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getDepart() {
+        return depart;
+    }
+
+    public void setDepart(String depart) {
+        this.depart = depart;
     }
 
     @Override

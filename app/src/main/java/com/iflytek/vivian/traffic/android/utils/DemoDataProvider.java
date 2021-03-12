@@ -169,19 +169,18 @@ public class DemoDataProvider {
         eventList.add(new Event("柳飘飘","西贡区将军澳海滨公园","撞了，现在人在医院了，电动车还在现场,有人员头部受伤",DateFormatUtil.parse("09:01")));
         eventList.add(new Event("包龙星","福田区桃花路与市花路交口","撞了，现在人在医院了，电动车还在现场,有人员头部受伤",DateFormatUtil.parse("09:01")));
         eventList.add(new Event("周铁","徐汇区龙腾大道与龙恒东路交口","撞了，现在人在医院了，电动车还在现场,有人员头部受伤",DateFormatUtil.parse("09:01")));
-        eventList.add(new Event("周星星","白云区西湾路广雅小学","撞了，现在人在医院了，电动车还在现场,有人员头部受伤",DateFormatUtil.parse("09:01")));
+        eventList.add(new Event("凌凌漆","白云区西湾路广雅小学","撞了，现在人在医院了，电动车还在现场,有人员头部受伤",DateFormatUtil.parse("09:01")));
         return eventList;
     }
 
     @MemoryCache
-    public static Map<String, Object> getUserInfo() {
-        Map<String, Object> userMap = new HashMap<>();
-        User user = new User();
-        user.setId("20172501203");
-        user.setIsAdmin(0);
-        user.setName("周星星");
-        userMap.put("user", user);
-        return userMap;
+    public static List<User> getUserInfo() {
+        List<User> userList = new ArrayList<>();
+        userList.add(new User("20172501203","周星星", "督察", "安徽省公安厅"));
+        userList.add(new User("20192501403","尹天仇", "协警", "合肥市公安局"));
+        userList.add(new User("20172501123","柳飘飘", "交警", "包河区交警二大队"));
+        userList.add(new User("20172501233","凌凌漆", "特殊情报人员", "广东省公安厅"));
+        return userList;
     }
 
 }
