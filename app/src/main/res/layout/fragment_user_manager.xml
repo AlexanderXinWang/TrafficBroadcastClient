@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/event_manager_refreshLayout"
+        android:id="@+id/user_manager_refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:srlEnableAutoLoadMore="true"
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/event_manager_recyclerView"
+            android:id="@+id/user_manager_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"

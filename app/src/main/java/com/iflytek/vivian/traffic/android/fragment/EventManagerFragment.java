@@ -2,6 +2,7 @@ package com.iflytek.vivian.traffic.android.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,18 +13,24 @@ import android.view.ViewGroup;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
+import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.adapter.base.broccoli.BroccoliSimpleDelegateAdapter;
 import com.iflytek.vivian.traffic.android.adapter.base.delegate.SimpleDelegateAdapter;
+import com.iflytek.vivian.traffic.android.adapter.entity.AdapterManagerItem;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.dto.Event;
 import com.iflytek.vivian.traffic.android.utils.DemoDataProvider;
+import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
+import com.xuexiang.xui.adapter.simple.AdapterItem;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
+import com.xuexiang.xui.widget.imageview.ImageLoader;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xutil.common.CollectionUtils;
 
 import butterknife.BindView;
@@ -63,6 +70,25 @@ public class EventManagerFragment extends BaseFragment {
         recyclerView.setRecycledViewPool(viewPool);
         viewPool.setMaxRecycledViews(0,10);
 
+        //管理工具栏（添加 / 筛选 / 多选）
+        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(3);
+        gridLayoutHelper.setPadding(0, 16, 0, 0);
+        gridLayoutHelper.setVGap(10);
+        gridLayoutHelper.setHGap(0);
+        SimpleDelegateAdapter<AdapterManagerItem> commonAdapter = new SimpleDelegateAdapter<AdapterManagerItem>(R.layout.adapter_manager_toolbar, gridLayoutHelper, DemoDataProvider.getManagerItems(getContext())) {
+            @Override
+            protected void bindData(@NonNull RecyclerViewHolder holder, int position, AdapterManagerItem item) {
+                if (item != null) {
+                    RadiusImageView imageView = holder.findViewById(R.id.tool_item);
+                    imageView.setCircle(true);
+                    ImageLoader.get().loadImage(imageView, item.getIcon());
+
+                    holder.click(R.id.toolbar_container, v -> XToastUtils.toast("点击了!"));
+                }
+            }
+        };
+
+        //警情
         mEventAdapter = new BroccoliSimpleDelegateAdapter<Event>(R.layout.adapter_event_manager_card_view_list_item, new LinearLayoutHelper(), DemoDataProvider.getEmptyEventInfo()) {
             @Override
             protected void onBindData(RecyclerViewHolder holder, Event model, int position) {
@@ -88,6 +114,7 @@ public class EventManagerFragment extends BaseFragment {
         };
 
         DelegateAdapter delegateAdapter = new DelegateAdapter(virtualLayoutManager);
+        delegateAdapter.addAdapter(commonAdapter);
         delegateAdapter.addAdapter(mEventAdapter);
 
         recyclerView.setAdapter(delegateAdapter);

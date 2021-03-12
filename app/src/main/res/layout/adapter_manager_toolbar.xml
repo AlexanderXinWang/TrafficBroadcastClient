@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xuexiang.xui.widget.alpha.XUIAlphaLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/toolbar_container"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:gravity="center"
+android:orientation="vertical">
+
+<FrameLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.xuexiang.xui.widget.imageview.RadiusImageView
+        android:id="@+id/tool_item"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        tools:src="@mipmap/ic_launcher" />
+
+</FrameLayout>
+
+
+</com.xuexiang.xui.widget.alpha.XUIAlphaLinearLayout>

@@ -15,6 +15,7 @@ import com.iflytek.vivian.traffic.android.dto.Event;
 import com.iflytek.vivian.traffic.android.dto.User;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
+import com.xuexiang.xui.widget.actionbar.TitleBar;
 
 /**
  * 用户管理
@@ -24,6 +25,13 @@ public class UserManagerFragment extends BaseFragment {
 
     private SimpleDelegateAdapter<User> mUserAdapter;
 
+    /**
+     * @return 返回为 null意为不需要导航栏
+     */
+    @Override
+    protected TitleBar initTitle() {
+        return null;
+    }
 
     @Override
     protected int getLayoutId() {

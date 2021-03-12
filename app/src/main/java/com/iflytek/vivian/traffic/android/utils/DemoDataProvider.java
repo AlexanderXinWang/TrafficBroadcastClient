@@ -20,6 +20,7 @@ package com.iflytek.vivian.traffic.android.utils;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 
+import com.iflytek.vivian.traffic.android.adapter.entity.AdapterManagerItem;
 import com.iflytek.vivian.traffic.android.adapter.entity.NewInfo;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.dto.Event;
@@ -116,6 +117,19 @@ public class DemoDataProvider {
         Drawable[] icons = ResUtils.getDrawableArray(context, iconArrayId);
         for (int i = 0; i < titles.length; i++) {
             list.add(new AdapterItem(titles[i], icons[i]));
+        }
+        return list;
+    }
+
+    public static List<AdapterManagerItem> getManagerItems(Context context) {
+        return getManagerItems(context, R.array.grid_icons_entry);
+    }
+
+    public static List<AdapterManagerItem> getManagerItems(Context context, int iconArrayId) {
+        List<AdapterManagerItem> list = new ArrayList<>();
+        Drawable[] icons = ResUtils.getDrawableArray(context, iconArrayId);
+        for (int i = 0; i < icons.length ; i++) {
+            list.add(new AdapterManagerItem(icons[i]));
         }
         return list;
     }
