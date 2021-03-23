@@ -13,4 +13,6 @@ public interface UserService {
     @Multipart
     @POST("/traffic-server/user/login")
     Call<Result<User>> userLogin(@Query("username") String username, @Query("password") String password);
+
+
 }
