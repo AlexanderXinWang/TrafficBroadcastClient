@@ -31,8 +31,7 @@ import com.xuexiang.xui.widget.textview.supertextview.SuperTextView;
 import butterknife.BindView;
 
 /**
- * @author xuexiang
- * @since 2019-10-30 00:18
+ * 个人信息页面
  */
 @Page(anim = CoreAnim.none)
 public class ProfileFragment extends BaseFragment implements SuperTextView.OnSuperTextViewClickListener {
@@ -53,7 +52,6 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
 
     /**
      * 布局的资源id
-     *
      * @return
      */
     @Override

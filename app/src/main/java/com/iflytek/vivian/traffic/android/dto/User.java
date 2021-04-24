@@ -20,7 +20,7 @@ package com.iflytek.vivian.traffic.android.dto;
 public class User {
     private String id;
     private String name;
-    private String imageId;
+    private String password;
     private Integer isAdmin;
     private String role;
     private String depart;
@@ -35,7 +35,7 @@ public class User {
     public User(String id, String name, String imageId, Integer isAdmin, String role, String depart) {
         this.id = id;
         this.name = name;
-        this.imageId = imageId;
+        this.password = imageId;
         this.isAdmin = isAdmin;
         this.role = role;
         this.depart = depart;
@@ -58,11 +58,11 @@ public class User {
     }
 
     public String getImageId() {
-        return imageId;
+        return password;
     }
 
     public void setImageId(String imageId) {
-        this.imageId = imageId;
+        this.password = imageId;
     }
 
     public Integer getIsAdmin() {
