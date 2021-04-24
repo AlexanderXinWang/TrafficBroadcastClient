@@ -80,7 +80,7 @@
     <!--警情详情-->
     <string name="event_detail_location">蜀山区金寨南路与紫云路交口</string>
 
-    <string name="server_url">http://192.168.0.0.1:8080/traffic-server/</string>
+    <string name="server_url">http://1.15.78.72:9997/traffic-server/</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

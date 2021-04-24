@@ -1,6 +1,7 @@
-package com.iflytek.vivian.traffic.android.event;
+package com.iflytek.vivian.traffic.android.event.event;
 
 import com.iflytek.vivian.traffic.android.dto.Event;
+import com.iflytek.vivian.traffic.android.event.BaseNetworkEvent;
 
 import java.util.List;
 

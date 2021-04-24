@@ -1,11 +1,12 @@
-package com.iflytek.vivian.traffic.android.event;
+package com.iflytek.vivian.traffic.android.event.event;
 
 import com.iflytek.vivian.traffic.android.dto.Event;
+import com.iflytek.vivian.traffic.android.event.BaseNetworkEvent;
 
 import java.util.List;
 
-public class EventListEvent extends BaseNetworkEvent {
-    public EventListEvent(boolean success, String errorMessage, Exception e, Object data) {
+public class EventListEvent extends BaseNetworkEvent<List<Event>> {
+    public EventListEvent(boolean success, String errorMessage, Exception e, List<Event> data) {
         super(success, errorMessage, e, data);
     }
 

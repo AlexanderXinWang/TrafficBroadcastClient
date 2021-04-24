@@ -1,4 +1,6 @@
-package com.iflytek.vivian.traffic.android.event;
+package com.iflytek.vivian.traffic.android.event.event;
+
+import com.iflytek.vivian.traffic.android.event.BaseNetworkEvent;
 
 public class EventDeleteEvent extends BaseNetworkEvent {
     public EventDeleteEvent(boolean success, String errorMessage, Exception e, Boolean data) {

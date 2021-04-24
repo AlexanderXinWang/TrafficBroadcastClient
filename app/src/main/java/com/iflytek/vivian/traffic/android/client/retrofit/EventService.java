@@ -24,7 +24,7 @@ public interface EventService {
     Call<Result<Event>> saveEvent(@Body Event event);
 
     @POST("/traffic-server/event/delete")
-    Call<Result<Boolean>> deleteEvent(@Body List<String> eventIdList);
+    Call<Result<Boolean>> deleteEvent(@Body List<String> eventIds);
 
     @POST("/traffic-server/event/update")
     Call<Result<Event>> updateEvent(@Body Event event);

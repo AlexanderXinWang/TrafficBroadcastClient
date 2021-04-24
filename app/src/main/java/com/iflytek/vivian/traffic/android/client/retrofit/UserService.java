@@ -23,7 +23,7 @@ public interface UserService {
     Call<Result<User>> saveUser(@Body User user);
 
     @POST("/traffic-server/user/delete")
-    Call<Result<Boolean>> deleteUser(@Query("id") String userId);
+    Call<Result<Boolean>> deleteUser(@Query("id") List<String> userIds);
 
     @POST("/traffic-server/user/update")
     Call<Result<User>> updateUser(@Body User user);

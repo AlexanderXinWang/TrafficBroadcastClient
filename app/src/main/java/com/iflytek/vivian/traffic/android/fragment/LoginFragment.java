@@ -10,8 +10,7 @@ import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.activity.AdminMainActivity;
 import com.iflytek.vivian.traffic.android.activity.UserMainActivity;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
-import com.iflytek.vivian.traffic.android.event.UserLoginEvent;
-import com.iflytek.vivian.traffic.android.utils.DemoDataProvider;
+import com.iflytek.vivian.traffic.android.event.user.UserLoginEvent;
 import com.iflytek.vivian.traffic.android.utils.RandomUtils;
 import com.iflytek.vivian.traffic.android.utils.SettingUtils;
 import com.iflytek.vivian.traffic.android.utils.TokenUtils;
@@ -30,8 +29,6 @@ import com.xuexiang.xutil.app.ActivityUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;

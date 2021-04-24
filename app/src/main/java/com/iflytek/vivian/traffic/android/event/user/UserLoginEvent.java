@@ -1,6 +1,7 @@
-package com.iflytek.vivian.traffic.android.event;
+package com.iflytek.vivian.traffic.android.event.user;
 
 import com.iflytek.vivian.traffic.android.dto.User;
+import com.iflytek.vivian.traffic.android.event.BaseNetworkEvent;
 
 public class UserLoginEvent extends BaseNetworkEvent<User> {
     public UserLoginEvent(boolean success, String errorMessage, Exception e, User data) {

@@ -1,28 +1,22 @@
 package com.iflytek.vivian.traffic.android.client;
 
-import android.provider.CalendarContract;
-import android.renderscript.RenderScript;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.iflytek.vivian.traffic.android.client.retrofit.EventService;
 import com.iflytek.vivian.traffic.android.dto.Event;
 import com.iflytek.vivian.traffic.android.dto.Result;
-import com.iflytek.vivian.traffic.android.event.EventDeleteEvent;
-import com.iflytek.vivian.traffic.android.event.EventDetailEvent;
-import com.iflytek.vivian.traffic.android.event.EventListEvent;
-import com.iflytek.vivian.traffic.android.event.EventRefreshEvent;
-import com.iflytek.vivian.traffic.android.event.EventSaveEvent;
-import com.iflytek.vivian.traffic.android.event.EventUpdateEvent;
-import com.iflytek.vivian.traffic.android.event.IatEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventDeleteEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventDetailEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventListEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventSaveEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventUpdateEvent;
+import com.iflytek.vivian.traffic.android.event.event.IatEvent;
 import com.iflytek.vivian.traffic.android.exception.ApiInvokeException;
-import com.umeng.commonsdk.debug.E;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.IOError;
 import java.io.IOException;
-import java.security.interfaces.RSAKey;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -38,6 +32,11 @@ public class EventClient {
 
     private final static String TAG="EventClient";
 
+    /**
+     * 语音识别警情信息
+     * @param serverUrl
+     * @param voiceData
+     */
     public static void iatEvent(String serverUrl, byte[] voiceData) {
         MultipartBody.Part file = MultipartBody.Part
                 .createFormData("file", "file.pcm", RequestBody.create(MediaType.parse("audio/pcm"), voiceData));
@@ -48,19 +47,20 @@ public class EventClient {
             @Override
             public void onResponse(Call<Result<Event>> call, Response<Result<Event>> response) {
                 try {
-                    Log.i(TAG, "调用iat识别接口成功。");
+                    Log.i(TAG, "调用iat接口返回：" + response.message());
                     if (response.isSuccessful()) {
                         Result<Event> result = response.body();
                         if (result.isSuccess()) {
                             EventBus.getDefault().post(IatEvent.success(result.getData()));
                             System.out.println("返回数据=" + JSON.toJSONString(result.getData()));
                         } else {
-                            EventBus.getDefault().post(IatEvent.fail(new ApiInvokeException("接口返回失败：" + result.getErrorMessage()), "接口返回错误信息"));
+                            EventBus.getDefault().post(IatEvent.fail(new ApiInvokeException("iat接口返回失败：" + result.getErrorMessage()), "接口返回错误信息"));
                         }
                     } else {
                         EventBus.getDefault().post(IatEvent.fail(new ApiInvokeException("事件上报错误"), response.errorBody().string()));
                     }
                 } catch (IOException e) {
+                    Log.e(TAG, "请求异常：" + e.getMessage());
                     EventBus.getDefault().post(IatEvent.fail(e, e.getMessage()));
                 }
             }
@@ -68,11 +68,16 @@ public class EventClient {
             @Override
             public void onFailure(retrofit2.Call<Result<Event>> call, Throwable t) {
                 Log.e(TAG, "iat识别失败：" + t.getMessage(), t);
-                EventBus.getDefault().post(IatEvent.fail(new Exception(t), "iat识别失败"));
+                EventBus.getDefault().post(IatEvent.fail(new ApiInvokeException(t), "iat识别失败"));
             }
         });
     }
 
+    /**
+     * 新增/上报警情事件
+     * @param serverUrl
+     * @param event
+     */
     public static void saveEvent(String serverUrl, Event event) {
 
         new Retrofit.Builder()
@@ -82,19 +87,19 @@ public class EventClient {
             public void onResponse(Call<Result<Event>> call, Response<Result<Event>> response) {
                 try {
                     if (response.isSuccessful()) {
-                        Log.i(TAG, "接口返回：" + response.message());
+                        Log.i(TAG, "调用saveEvent接口返回：" + response.message());
                         Result<Event> result = response.body();
                         if (result.isSuccess()) {
                             EventBus.getDefault().post(EventSaveEvent.success(result.getData()));
                         } else {
-                            EventBus.getDefault().post(EventSaveEvent.fail(new ApiInvokeException(result.getErrorMessage()),result.getErrorMessage()));
+                            EventBus.getDefault().post(EventSaveEvent.fail(new ApiInvokeException("saveEvent接口返回失败" + result.getErrorMessage()),result.getErrorMessage()));
                         }
                     } else {
                         Log.e(TAG, "请求saveEvent接口失败：" + response.errorBody().string());
                         EventBus.getDefault().post(EventSaveEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
                     }
                 } catch (IOException e) {
-                    EventBus.getDefault().post(EventSaveEvent.fail(new ApiInvokeException(e), e.getMessage()));
+                    EventBus.getDefault().post(EventSaveEvent.fail(e, e.getMessage()));
                 }
             }
 
@@ -106,6 +111,11 @@ public class EventClient {
         });
     }
 
+    /**
+     * 删除警情事件（多选）
+     * @param serverUrl
+     * @param eventIdList
+     */
     public static void deleteEvent(String serverUrl, List<String> eventIdList) {
 
         new Retrofit.Builder()
@@ -118,18 +128,23 @@ public class EventClient {
                 if (result.isSuccess()) {
                     EventBus.getDefault().post(EventDeleteEvent.success(result.getData()));
                 } else {
-                    EventBus.getDefault().post(EventDeleteEvent.fail(new ApiInvokeException("接口返回失败：" + result.getErrorMessage()), "接口返回错误信息"));
+                    EventBus.getDefault().post(EventDeleteEvent.fail(new ApiInvokeException("deleteEvent接口返回失败：" + result.getErrorMessage()), "接口返回错误信息"));
                 }
             }
 
             @Override
             public void onFailure(Call<Result<Boolean>> call, Throwable t) {
-                Log.e(TAG, "删除失败：" + t.getMessage(), t);
-                EventBus.getDefault().post(EventDeleteEvent.fail(new Exception(t), "删除失败"));
+                Log.e(TAG, "请求deleteEvent接口失败：" + t.getMessage(), t);
+                EventBus.getDefault().post(EventDeleteEvent.fail(new ApiInvokeException(t), "删除失败"));
             }
         });
     }
 
+    /**
+     * 更新警情事件信息
+     * @param serverUrl
+     * @param event
+     */
     public static void updateEvent(String serverUrl, Event event) {
 
         new Retrofit.Builder()
@@ -139,19 +154,20 @@ public class EventClient {
             public void onResponse(Call<Result<Event>> call, Response<Result<Event>> response) {
                 try {
                     if (response.isSuccessful()) {
-                        Log.i(TAG, "接口返回：" + response.message());
+                        Log.i(TAG, "请求updateEvent接口返回：" + response.message());
                         Result<Event> result = response.body();
                         if (result.isSuccess()) {
                             EventBus.getDefault().post(EventUpdateEvent.success(result.getData()));
                         } else {
-                            EventBus.getDefault().post(EventUpdateEvent.fail(new ApiInvokeException(result.getErrorMessage()), result.getErrorMessage()));
+                            EventBus.getDefault().post(EventUpdateEvent.fail(new ApiInvokeException("请求updateEvent接口返回失败："
+                                    + result.getErrorMessage()), result.getErrorMessage()));
                         }
                     } else {
                         Log.e(TAG, "请求updateEvent接口失败：" + response.errorBody().string());
                         EventBus.getDefault().post(EventUpdateEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
                     }
                 } catch (IOException e) {
-                    EventBus.getDefault().post(EventUpdateEvent.fail(new ApiInvokeException(e), e.getMessage()));
+                    EventBus.getDefault().post(EventUpdateEvent.fail(e, e.getMessage()));
                 }
             }
 
@@ -163,6 +179,10 @@ public class EventClient {
         });
     }
 
+    /**
+     * 查询警情事件（所有）
+     * @param serverUrl
+     */
     public static void listEvent(String serverUrl) {
         new Retrofit.Builder()
                 .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
@@ -171,29 +191,35 @@ public class EventClient {
             public void onResponse(Call<Result<List<Event>>> call, Response<Result<List<Event>>> response) {
                 try {
                     if (response.isSuccessful()) {
-                        Log.i(TAG, "接口返回：" + response.message());
+                        Log.i(TAG, "listEvent接口返回：" + response.message());
                         Result<List<Event>> result = response.body();
                         if (result.isSuccess()) {
                             EventBus.getDefault().post(EventListEvent.success(result.getData()));
                         } else {
-                            EventBus.getDefault().post(EventListEvent.fail(new ApiInvokeException(result.getErrorMessage()), result.getErrorMessage()));
+                            EventBus.getDefault().post(EventListEvent.fail(new ApiInvokeException("listEvent接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
                         }
                     } else {
                         Log.e(TAG, "请求listEvent接口失败：" + response.errorBody().string());
                         EventBus.getDefault().post(EventListEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
                     }
                 } catch (IOException e) {
-                    EventBus.getDefault().post(EventListEvent.fail(new ApiInvokeException(e), e.getMessage()));
+                    EventBus.getDefault().post(EventListEvent.fail(e, e.getMessage()));
                 }
             }
 
             @Override
             public void onFailure(Call<Result<List<Event>>> call, Throwable t) {
-
+                Log.e(TAG, "请求异常" + t.getMessage(), t);
+                EventBus.getDefault().post(EventListEvent.fail(new ApiInvokeException(t), t.getMessage()));
             }
         });
     }
 
+    /**
+     * 查询单个警情事件详情信息
+     * @param serverUrl
+     * @param eventId
+     */
     public static void selectEvent(String serverUrl, String eventId) {
         new Retrofit.Builder()
                 .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
@@ -202,19 +228,19 @@ public class EventClient {
             public void onResponse(Call<Result<Event>> call, Response<Result<Event>> response) {
                 try {
                     if (response.isSuccessful()) {
-                        Log.i(TAG, "接口返回：" + response.message());
+                        Log.i(TAG, "调用selectEvent接口返回：" + response.message());
                         Result<Event> result = response.body();
                         if (result.isSuccess()) {
                             EventBus.getDefault().post(EventDetailEvent.success(result.getData()));
                         } else {
-                            EventBus.getDefault().post(EventDetailEvent.fail(new ApiInvokeException(result.getErrorMessage()), result.getErrorMessage()));
+                            EventBus.getDefault().post(EventDetailEvent.fail(new ApiInvokeException("selectEvent接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
                         }
                     } else {
                         Log.e(TAG, "请求selectEvent接口失败：" + response.errorBody().string());
                         EventBus.getDefault().post(EventDetailEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
                     }
                 } catch (IOException e) {
-                    EventBus.getDefault().post(EventDetailEvent.fail(new ApiInvokeException(e), e.getMessage()));
+                    EventBus.getDefault().post(EventDetailEvent.fail(e, e.getMessage()));
                 }
             }
 
