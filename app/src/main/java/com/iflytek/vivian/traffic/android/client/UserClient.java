@@ -39,15 +39,14 @@ public class UserClient {
     /**
      * 用户登录
      * @param serverUrl
-     * @param username
-     * @param password
+     * @param user
      */
-    public static void userLogin(String serverUrl, String username, String password) {
+    public static void userLogin(String serverUrl, User user) {
         new Retrofit.Builder()
                 .baseUrl(serverUrl)
                 .addConverterFactory(FastJsonConverterFactory.create())
                 .build()
-                .create(UserService.class).userLogin(username,password).enqueue(new retrofit2.Callback<Result<User>>() {
+                .create(UserService.class).userLogin(user).enqueue(new retrofit2.Callback<Result<User>>() {
             @Override
             public void onResponse(Call<Result<User>> call, Response<Result<User>> response) {
                 try {

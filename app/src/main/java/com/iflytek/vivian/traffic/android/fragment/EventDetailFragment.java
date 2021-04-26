@@ -14,4 +14,5 @@ public class EventDetailFragment extends BaseFragment {
     protected void initViews() {
 
     }
+
 }

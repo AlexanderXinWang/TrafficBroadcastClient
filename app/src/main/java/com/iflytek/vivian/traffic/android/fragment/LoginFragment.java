@@ -3,13 +3,18 @@ package com.iflytek.vivian.traffic.android.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import com.alibaba.fastjson.JSON;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.activity.AdminMainActivity;
 import com.iflytek.vivian.traffic.android.activity.UserMainActivity;
+import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
+import com.iflytek.vivian.traffic.android.dto.User;
 import com.iflytek.vivian.traffic.android.event.user.UserLoginEvent;
 import com.iflytek.vivian.traffic.android.utils.RandomUtils;
 import com.iflytek.vivian.traffic.android.utils.SettingUtils;
@@ -27,6 +32,7 @@ import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText;
 import com.xuexiang.xutil.app.ActivityUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -96,8 +102,10 @@ public class LoginFragment extends BaseFragment {
             case R.id.btn_login:
                 if (etUsername.validate()) {
                     if (etPassword.validate()) {
-//                        loginByVerifyCode(etUsername.getEditValue(), etPassword.getEditValue());
-                        userLogin(etUsername.getEditValue(), etPassword.getEditValue());
+//                        userLogin(etUsername.getEditValue(), etPassword.getEditValue());
+                        User user = new User(etUsername.getEditValue(), etPassword.getEditValue());
+                        // 用户登录
+                        UserClient.userLogin(getString(R.string.server_url), user);
                     }
                 }
                 break;
@@ -118,22 +126,23 @@ public class LoginFragment extends BaseFragment {
     /**
      * 用户登录
      */
-    public void userLogin(String username, String password) {
-//        UserClient.userLogin(getString(R.string.server_url),username,password);
-        String token = RandomUtils.getRandomNumbersAndLetters(16);
-        if (TokenUtils.handleLoginSuccess(token)) {
-            popToBack();
-            ActivityUtils.startActivity(AdminMainActivity.class);
-//            ActivityUtils.startActivity(UserMainActivity.class, DemoDataProvider.getUserInfo());
-        }
+    public void userLogin(String userId, String password) {
+//        UserClient.userLogin(getString(R.string.server_url), userId, password);
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
 
     /**
      * 登录成功的处理
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    private void onLoginSuccess(UserLoginEvent event) {
+    public void onLoginSuccess(UserLoginEvent event) {
         String token = RandomUtils.getRandomNumbersAndLetters(16);
         if (TokenUtils.handleLoginSuccess(token)) {
             if (event.isSuccess()) {

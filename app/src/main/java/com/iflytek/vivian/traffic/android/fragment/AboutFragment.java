@@ -62,4 +62,5 @@ public class AboutFragment extends BaseFragment {
         String currentYear = dateFormat.format(new Date());
         mCopyrightTextView.setText(String.format(getResources().getString(R.string.about_copyright), currentYear));
     }
+
 }

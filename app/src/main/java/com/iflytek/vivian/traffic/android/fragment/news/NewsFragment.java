@@ -62,6 +62,7 @@ public class NewsFragment extends BaseFragment {
 
     private SimpleDelegateAdapter<NewInfo> mNewsAdapter;
 
+
     /**
      * @return 返回为 null意为不需要导航栏
      */

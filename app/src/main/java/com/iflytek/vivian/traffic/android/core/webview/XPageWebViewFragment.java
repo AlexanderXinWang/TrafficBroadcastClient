@@ -130,6 +130,7 @@ public class XPageWebViewFragment extends BaseFragment {
                 .open(fragment);
     }
 
+
     @Override
     protected TitleBar initTitle() {
         return null;

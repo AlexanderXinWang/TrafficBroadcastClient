@@ -42,6 +42,7 @@ public class BaseActivity extends XPageActivity {
 
     Unbinder mUnbinder;
 
+
     @Override
     protected void attachBaseContext(Context newBase) {
         //注入字体

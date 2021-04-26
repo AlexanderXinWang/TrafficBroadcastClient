@@ -48,10 +48,11 @@
                 android:hint="@string/tip_please_input_user_name"
                 android:inputType="number"
                 app:met_clearButton="true"
-                app:met_errorMessage="@string/tip_phone_number_error"
-                app:met_floatingLabel="normal"
-                app:met_floatingLabelText="@string/title_phone_number"
-                app:met_regexp="@string/regex_phone_number" />
+                 />
+<!--            app:met_errorMessage="@string/tip_phone_number_error"-->
+<!--            app:met_floatingLabel="normal"-->
+<!--            app:met_floatingLabelText="@string/title_phone_number"-->
+                <!--app:met_regexp="@string/regex_phone_number"-->
 
         </FrameLayout>
 
@@ -75,13 +76,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
                 android:hint="@string/hint_please_input_password"
-                android:inputType="number"
-                app:met_clearButton="false"
-                app:met_errorMessage="@string/tip_verify_code_error"
-                app:met_floatingLabel="normal"
-                app:met_floatingLabelText="@string/lab_verify_code"
-                app:met_maxCharacters="4"
-                app:met_regexp="@string/regex_verify_code" />
+                android:inputType="numberPassword" />
+<!--            app:met_clearButton="false"-->
+<!--            app:met_errorMessage="@string/tip_verify_code_error"-->
+<!--            app:met_floatingLabel="normal"-->
+<!--            app:met_floatingLabelText="@string/lab_verify_code"-->
+<!--            app:met_maxCharacters="4"-->
+<!--            app:met_regexp="@string/regex_verify_code"-->
 
             <!--<com.xuexiang.xui.widget.button.roundbutton.RoundButton
                 android:id="@+id/btn_get_verify_code"

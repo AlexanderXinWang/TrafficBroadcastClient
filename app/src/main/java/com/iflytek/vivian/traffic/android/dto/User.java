@@ -20,10 +20,25 @@ package com.iflytek.vivian.traffic.android.dto;
 public class User {
     private String id;
     private String name;
+    private String number;
     private String password;
     private Integer isAdmin;
     private String role;
     private String depart;
+
+    public User() {
+
+    }
+
+    /**
+     * 用于登录传参
+     * @param id
+     * @param password
+     */
+    public User(String id, String password) {
+        this.id = id;
+        this.password = password;
+    }
 
     public User(String id, String name, String role, String depart) {
         this.id = id;
@@ -57,12 +72,20 @@ public class User {
         this.name = name;
     }
 
-    public String getImageId() {
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getPassword() {
         return password;
     }
 
-    public void setImageId(String imageId) {
-        this.password = imageId;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Integer getIsAdmin() {

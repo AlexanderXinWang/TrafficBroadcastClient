@@ -47,6 +47,7 @@ public class UserManagerFragment extends BaseFragment {
 
     private SimpleDelegateAdapter<User> mUserAdapter;
 
+
     /**
      * @return 返回为 null意为不需要导航栏
      */

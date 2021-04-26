@@ -27,18 +27,18 @@ public class Event {
     private String vehicle;
     private String event;
     private String eventResult;
-    private String astResult;
-    private Date postTime;
-    private byte[] mp3;
+    private String iatResult;
+    private Date startTime;
+    private byte[] pcm;
 
-    public Event(String policemanName, String location, String event, Date postTime) {
+    public Event(String policemanName, String location, String event, Date startTime) {
         this.policemanName = policemanName;
         this.location = location;
         this.event = event;
-        this.postTime = postTime;
+        this.startTime = startTime;
     }
 
-    public Event(String id, String policemanId, String policemanName, String location, String vehicle, String event, String eventResult, String astResult, Date postTime, byte[] mp3) {
+    public Event(String id, String policemanId, String policemanName, String location, String vehicle, String event, String eventResult, String iatResult, Date startTime, byte[] mp3) {
         this.id = id;
         this.policemanId = policemanId;
         this.policemanName = policemanName;
@@ -46,9 +46,9 @@ public class Event {
         this.vehicle = vehicle;
         this.event = event;
         this.eventResult = eventResult;
-        this.astResult = astResult;
-        this.postTime = postTime;
-        this.mp3 = mp3;
+        this.iatResult = iatResult;
+        this.startTime = startTime;
+        this.pcm = pcm;
     }
 
     public Event() {
@@ -103,28 +103,28 @@ public class Event {
         this.eventResult = eventResult;
     }
 
-    public String getAstResult() {
-        return astResult;
+    public String getIatResult() {
+        return iatResult;
     }
 
-    public void setAstResult(String astResult) {
-        this.astResult = astResult;
+    public void setIatResult(String iatResult) {
+        this.iatResult = iatResult;
     }
 
     public byte[] getMp3() {
-        return mp3;
+        return pcm;
     }
 
     public void setMp3(byte[] mp3) {
-        this.mp3 = mp3;
+        this.pcm = pcm;
     }
 
-    public Date getPostTime() {
-        return postTime;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setPostTime(Date postTime) {
-        this.postTime = postTime;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
     public String getPolicemanName() {

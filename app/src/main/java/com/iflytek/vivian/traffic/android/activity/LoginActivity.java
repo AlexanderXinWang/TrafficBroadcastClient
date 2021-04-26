@@ -20,11 +20,15 @@ package com.iflytek.vivian.traffic.android.activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 
+import androidx.fragment.app.Fragment;
+
 import com.iflytek.vivian.traffic.android.fragment.LoginFragment;
 import com.iflytek.vivian.traffic.android.core.BaseActivity;
 import com.xuexiang.xui.utils.KeyboardUtils;
 import com.xuexiang.xui.utils.StatusBarUtils;
 import com.xuexiang.xutil.display.Colors;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * 登录页面

@@ -49,6 +49,7 @@ public class EventManagerFragment extends BaseFragment {
 
     private SimpleDelegateAdapter<Event> mEventAdapter;
 
+
     /**
      * @return 返回为 null意为不需要导航栏
      */
