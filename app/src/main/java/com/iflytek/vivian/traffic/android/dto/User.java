@@ -20,7 +20,7 @@ package com.iflytek.vivian.traffic.android.dto;
 public class User {
     private String id;
     private String name;
-    private String number;
+    private String age;
     private String password;
     private Integer isAdmin;
     private String role;
@@ -72,12 +72,12 @@ public class User {
         this.name = name;
     }
 
-    public String getNumber() {
-        return number;
+    public String getAge() {
+        return age;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setAge(String age) {
+        this.age = age;
     }
 
     public String getPassword() {

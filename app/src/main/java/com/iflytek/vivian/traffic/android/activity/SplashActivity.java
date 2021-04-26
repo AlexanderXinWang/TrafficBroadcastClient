@@ -17,6 +17,10 @@
 
 package com.iflytek.vivian.traffic.android.activity;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.KeyEvent;
 
 import com.iflytek.vivian.traffic.android.R;
@@ -69,8 +73,20 @@ public class SplashActivity extends BaseSplashActivity implements CancelAdapt {
     }
 
     private void loginOrGoMainPage() {
+
+        Context context = SplashActivity.this;
+
         if (TokenUtils.hasToken()) {
-            ActivityUtils.startActivity(UserMainActivity.class);
+            SharedPreferences sharedPreferences = context.getSharedPreferences("loginToken", 0);
+            Integer userIsAdmin = sharedPreferences.getInt("userIsAdmin", 0);
+
+            // 判断用户角色进入相应界面
+            if (userIsAdmin == 0) {
+                ActivityUtils.startActivity(UserMainActivity.class);
+            } else if (userIsAdmin == 1) {
+                ActivityUtils.startActivity(AdminMainActivity.class);
+            }
+
         } else {
             ActivityUtils.startActivity(LoginActivity.class);
         }

@@ -1,7 +1,9 @@
 
 package com.iflytek.vivian.traffic.android.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -56,6 +58,7 @@ public class LoginFragment extends BaseFragment {
 
     private CountDownButtonHelper mCountDownHelper;
 
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_login;
@@ -69,12 +72,13 @@ public class LoginFragment extends BaseFragment {
         titleBar.setTitle("");
         titleBar.setLeftImageDrawable(ResUtils.getVectorDrawable(getContext(), R.drawable.ic_login_close));
         titleBar.setActionTextColor(ThemeUtils.resolveColor(getContext(), R.attr.colorAccent));
-        titleBar.addAction(new TitleBar.TextAction(R.string.title_jump_login) {
+
+        /*titleBar.addAction(new TitleBar.TextAction(R.string.title_jump_login) {
             @Override
             public void performAction(View view) {
 //                onLoginSuccess();
             }
-        });
+        });*/
         return titleBar;
     }
 
@@ -123,13 +127,6 @@ public class LoginFragment extends BaseFragment {
         }
     }
 
-    /**
-     * 用户登录
-     */
-    public void userLogin(String userId, String password) {
-//        UserClient.userLogin(getString(R.string.server_url), userId, password);
-    }
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -143,7 +140,11 @@ public class LoginFragment extends BaseFragment {
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoginSuccess(UserLoginEvent event) {
+
         String token = RandomUtils.getRandomNumbersAndLetters(16);
+
+        setLoginToken(event.getData());
+
         if (TokenUtils.handleLoginSuccess(token)) {
             if (event.isSuccess()) {
                 Intent intent = new Intent();
@@ -161,10 +162,11 @@ public class LoginFragment extends BaseFragment {
                 }
             } else {
                 new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("登陆失败")
-                        .content(event.getErrorMessage()).positiveText("确定").show();
+                        .content("用户名或密码错误！").positiveText("确定").show();
             }
         }
     }
+
 
     @Override
     public void onDestroyView() {
@@ -172,6 +174,19 @@ public class LoginFragment extends BaseFragment {
             mCountDownHelper.recycle();
         }
         super.onDestroyView();
+    }
+
+    public void setLoginToken(User user) {
+        // 生成的token与当前用户信息保存到本地
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginToken", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("userId", user.getId());
+        editor.putString("userName", user.getName());
+        editor.putInt("userIsAdmin", user.getIsAdmin());
+        editor.putString("userAge", user.getAge());
+        editor.putString("userDepart", user.getDepart());
+        editor.putString("userRole", user.getRole());
+        editor.commit();
     }
 
     /**
