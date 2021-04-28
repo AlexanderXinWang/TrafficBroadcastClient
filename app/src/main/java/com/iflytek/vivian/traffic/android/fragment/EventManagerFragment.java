@@ -116,9 +116,7 @@ public class EventManagerFragment extends BaseFragment {
                     holder.text(R.id.tv_title, model.getLocation());
                     holder.text(R.id.tv_summary, model.getEvent());
 
-                    // todo 传eventId跳转
-                    EventClient.selectEvent(getString(R.string.server_url), model.getId());
-                    holder.click(R.id.card_view, v -> openNewPage(EventDetailFragment.class));
+                    holder.click(R.id.card_view, v -> openNewPage(EventDetailFragment.class, "eventId", model.getId()));
                 }
             }
 
@@ -150,13 +148,15 @@ public class EventManagerFragment extends BaseFragment {
                 refreshLayout.finishRefresh();
             }, 1000);
         });
+
         //上拉加载
-        refreshLayout.setOnLoadMoreListener(refreshLayout -> {
+        /*refreshLayout.setOnLoadMoreListener(refreshLayout -> {
             refreshLayout.getLayout().postDelayed(() -> {
                 mEventAdapter.loadMore(eventList);
                 refreshLayout.finishLoadMore();
             }, 1000);
-        });
+        });*/
+
         refreshLayout.autoRefresh();//第一次进入触发自动刷新，演示效果
     }
 

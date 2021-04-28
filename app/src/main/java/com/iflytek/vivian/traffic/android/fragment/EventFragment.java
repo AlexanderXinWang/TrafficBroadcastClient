@@ -145,6 +145,7 @@ public class EventFragment extends BaseFragment {
     protected void initListeners() {
         //下拉刷新
         refreshLayout.setOnRefreshListener(refreshLayout -> {
+
             // TODO: 2020-04-26 分页
             refreshLayout.getLayout().postDelayed(() -> {
 //                mEventAdapter.refresh(DemoDataProvider.getDemoEventInfo());
@@ -153,14 +154,16 @@ public class EventFragment extends BaseFragment {
                 refreshLayout.finishRefresh();
             }, 1000);
         });
+
         //上拉加载
-        refreshLayout.setOnLoadMoreListener(refreshLayout -> {
+        /*refreshLayout.setOnLoadMoreListener(refreshLayout -> {
             // TODO: 2020-04-26 分页
             refreshLayout.getLayout().postDelayed(() -> {
                 mEventAdapter.loadMore(eventList);
                 refreshLayout.finishLoadMore();
             }, 1000);
-        });
+        });*/
+
         // TODO: 2021-04-26 自动刷新无数据
         refreshLayout.autoRefresh();//第一次进入触发自动刷新，演示效果
     }
