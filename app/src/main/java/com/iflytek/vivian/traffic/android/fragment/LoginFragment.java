@@ -184,7 +184,7 @@ public class LoginFragment extends BaseFragment {
         editor.putString("userName", user.getName());
         editor.putInt("userIsAdmin", user.getIsAdmin());
         editor.putString("userAge", user.getAge());
-        editor.putString("userDepart", user.getDepart());
+        editor.putString("userDepart", user.getDepartment());
         editor.putString("userRole", user.getRole());
         editor.commit();
     }

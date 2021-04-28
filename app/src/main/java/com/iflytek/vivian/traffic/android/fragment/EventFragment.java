@@ -55,6 +55,7 @@ public class EventFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+        EventClient.listEvent(getString(R.string.server_url));
     }
 
     /**
@@ -149,7 +150,6 @@ public class EventFragment extends BaseFragment {
             // TODO: 2020-04-26 分页
             refreshLayout.getLayout().postDelayed(() -> {
 //                mEventAdapter.refresh(DemoDataProvider.getDemoEventInfo());
-                EventClient.listEvent(getString(R.string.server_url));
                 mEventAdapter.refresh(eventList);
                 refreshLayout.finishRefresh();
             }, 1000);

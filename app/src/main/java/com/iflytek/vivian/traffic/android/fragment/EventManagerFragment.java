@@ -62,9 +62,10 @@ public class EventManagerFragment extends BaseFragment {
     private List<Event> eventList = null;
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+        EventClient.listEvent(getString(R.string.server_url));
     }
 
     /**
@@ -143,7 +144,6 @@ public class EventManagerFragment extends BaseFragment {
         //下拉刷新
         refreshLayout.setOnRefreshListener(refreshLayout -> {
             refreshLayout.getLayout().postDelayed(() -> {
-                EventClient.listEvent(getString(R.string.server_url));
                 mEventAdapter.refresh(eventList);
                 refreshLayout.finishRefresh();
             }, 1000);
@@ -158,6 +158,12 @@ public class EventManagerFragment extends BaseFragment {
         });*/
 
         refreshLayout.autoRefresh();//第一次进入触发自动刷新，演示效果
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

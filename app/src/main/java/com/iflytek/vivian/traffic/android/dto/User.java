@@ -24,7 +24,7 @@ public class User {
     private String password;
     private Integer isAdmin;
     private String role;
-    private String depart;
+    private String department;
 
     public User() {
 
@@ -40,20 +40,20 @@ public class User {
         this.password = password;
     }
 
-    public User(String id, String name, String role, String depart) {
+    public User(String id, String name, String role, String department) {
         this.id = id;
         this.name = name;
         this.role = role;
-        this.depart = depart;
+        this.department = department;
     }
 
-    public User(String id, String name, String imageId, Integer isAdmin, String role, String depart) {
+    public User(String id, String name, String imageId, Integer isAdmin, String role, String department) {
         this.id = id;
         this.name = name;
         this.password = imageId;
         this.isAdmin = isAdmin;
         this.role = role;
-        this.depart = depart;
+        this.department = department;
     }
 
     public String getId() {
@@ -104,12 +104,12 @@ public class User {
         this.role = role;
     }
 
-    public String getDepart() {
-        return depart;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setDepart(String depart) {
-        this.depart = depart;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     @Override

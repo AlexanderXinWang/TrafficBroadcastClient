@@ -3,12 +3,7 @@ package com.iflytek.vivian.traffic.android.fragment;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
@@ -18,9 +13,10 @@ import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.adapter.base.broccoli.BroccoliSimpleDelegateAdapter;
 import com.iflytek.vivian.traffic.android.adapter.base.delegate.SimpleDelegateAdapter;
 import com.iflytek.vivian.traffic.android.adapter.entity.AdapterManagerItem;
+import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
-import com.iflytek.vivian.traffic.android.dto.Event;
 import com.iflytek.vivian.traffic.android.dto.User;
+import com.iflytek.vivian.traffic.android.event.user.UserListEvent;
 import com.iflytek.vivian.traffic.android.utils.DemoDataProvider;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -30,6 +26,12 @@ import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.imageview.ImageLoader;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 
 import butterknife.BindView;
 import me.samlss.broccoli.Broccoli;
@@ -47,6 +49,14 @@ public class UserManagerFragment extends BaseFragment {
 
     private SimpleDelegateAdapter<User> mUserAdapter;
 
+    private List<User> userList = null;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+        UserClient.listUser(getString(R.string.server_url));
+    }
 
     /**
      * @return 返回为 null意为不需要导航栏
@@ -87,18 +97,17 @@ public class UserManagerFragment extends BaseFragment {
             }
         };
 
-        //警情
-        mUserAdapter = new BroccoliSimpleDelegateAdapter<User>(R.layout.adapter_user_manager_card_view_list_item, new LinearLayoutHelper(), DemoDataProvider.getUserInfo()) {
+        //用户列表
+        mUserAdapter = new BroccoliSimpleDelegateAdapter<User>(R.layout.adapter_user_manager_card_view_list_item, new LinearLayoutHelper(), userList) {
             @Override
             protected void onBindData(RecyclerViewHolder holder, User model, int position) {
                 if (model != null) {
                     holder.text(R.id.tv_user_name, model.getName());
-//                    holder.text(R.id.tv_tag, DateFormatUtil.format(model.getPostTime()));
                     holder.text(R.id.tv_user_id, model.getId());
                     holder.text(R.id.tv_role, model.getRole());
-                    holder.text(R.id.tv_depart, model.getDepart());
+                    holder.text(R.id.tv_depart, model.getDepartment());
 
-                    holder.click(R.id.card_view, v -> openNewPage(EventDetailFragment.class));
+                    holder.click(R.id.card_view, v -> openNewPage(UserDetailFragment.class, "userId", model.getId()));
                 }
             }
 
@@ -126,19 +135,34 @@ public class UserManagerFragment extends BaseFragment {
         refreshLayout.setOnRefreshListener(refreshLayout -> {
             // TODO: 2020-02-25 这里只是模拟了网络请求
             refreshLayout.getLayout().postDelayed(() -> {
-                mUserAdapter.refresh(DemoDataProvider.getUserInfo());
+                mUserAdapter.refresh(userList);
                 refreshLayout.finishRefresh();
             }, 1000);
         });
+
         //上拉加载
-        refreshLayout.setOnLoadMoreListener(refreshLayout -> {
+        /*refreshLayout.setOnLoadMoreListener(refreshLayout -> {
             // TODO: 2020-02-25 这里只是模拟了网络请求
             refreshLayout.getLayout().postDelayed(() -> {
-                mUserAdapter.loadMore(DemoDataProvider.getUserInfo());
+                mUserAdapter.loadMore(userList);
                 refreshLayout.finishLoadMore();
             }, 1000);
-        });
+        });*/
+
         refreshLayout.autoRefresh();//第一次进入触发自动刷新，演示效果
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getUserList(UserListEvent event) {
+        if (event.isSuccess()) {
+            userList = event.getData();
+        }
     }
 
 }

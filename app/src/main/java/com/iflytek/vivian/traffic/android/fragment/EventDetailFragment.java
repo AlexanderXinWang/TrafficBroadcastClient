@@ -27,6 +27,7 @@ import com.iflytek.vivian.traffic.android.event.event.EventDetailEvent;
 import com.iflytek.vivian.traffic.android.utils.DateFormatUtil;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.core.PageOption;
+import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 
@@ -39,10 +40,8 @@ import butterknife.BindAnim;
 import butterknife.BindView;
 import me.samlss.broccoli.Broccoli;
 
-@Page(name = "警情详情")
+@Page(anim = CoreAnim.none)
 public class EventDetailFragment extends BaseFragment {
-
-    private SimpleDelegateAdapter<Event> mEventAdapter;
 
     @BindView(R.id.event_detail_location)
     TextView location;
@@ -62,23 +61,11 @@ public class EventDetailFragment extends BaseFragment {
     TextView eventResult;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         EventClient.selectEvent(getString(R.string.server_url), getArguments().getString("eventId"));
-        System.out.println(getArguments().getString("eventId"));
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        return super.onCreateView(inflater, container, savedInstanceState);
+//        System.out.println(getArguments().getString("eventId"));
     }
 
     /**
@@ -97,6 +84,12 @@ public class EventDetailFragment extends BaseFragment {
     @Override
     protected void initViews() {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 
 
