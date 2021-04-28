@@ -13,6 +13,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface UserService {
@@ -32,7 +33,7 @@ public interface UserService {
     @GET("/traffic-server/user/list")
     Call<Result<List<User>>> listUser();
 
-    @POST("/traffic-server/user/detail")
-    Call<Result<User>> selectUser(@Body String userId);
+    @POST("/traffic-server/user/detail/{userId}")
+    Call<Result<User>> selectUser(@Path("userId") String userId);
 
 }

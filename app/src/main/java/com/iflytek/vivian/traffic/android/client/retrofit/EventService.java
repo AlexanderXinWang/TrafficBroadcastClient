@@ -13,6 +13,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface EventService {
@@ -33,7 +34,7 @@ public interface EventService {
     @GET("/traffic-server/event/list")
     Call<Result<List<Event>>> listEvent();
 
-    @POST("/traffic-server/event/detail")
-    Call<Result<Event>> selectEvent(@Body String eventId);
+    @POST("/traffic-server/event/detail/{eventId}")
+    Call<Result<Event>> selectEvent(@Path("eventId") String eventId);
 
 }

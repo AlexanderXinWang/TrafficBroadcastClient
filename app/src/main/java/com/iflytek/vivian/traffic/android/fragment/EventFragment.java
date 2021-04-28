@@ -52,8 +52,8 @@ public class EventFragment extends BaseFragment {
     private List<Event> eventList = null;
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
     }
 
@@ -96,8 +96,6 @@ public class EventFragment extends BaseFragment {
             }
         };
 
-
-
         //资讯的标题
         SingleDelegateAdapter titleAdapter = new SingleDelegateAdapter(R.layout.adapter_title_item) {
             @Override
@@ -118,8 +116,8 @@ public class EventFragment extends BaseFragment {
                     holder.text(R.id.tv_title, model.getLocation());
                     holder.text(R.id.tv_summary, model.getEvent());
                     // todo 传eventId跳转
-                    EventClient.selectEvent(getString(R.string.server_url), model.getId());
-                    holder.click(R.id.card_view, v -> openNewPage(EventDetailFragment.class));
+//                    EventClient.selectEvent(getString(R.string.server_url), model.getId());
+                    holder.click(R.id.card_view, v -> openNewPage(EventDetailFragment.class, "eventId", model.getId()));
                 }
 
             }
@@ -137,7 +135,6 @@ public class EventFragment extends BaseFragment {
 
         DelegateAdapter delegateAdapter = new DelegateAdapter(virtualLayoutManager);
         delegateAdapter.addAdapter(bannerAdapter);
-//        delegateAdapter.addAdapter(commonAdapter);
         delegateAdapter.addAdapter(titleAdapter);
         delegateAdapter.addAdapter(mEventAdapter);
 
@@ -173,6 +170,8 @@ public class EventFragment extends BaseFragment {
         if (event.isSuccess()) {
             eventList = event.getData();
             System.out.println(eventList);
+        } else {
+            // TODO 弹出请求错误
         }
     }
 

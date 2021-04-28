@@ -51,6 +51,7 @@ public abstract class SimpleDelegateAdapter<T> extends BaseDelegateAdapter<T> {
         mLayoutHelper = layoutHelper;
     }
 
+
     @Override
     protected int getItemLayoutId(int viewType) {
         return mLayoutId;

@@ -19,7 +19,7 @@
     app:contentPaddingTop="5dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="match_parent" android:baselineAligned="false" 
         android:layout_height="80dp">
 
         <LinearLayout
