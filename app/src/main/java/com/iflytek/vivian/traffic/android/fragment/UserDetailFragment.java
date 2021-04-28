@@ -18,7 +18,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
-@Page(anim = CoreAnim.none)
+@Page(anim = CoreAnim.none, name = "警员详情")
 public class UserDetailFragment extends BaseFragment {
 
     @BindView(R.id.user_detail_name)

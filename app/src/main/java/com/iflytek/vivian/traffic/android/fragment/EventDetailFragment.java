@@ -40,7 +40,7 @@ import butterknife.BindAnim;
 import butterknife.BindView;
 import me.samlss.broccoli.Broccoli;
 
-@Page(anim = CoreAnim.none)
+@Page(anim = CoreAnim.none, name = "警情详情")
 public class EventDetailFragment extends BaseFragment {
 
     @BindView(R.id.event_detail_location)
@@ -66,14 +66,6 @@ public class EventDetailFragment extends BaseFragment {
         EventBus.getDefault().register(this);
         EventClient.selectEvent(getString(R.string.server_url), getArguments().getString("eventId"));
 //        System.out.println(getArguments().getString("eventId"));
-    }
-
-    /**
-     * @return 返回为 null意为不需要导航栏
-     */
-    @Override
-    protected TitleBar initTitle() {
-        return null;
     }
 
     @Override
