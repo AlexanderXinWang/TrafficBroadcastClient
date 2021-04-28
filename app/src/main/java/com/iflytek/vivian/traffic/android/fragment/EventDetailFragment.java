@@ -24,6 +24,7 @@ import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.dto.Event;
 import com.iflytek.vivian.traffic.android.event.event.EventDetailEvent;
+import com.iflytek.vivian.traffic.android.utils.DateFormatUtil;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.core.PageOption;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
@@ -106,6 +107,11 @@ public class EventDetailFragment extends BaseFragment {
             System.out.println(event);
             location.setText(event.getLocation());
             userName.setText(event.getPolicemanName());
+            userId.setText(event.getPolicemanId());
+            time.setText(DateFormatUtil.format(event.getStartTime()));
+            vehicle.setText(event.getVehicle());
+            eventDesc.setText(event.getEvent());
+            eventResult.setText(event.getEventResult());
         } else {
             // TODO 弹出请求错误
         }
