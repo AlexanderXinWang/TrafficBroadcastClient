@@ -2,7 +2,6 @@ package com.iflytek.vivian.traffic.android.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
@@ -39,7 +38,6 @@ import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.display.Colors;
 
 import butterknife.BindView;
-import okhttp3.internal.Util;
 
 /**
  * 管理员程序主页面

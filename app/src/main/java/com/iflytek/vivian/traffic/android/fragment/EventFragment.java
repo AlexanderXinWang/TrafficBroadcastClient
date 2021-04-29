@@ -3,7 +3,6 @@ package com.iflytek.vivian.traffic.android.fragment;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
@@ -116,8 +115,7 @@ public class EventFragment extends BaseFragment {
                     holder.text(R.id.tv_tag, DateFormatUtil.format(model.getStartTime()));
                     holder.text(R.id.tv_title, model.getLocation());
                     holder.text(R.id.tv_summary, model.getEvent());
-                    // todo 传eventId跳转
-//                    EventClient.selectEvent(getString(R.string.server_url), model.getId());
+
                     holder.click(R.id.card_view, v -> openNewPage(EventDetailFragment.class, "eventId", model.getId()));
                 }
 
@@ -147,7 +145,6 @@ public class EventFragment extends BaseFragment {
         //下拉刷新
         refreshLayout.setOnRefreshListener(refreshLayout -> {
 
-            // TODO: 2020-04-26 分页
             refreshLayout.getLayout().postDelayed(() -> {
 //                mEventAdapter.refresh(DemoDataProvider.getDemoEventInfo());
                 mEventAdapter.refresh(eventList);
@@ -157,15 +154,19 @@ public class EventFragment extends BaseFragment {
 
         //上拉加载
         /*refreshLayout.setOnLoadMoreListener(refreshLayout -> {
-            // TODO: 2020-04-26 分页
             refreshLayout.getLayout().postDelayed(() -> {
                 mEventAdapter.loadMore(eventList);
                 refreshLayout.finishLoadMore();
             }, 1000);
         });*/
 
-        // TODO: 2021-04-26 自动刷新无数据
         refreshLayout.autoRefresh();//第一次进入触发自动刷新，演示效果
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

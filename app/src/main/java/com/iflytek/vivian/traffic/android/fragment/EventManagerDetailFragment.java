@@ -18,36 +18,36 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
-@Page(anim = CoreAnim.none, name = "警情大厅详情")
-public class EventDetailFragment extends BaseFragment {
+@Page(anim = CoreAnim.none, name = "警情管理详情")
+public class EventManagerDetailFragment extends BaseFragment {
 
-    @BindView(R.id.event_hall_detail_location)
+    @BindView(R.id.event_detail_location)
     TextView location;
-    @BindView(R.id.event_hall_detail_user_name)
+    @BindView(R.id.event_detail_user_name)
     TextView userName;
-    @BindView(R.id.event_hall_detail_user_id)
+    @BindView(R.id.event_detail_user_id)
     TextView userId;
-    @BindView(R.id.event_hall_detail_time)
+    @BindView(R.id.event_detail_time)
     TextView time;
-    @BindView(R.id.event_hall_detail_vehicle)
+    @BindView(R.id.event_detail_vehicle)
     TextView vehicle;
-    @BindView(R.id.event_hall_detail_status)
+    @BindView(R.id.event_detail_status)
     TextView status;
-    @BindView(R.id.event_hall_detail_desc)
+    @BindView(R.id.event_detail_desc)
     TextView eventDesc;
-    @BindView(R.id.event_hall_detail_result)
+    @BindView(R.id.event_detail_result)
     TextView eventResult;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        EventClient.selectEvent(getString(R.string.server_url), getArguments().getString("eventId"));
+        EventClient.selectEvent(getString(R.string.server_url), getArguments().getString("eventManagerId"));
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_event_detail;
+        return R.layout.fragment_event_manager_detail;
     }
 
     @Override
@@ -78,4 +78,5 @@ public class EventDetailFragment extends BaseFragment {
             // TODO 弹出请求错误
         }
     }
+
 }
