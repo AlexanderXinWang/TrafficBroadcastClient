@@ -72,7 +72,7 @@
                                 android:layout_marginLeft="5dp"/>
 
                             <EditText
-                                android:id="@+id/user_detail_age"
+                                android:id="@+id/event_report_location"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="3"
@@ -199,6 +199,7 @@
                         </FrameLayout>
 
                         <TextView
+                            android:id="@+id/event_report_iat"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
 

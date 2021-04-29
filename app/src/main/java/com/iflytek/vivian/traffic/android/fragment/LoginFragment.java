@@ -174,6 +174,7 @@ public class LoginFragment extends BaseFragment {
             mCountDownHelper.recycle();
         }
         super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 
     public void setLoginToken(User user) {
