@@ -78,15 +78,17 @@ public class SplashActivity extends BaseSplashActivity implements CancelAdapt {
 
         if (TokenUtils.hasToken()) {
             SharedPreferences sharedPreferences = context.getSharedPreferences("loginToken", 0);
-            Integer userIsAdmin = sharedPreferences.getInt("userIsAdmin", 0);
-
-            // 判断用户角色进入相应界面
-            if (userIsAdmin == 0) {
-                ActivityUtils.startActivity(UserMainActivity.class);
-            } else if (userIsAdmin == 1) {
-                ActivityUtils.startActivity(AdminMainActivity.class);
+            if (sharedPreferences != null) {
+                Integer userIsAdmin = sharedPreferences.getInt("userIsAdmin", 0);
+                // 判断用户角色进入相应界面
+                if (userIsAdmin == 0) {
+                    ActivityUtils.startActivity(UserMainActivity.class);
+                } else if (userIsAdmin == 1) {
+                    ActivityUtils.startActivity(AdminMainActivity.class);
+                }
+            } else {
+                ActivityUtils.startActivity(LoginActivity.class);
             }
-
         } else {
             ActivityUtils.startActivity(LoginActivity.class);
         }

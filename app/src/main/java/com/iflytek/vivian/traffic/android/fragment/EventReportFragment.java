@@ -9,11 +9,14 @@ import android.media.MediaRecorder;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.iflytek.vivian.traffic.android.R;
+import com.iflytek.vivian.traffic.android.activity.SplashActivity;
 import com.iflytek.vivian.traffic.android.client.EventClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.dto.Event;
@@ -23,6 +26,7 @@ import com.iflytek.vivian.traffic.android.event.event.IatEvent;
 import com.iflytek.vivian.traffic.android.utils.AlertDialogUtil;
 import com.iflytek.vivian.traffic.android.utils.StringUtil;
 import com.iflytek.vivian.traffic.android.utils.WaveUtil;
+import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
@@ -37,6 +41,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import butterknife.BindView;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 
 import static com.iflytek.vivian.traffic.android.utils.WaveUtil.writeHead;
 
@@ -75,13 +81,15 @@ public class EventReportFragment extends BaseFragment {
     private byte[] voiceData = new byte[1280];
 
     private Event event;
+    private User loginUser;
 
-    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginToken", Context.MODE_PRIVATE);
+//    SharedPreferences sharedPreferences = getContext().getSharedPreferences("loginToken", Context.MODE_PRIVATE);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+        initData();
     }
 
     /**
@@ -99,13 +107,65 @@ public class EventReportFragment extends BaseFragment {
 
     @Override
     protected void initViews() {
+        /*String data = getActivity().getIntent().getStringExtra("data");
+        if (StringUtil.isNotEmpty(data)) {
+            loginUser = JSON.parseObject(data, User.class);
+        }*/
+    }
 
+    public void initData() {
+        String data = getActivity().getIntent().getStringExtra("data");
+        if (StringUtil.isNotEmpty(data)) {
+            loginUser = JSON.parseObject(data, User.class);
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
+    }
+
+    @SingleClick
+    @OnClick({R.id.event_report_flush, R.id.event_report_record, R.id.event_report})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.event_report_flush:
+                eventLocation.setText(null);
+                eventVehicle.setText(null);
+                eventDesc.setText(null);
+                eventResult.setText(null);
+                break;
+            case R.id.event_report_record:
+                if (isWorking) {
+                    isWorking = false;
+                    onBtnClickedIat();
+                } else {
+                    startRecord();
+                    // TODO 录音状态提示
+                }
+                break;
+            case R.id.event_report:
+                try {
+                    Event event = new Event();
+                    event.setLocation(eventLocation.getText().toString());
+                    event.setVehicle(eventVehicle.getText().toString());
+                    event.setEvent(eventDesc.getText().toString());
+                    event.setEventResult(eventResult.getText().toString());
+                    event.setIatResult(iatResult.getText().toString());
+                    /*event.setPolicemanId(loginUser.getId());
+                    event.setPolicemanName(loginUser.getName());*/
+
+                    if ("".equals(event.getLocation()) && "".equals(event.getVehicle()) && "".equals(event.getEvent()) && "".equals(event.getEventResult())) {
+                        AlertDialogUtil.warning(getContext(), "输入为空");
+                    } else {
+                        EventClient.saveEvent(getString(R.string.server_url), event);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "上报事件失败：" + e.getMessage());
+                }
+                break;
+        }
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,14 +280,14 @@ public class EventReportFragment extends BaseFragment {
                 }
             }
         } else {
-            AlertDialogUtil.warning(getContext(), "iat响应失败：" + iatEvent.getErrorMessage());
+            AlertDialogUtil.warning(getContext(), "iat响应失败：" + iatEvent.getErrorMessage() );
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onReportEvent(EventSaveEvent event) {
         if (event.isSuccess()) {
-            String message = String.format("用户：%s", sharedPreferences.getString("userName", ""));
+            String message = String.format("周星星"/*, loginUser.getName()*/);
             AlertDialogUtil.infoAndClose(getActivity(), message, "事件上报成功，点击返回");
             Log.i(TAG, "保存事件成功");
         } else {
@@ -267,6 +327,8 @@ public class EventReportFragment extends BaseFragment {
         System.arraycopy(byte2, 0, bytes, byte1.length, byte2.length);
         return bytes;
     }
+
+
 
 
 

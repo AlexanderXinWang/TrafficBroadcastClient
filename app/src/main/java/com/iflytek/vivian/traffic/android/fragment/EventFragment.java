@@ -147,6 +147,7 @@ public class EventFragment extends BaseFragment {
 
             refreshLayout.getLayout().postDelayed(() -> {
 //                mEventAdapter.refresh(DemoDataProvider.getDemoEventInfo());
+                EventClient.listEvent(getString(R.string.server_url));
                 mEventAdapter.refresh(eventList);
                 refreshLayout.finishRefresh();
             }, 1000);

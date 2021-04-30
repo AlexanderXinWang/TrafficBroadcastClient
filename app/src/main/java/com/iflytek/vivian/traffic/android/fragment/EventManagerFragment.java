@@ -135,6 +135,7 @@ public class EventManagerFragment extends BaseFragment {
         //下拉刷新
         refreshLayout.setOnRefreshListener(refreshLayout -> {
             refreshLayout.getLayout().postDelayed(() -> {
+                EventClient.listEvent(getString(R.string.server_url));
                 mEventAdapter.refresh(eventList);
                 refreshLayout.finishRefresh();
             }, 1000);
