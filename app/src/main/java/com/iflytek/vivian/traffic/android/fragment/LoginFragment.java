@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import com.alibaba.fastjson.JSON;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.activity.AdminMainActivity;
+import com.iflytek.vivian.traffic.android.activity.LoginActivity;
 import com.iflytek.vivian.traffic.android.activity.UserMainActivity;
 import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
@@ -143,12 +144,11 @@ public class LoginFragment extends BaseFragment {
 
         String token = RandomUtils.getRandomNumbersAndLetters(16);
 
-        setLoginToken(event.getData());
-
         if (TokenUtils.handleLoginSuccess(token)) {
             if (event.isSuccess()) {
-                Intent intent = new Intent();
-                intent.putExtra("data", JSON.toJSONString(event.getData()));
+//                Intent intent = new Intent();
+//                intent.putExtra("userData", JSON.toJSONString(event.getData()));
+                setLoginToken(event.getData());
                 popToBack();    // 弹出当前framework
                 /**
                  * 区分用户类型
@@ -156,8 +156,14 @@ public class LoginFragment extends BaseFragment {
                  * 管理员 —— 1
                  */
                 if (event.getData().getIsAdmin() == 0) {
+//                    Intent userIntent = new Intent(getActivity(), UserMainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    userIntent.putExtra("userData", JSON.toJSONString(event.getData()));
+//                    ActivityUtils.startActivity(userIntent);
                     ActivityUtils.startActivity(UserMainActivity.class);
                 } else {
+//                    Intent adminIntent = new Intent(getActivity(), AdminMainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    adminIntent.putExtra("userData", JSON.toJSONString(event.getData()));
+//                    ActivityUtils.startActivity(adminIntent);
                     ActivityUtils.startActivity(AdminMainActivity.class);
                 }
             } else {
@@ -179,7 +185,7 @@ public class LoginFragment extends BaseFragment {
 
     public void setLoginToken(User user) {
         // 生成的token与当前用户信息保存到本地
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginToken", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("loginUser", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("userId", user.getId());
         editor.putString("userName", user.getName());

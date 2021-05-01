@@ -23,8 +23,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.KeyEvent;
 
+import com.alibaba.fastjson.JSON;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.utils.SettingUtils;
+import com.iflytek.vivian.traffic.android.utils.StringUtil;
 import com.iflytek.vivian.traffic.android.utils.TokenUtils;
 import com.iflytek.vivian.traffic.android.utils.Utils;
 import com.xuexiang.xui.utils.KeyboardUtils;
@@ -77,13 +79,22 @@ public class SplashActivity extends BaseSplashActivity implements CancelAdapt {
         Context context = SplashActivity.this;
 
         if (TokenUtils.hasToken()) {
-            SharedPreferences sharedPreferences = context.getSharedPreferences("loginToken", 0);
+            SharedPreferences sharedPreferences = context.getSharedPreferences("loginUser", 0);
             if (sharedPreferences != null) {
                 Integer userIsAdmin = sharedPreferences.getInt("userIsAdmin", 0);
+                String userId = sharedPreferences.getString("userId", "");
                 // 判断用户角色进入相应界面
                 if (userIsAdmin == 0) {
+//                    Intent userIntent = new Intent(context, UserMainActivity.class);
+//                    userIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    userIntent.putExtra("userId", userId);
+//                    ActivityUtils.startActivity(userIntent);
                     ActivityUtils.startActivity(UserMainActivity.class);
                 } else if (userIsAdmin == 1) {
+//                    Intent adminIntent = new Intent(context, AdminMainActivity.class);
+//                    adminIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    adminIntent.putExtra("userId", userId);
+//                    ActivityUtils.startActivity(adminIntent);
                     ActivityUtils.startActivity(AdminMainActivity.class);
                 }
             } else {

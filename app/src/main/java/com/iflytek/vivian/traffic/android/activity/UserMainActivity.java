@@ -17,8 +17,11 @@
 
 package com.iflytek.vivian.traffic.android.activity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,16 +34,23 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import com.alibaba.fastjson.JSON;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.iflytek.vivian.traffic.android.client.UserClient;
+import com.iflytek.vivian.traffic.android.dto.User;
+import com.iflytek.vivian.traffic.android.event.user.UserDetailEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserLoginEvent;
 import com.iflytek.vivian.traffic.android.fragment.AboutFragment;
 import com.iflytek.vivian.traffic.android.fragment.EventFragment;
 import com.iflytek.vivian.traffic.android.fragment.EventReportFragment;
 import com.iflytek.vivian.traffic.android.fragment.SettingsFragment;
+import com.iflytek.vivian.traffic.android.fragment.UserDetailFragment;
 import com.iflytek.vivian.traffic.android.fragment.profile.ProfileFragment;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.core.BaseActivity;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
+import com.iflytek.vivian.traffic.android.utils.StringUtil;
 import com.iflytek.vivian.traffic.android.utils.Utils;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.iflytek.vivian.traffic.android.widget.GuideTipsDialog;
@@ -48,11 +58,16 @@ import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xutil.XUtil;
 import com.xuexiang.xutil.common.ClickUtils;
 import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.display.Colors;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
@@ -60,6 +75,8 @@ import butterknife.BindView;
  * 用户程序主页面
  */
 public class UserMainActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener, BottomNavigationView.OnNavigationItemSelectedListener, ClickUtils.OnClick2ExitListener, Toolbar.OnMenuItemClickListener {
+
+    private static final String TAG = "UserMainActivity";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -80,8 +97,11 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
 
     private String[] mTitles;
 
-//    private Bundle bundle = this.getIntent().getExtras();
-//    private User user = bundle.getString("user");
+    private String userId;
+    private String userName;
+    private String userAge;
+    private String userRole;
+    private String userDepart;
 
 
 
@@ -94,11 +114,17 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        savedInstanceState.getSerializable(String.valueOf(1));
+//        EventBus.getDefault().register(this);
 
+        initData();
         initViews();
-
         initListeners();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -128,11 +154,58 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
         GuideTipsDialog.showTips(this);
     }
 
+    private void initData() {
+
+        SharedPreferences preferences = getSharedPreferences("loginUser", MODE_PRIVATE);
+        userId = preferences.getString("userId", "");
+        userName = preferences.getString("userName", "");
+        userRole = preferences.getString("userRole", "");
+        userDepart = preferences.getString("userDepart", "");
+
+        Log.i(TAG, "当前用户id" + userId);
+
+//        loginUser.setId(userId);
+//        loginUser.setName(userName);
+//        loginUser.setAge("");
+//        loginUser.setRole(userRole);
+//        loginUser.setDepartment(userDepart);
+
+//        loginUser.setId(preferences.getString("userId", ""));
+//        loginUser.setName(preferences.getString("userName", ""));
+//        loginUser.setRole(preferences.getString("userRole", ""));
+//        loginUser.setDepartment(preferences.getString("userDepart", ""));
+
+//        UserClient.selectUser(getString(R.string.server_url), userId);
+
+//        String userName = getIntent().getStringExtra("userName");
+//        String userRole = getIntent().getStringExtra("userRole");
+//        String userDepart = getIntent().getStringExtra("userDepart");
+//        if (StringUtil.isNotEmpty(userId)) {
+//            loginUser.setId(userId);
+//        }
+//        if (StringUtil.isNotEmpty(userName)) {
+//            loginUser.setName(userName);
+//        }
+//        if (StringUtil.isNotEmpty(userRole)) {
+//            loginUser.setRole(userRole);
+//        }
+//        if (StringUtil.isNotEmpty(userDepart)) {
+//            loginUser.setDepartment(userDepart);
+//        }
+//        Context context = UserMainActivity.this;
+//        SharedPreferences localUser = context.getSharedPreferences("loginUser", 0);
+//        loginUser.setId(localUser.getString("userId",""));
+//        loginUser.setName(localUser.getString("userName", ""));
+//        loginUser.setRole(localUser.getString("userRole", ""));
+//        loginUser.setDepartment(localUser.getString("userDepart", ""));
+    }
+
     private void initHeader() {
         navView.setItemIconTintList(null);
         View headerView = navView.getHeaderView(0);
         LinearLayout navHeader = headerView.findViewById(R.id.nav_header);
         RadiusImageView ivAvatar = headerView.findViewById(R.id.iv_avatar);
+        TextView tvId = headerView.findViewById(R.id.tv_user_id);
         TextView tvAvatar = headerView.findViewById(R.id.tv_avatar);
         TextView tvSign = headerView.findViewById(R.id.tv_sign);
 
@@ -152,12 +225,10 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
 
         // TODO: 2019-10-09 初始化数据
         ivAvatar.setImageResource(R.drawable.ic_default_head);
-        tvAvatar.setText(R.string.app_name);
-        tvSign.setText("这个家伙很懒，什么也没有留下～～");
+        tvId.setText(userId);
+        tvAvatar.setText(userName);
+        tvSign.setText(userRole + "   " + userDepart);
         navHeader.setOnClickListener(this);
-
-//        tvAvatar.setText(bundle.getString("name"));
-//        tvSign.setText(bundle.getInt("id"));
     }
 
     protected void initListeners() {
@@ -306,5 +377,14 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
         XUtil.exitApp();
     }
 
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onLoginUser(UserDetailEvent event) {
+//        if (event.isSuccess()) {
+//            loginUser = event.getData();
+//        } else {
+//            new MaterialDialog.Builder(this).iconRes(R.drawable.ic_menu_about).title("服务器错误")
+//                    .content("获取当前用户信息失败！").positiveText("确定").show();
+//        }
+//    }
 
 }

@@ -47,6 +47,7 @@
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginStart="4dp"
                     android:text="周星星"
+                    android:textSize="16dp"
                     android:textColor="@color/xui_config_color_pure_black" />
             </LinearLayout>
 
@@ -54,7 +55,8 @@
                 android:id="@+id/tv_tag"
                 style="@style/TextStyle.Explain"
                 android:layout_gravity="end|center_vertical"
-                android:text="09:04" />
+                android:text="09:04"
+                android:textSize="15dp"/>
 
         </FrameLayout>
 

@@ -10,6 +10,7 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +62,10 @@ public class EventReportFragment extends BaseFragment {
     EditText eventResult;
     @BindView(R.id.event_report_iat)
     TextView iatResult;
+    @BindView(R.id.event_report_status)
+    TextView reportStatus;
+    @BindView(R.id.event_report_record)
+    Button btnSpeak;
 
     //来源：麦克风
     private final static int AUDIO_INPUT = MediaRecorder.AudioSource.MIC;
@@ -136,12 +141,16 @@ public class EventReportFragment extends BaseFragment {
                 eventDesc.setText(null);
                 eventResult.setText(null);
                 break;
+            // 语音输入按钮绑定事件
             case R.id.event_report_record:
                 if (isWorking) {
                     isWorking = false;
                     onBtnClickedIat();
+//                    AlertDialogUtil.warning(getContext(), "再次点击按钮结束");
                 } else {
                     startRecord();
+                    reportStatus.setText("请说话...");
+                    btnSpeak.setText("录音中...");
                     // TODO 录音状态提示
                 }
                 break;
@@ -172,17 +181,8 @@ public class EventReportFragment extends BaseFragment {
     // 录音
 
     /**
-     * 语音输入按钮绑定事件
+     *
      */
-    public void onRecordBtnClicked() {
-        if (isWorking) {
-            isWorking = false;
-            onBtnClickedIat();
-        } else {
-            startRecord();
-            // TODO 录音状态提示
-        }
-    }
 
     /**
      * 开启录音线程
@@ -246,6 +246,8 @@ public class EventReportFragment extends BaseFragment {
         if (voiceData != null) {
             try {
                 EventClient.iatEvent(getString(R.string.server_url), byteMerger(getHead(voiceData.length, audioSampleRate, 16, 1), voiceData));
+                reportStatus.setText("语音识别中...");
+                btnSpeak.setText("语音输入");
             } catch (IOException e) {
                 Log.e(TAG, "语音识别异常" + e.getMessage());
             }
@@ -264,6 +266,7 @@ public class EventReportFragment extends BaseFragment {
             event = iatEvent.getData();
             if (StringUtil.isNotEmpty(event.getIatResult())) {
                 iatResult.setText(event.getIatResult());
+                reportStatus.setText("语音识别完成！");
             }
             if (null != event) {
                 if (null != event.getLocation()) {
@@ -281,6 +284,7 @@ public class EventReportFragment extends BaseFragment {
             }
         } else {
             AlertDialogUtil.warning(getContext(), "iat响应失败：" + iatEvent.getErrorMessage() );
+            reportStatus.setText("请重新进行录音或文字输入");
         }
     }
 

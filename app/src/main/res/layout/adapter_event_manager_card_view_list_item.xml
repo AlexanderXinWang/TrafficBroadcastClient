@@ -41,19 +41,7 @@
             app:contentPaddingTop="5dp">
 
             <LinearLayout
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <com.xuexiang.xui.widget.button.SmoothCheckBox
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    >
-
-                </com.xuexiang.xui.widget.button.SmoothCheckBox>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
@@ -75,20 +63,46 @@
                             android:src="@mipmap/ic_launcher"
                             app:riv_is_circle="true" />
 
-                        <TextView
-                            android:id="@+id/tv_user_name"
-                            style="@style/TextStyle.Explain"
-                            android:layout_gravity="end|center_vertical"
-                            android:layout_marginStart="4dp"
-                            android:text="周星星"
-                            android:textColor="@color/xui_config_color_pure_black" />
-                    </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
 
-                    <TextView
-                        android:id="@+id/tv_tag"
-                        style="@style/TextStyle.Explain"
-                        android:layout_gravity="end|center_vertical"
-                        android:text="09:04" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/tv_user_name"
+                                    android:layout_marginStart="5dp"
+                                    android:text="周星星"
+                                    android:gravity="center_vertical"
+                                    android:textColor="@color/xui_config_color_pure_black" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="3"
+                                android:layout_gravity="end"
+                                android:gravity="right">
+                                <TextView
+                                    android:id="@+id/tv_tag"
+                                    android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:gravity="right"
+                                    android:layout_marginEnd="5dp"
+                                    android:text="09:04" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+
+
+
+                    </LinearLayout>
 
                 </FrameLayout>
 

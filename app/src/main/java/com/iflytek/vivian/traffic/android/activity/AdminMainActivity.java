@@ -19,6 +19,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.core.BaseActivity;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
+import com.iflytek.vivian.traffic.android.event.user.UserLoginEvent;
 import com.iflytek.vivian.traffic.android.fragment.AboutFragment;
 import com.iflytek.vivian.traffic.android.fragment.EventFragment;
 import com.iflytek.vivian.traffic.android.fragment.EventManagerFragment;
@@ -36,6 +37,9 @@ import com.xuexiang.xutil.XUtil;
 import com.xuexiang.xutil.common.ClickUtils;
 import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.display.Colors;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
@@ -278,5 +282,12 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onExit() {
         XUtil.exitApp();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserLogin(UserLoginEvent event) {
+        if (event.isSuccess()) {
+
+        }
     }
 }
