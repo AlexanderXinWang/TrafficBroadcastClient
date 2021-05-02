@@ -158,10 +158,6 @@ public class EventManagerFragment extends BaseFragment {
         });*/
 
         refreshLayout.autoRefresh();//第一次进入触发自动刷新，演示效果
-
-
-        ImageView add = findViewById(R.id.tool_item_add);
-
     }
 
     @Override
@@ -171,16 +167,15 @@ public class EventManagerFragment extends BaseFragment {
     }
 
     @SingleClick
-    @OnClick({R.id.tool_item_add, R.id.tool_item_filter, R.id.tool_item_delete})
+    @OnClick({R.id.event_manager_add, R.id.event_manager_filter, R.id.event_manager_delete})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.tool_item_add:
-                openNewPage(EventDetailFragment.class);
-
+            case R.id.event_manager_add:
+                openNewPage(EventManagerAddFragment.class);
                 break;
-            case R.id.tool_item_filter:
+            case R.id.event_manager_filter:
                 break;
-            case R.id.tool_item_delete:
+            case R.id.event_manager_delete:
                 break;
         }
     }

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout style="@style/PullDownStyle">
+
+        <androidx.core.widget.NestedScrollView style="@style/ScrollViewStyle">
+
+            <LinearLayout
+                android:id="@+id/event_detail_linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/event_add_location"
+                        android:layout_width="280dp"
+                        android:layout_height="60dp"
+                        android:layout_marginLeft="15dp"
+                        android:hint="请输入事件发生地"
+                        android:textSize="22sp"
+                        android:textColor="@color/xui_config_color_blue" />
+
+                    <ImageView
+                        android:id="@+id/event_add_save"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/ic_manager_save"/>
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal"
+                    android:background="@color/white">
+
+                    <com.xuexiang.xui.widget.imageview.RadiusImageView
+                        android:id="@+id/event_add_user_image"
+                        android:scaleType="centerCrop"
+                        android:layout_gravity="center"
+                        app:riv_is_circle="true"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/sRightImgId"
+                        app:srcCompat="@drawable/ic_default_head" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/event_add_user_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_gravity="end"
+                            android:layout_marginStart="4dp"
+                            android:hint="请输入事件上报人"
+                            android:textSize="15dp"
+                            android:textColor="@color/xui_config_color_blue"/>
+
+                        <EditText
+                            android:id="@+id/event_add_user_id"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="4dp"
+                            android:hint="请输入事件上报人编号"
+                            android:textSize="15dp"
+                            android:textColor="@color/xui_config_color_blue"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/event_detail_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center|right"
+                        android:layout_marginRight="15dp"
+                        android:textSize="15dp"
+                        android:textColor="@color/black"/>
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="车辆类型"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"/>
+
+                    <EditText
+                        android:id="@+id/event_add_vehicle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:hint="例：两个电动车"
+                        android:textSize="15dp"
+                        android:textColor="@color/xui_config_color_blue"/>
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="当前状态"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"/>
+
+                    <EditText
+                        android:id="@+id/event_add_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:hint="例：已处理"
+                        android:textSize="15dp"
+                        android:textColor="@color/xui_config_color_blue"/>
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:text="事件描述"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"/>
+
+                    <EditText
+                        android:id="@+id/event_add_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="例：撞了，现在人在医院了，电动车还在现场,有人员头部受伤"
+                        android:textSize="15dp"
+                        android:textColor="@color/xui_config_color_blue"/>
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:text="事件结果"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"/>
+
+                    <EditText
+                        android:id="@+id/event_add_result"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="10dp"
+                        android:hint="例：撞了，现在人在医院了，电动车还在现场,有人员头部受伤"
+                        android:textSize="15dp"
+                        android:textColor="@color/xui_config_color_blue"/>
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"/>
+
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+</LinearLayout>
