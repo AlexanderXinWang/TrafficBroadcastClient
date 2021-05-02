@@ -30,13 +30,13 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="700dp"
+                    android:layout_height="600dp"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp">
+                        android:layout_marginTop="20dp">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -49,20 +49,38 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="20dp">
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="5dp">
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="当前用户：周星星"/>
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:text="当前用户"
+                            android:textSize="18dp"
+                            android:textColor="@color/black"
+                            android:textColorHighlight="@color/colorAccent"
+                            android:layout_marginLeft="5dp"/>
+
+                        <TextView
+                            android:id="@+id/event_report_user"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:text="周星星"
+                            android:textSize="16dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/xui_config_color_blue">
+                        </TextView>
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="220dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="5dp"
                         android:background="@color/white"
                         android:orientation="vertical">
 
@@ -207,14 +225,17 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="iat识别结果"
-                                android:textSize="18dp" />
+                                android:textSize="18dp"
+                                android:textColor="@color/black"/>
                         </FrameLayout>
 
                         <TextView
                             android:id="@+id/event_report_iat"
                             android:layout_width="match_parent"
-                            android:layout_height="150dp"
-                            android:background="@drawable/abc_vector_test"/>
+                            android:layout_height="100dp"
+                            android:layout_margin="10dp"
+                            android:text="请按照：事件是XXX，地点是XXX，车辆类型是XXX，事件结果是XXX的格式进行描述。"
+                            android:background="@drawable/bg_blue_circular"/>
 
                     </LinearLayout>
 
@@ -223,33 +244,68 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="当前状态" />
+                        android:text="当前状态"
+                        android:textSize="18dp"
+                        android:textColor="@color/white"
+                        android:background="@drawable/bg_blue_circular"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        android:layout_marginTop="10dp">
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
 
-                        <Button
-                            android:id="@+id/event_report_flush"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="清除数据"
-                            android:textSize="18dp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center">
+                            <Button
+                                android:id="@+id/event_report_record"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="10dp"
+                                android:text="语音输入"
+                                android:textSize="18dp"
+                                android:background="@drawable/bg_blue_circular"/>
+                        </LinearLayout>
 
-                        <Button
-                            android:id="@+id/event_report_record"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="语音输入"
-                            android:textSize="18dp" />
 
-                        <Button
-                            android:id="@+id/event_report"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="点击上报事件"
-                            android:textSize="18dp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="left">
+                                <Button
+                                    android:id="@+id/event_report_flush"
+                                    android:layout_width="130dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="清除数据"
+                                    android:textSize="18dp"
+                                    android:background="@drawable/bg_blue_circular"/>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="right"
+                                android:layout_weight="1">
+                                <Button
+                                    android:id="@+id/event_report"
+                                    android:layout_width="130dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="上报事件"
+                                    android:textSize="18dp"
+                                    android:background="@drawable/bg_blue_circular"/>
+                            </LinearLayout>
+
+                        </LinearLayout>
+
 
                     </LinearLayout>
 

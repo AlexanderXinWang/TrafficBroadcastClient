@@ -31,6 +31,7 @@ import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xutil.tip.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -86,9 +87,8 @@ public class EventReportFragment extends BaseFragment {
     private byte[] voiceData = new byte[1280];
 
     private Event event;
-    private User loginUser;
-
-//    SharedPreferences sharedPreferences = getContext().getSharedPreferences("loginToken", Context.MODE_PRIVATE);
+    private String userId;
+    private String userName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,17 +112,14 @@ public class EventReportFragment extends BaseFragment {
 
     @Override
     protected void initViews() {
-        /*String data = getActivity().getIntent().getStringExtra("data");
-        if (StringUtil.isNotEmpty(data)) {
-            loginUser = JSON.parseObject(data, User.class);
-        }*/
+        TextView currentUser = findViewById(R.id.event_report_user);
+        currentUser.setText(userName + " " + userId);
     }
 
     public void initData() {
-        String data = getActivity().getIntent().getStringExtra("data");
-        if (StringUtil.isNotEmpty(data)) {
-            loginUser = JSON.parseObject(data, User.class);
-        }
+        SharedPreferences preferences = getActivity().getSharedPreferences("loginUser", Context.MODE_PRIVATE);
+        userId = preferences.getString("userId", "");
+        userName = preferences.getString("userName", "");
     }
 
     @Override
@@ -135,6 +132,7 @@ public class EventReportFragment extends BaseFragment {
     @OnClick({R.id.event_report_flush, R.id.event_report_record, R.id.event_report})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            // 清除数据按钮
             case R.id.event_report_flush:
                 eventLocation.setText(null);
                 eventVehicle.setText(null);
@@ -146,14 +144,15 @@ public class EventReportFragment extends BaseFragment {
                 if (isWorking) {
                     isWorking = false;
                     onBtnClickedIat();
+                    //TODO 弹窗提示
 //                    AlertDialogUtil.warning(getContext(), "再次点击按钮结束");
                 } else {
                     startRecord();
                     reportStatus.setText("请说话...");
                     btnSpeak.setText("录音中...");
-                    // TODO 录音状态提示
                 }
                 break;
+                // 事件上报按钮
             case R.id.event_report:
                 try {
                     Event event = new Event();
@@ -162,11 +161,12 @@ public class EventReportFragment extends BaseFragment {
                     event.setEvent(eventDesc.getText().toString());
                     event.setEventResult(eventResult.getText().toString());
                     event.setIatResult(iatResult.getText().toString());
-                    /*event.setPolicemanId(loginUser.getId());
-                    event.setPolicemanName(loginUser.getName());*/
+                    event.setPolicemanId(userId);
+                    event.setPolicemanName(userName);
 
                     if ("".equals(event.getLocation()) && "".equals(event.getVehicle()) && "".equals(event.getEvent()) && "".equals(event.getEventResult())) {
-                        AlertDialogUtil.warning(getContext(), "输入为空");
+                        new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("表单填写错误").content("输入为空").positiveText("确定").show();
+//                        AlertDialogUtil.warning(getContext(), "输入为空");
                     } else {
                         EventClient.saveEvent(getString(R.string.server_url), event);
                     }
@@ -252,7 +252,8 @@ public class EventReportFragment extends BaseFragment {
                 Log.e(TAG, "语音识别异常" + e.getMessage());
             }
         } else {
-            AlertDialogUtil.warning(getContext(), "请先输入语音");
+            new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("语音识别异常").content("请先输入语音").positiveText("确定").show();
+//            AlertDialogUtil.warning(getContext(), "请先输入语音");
         }
     }
 
@@ -283,7 +284,8 @@ public class EventReportFragment extends BaseFragment {
                 }
             }
         } else {
-            AlertDialogUtil.warning(getContext(), "iat响应失败：" + iatEvent.getErrorMessage() );
+            new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("语音识别失败").content(iatEvent.getErrorMessage()).positiveText("确定").show();
+//            AlertDialogUtil.warning(getContext(), "iat响应失败：" + iatEvent.getErrorMessage() );
             reportStatus.setText("请重新进行录音或文字输入");
         }
     }
@@ -291,11 +293,12 @@ public class EventReportFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onReportEvent(EventSaveEvent event) {
         if (event.isSuccess()) {
-            String message = String.format("周星星"/*, loginUser.getName()*/);
-            AlertDialogUtil.infoAndClose(getActivity(), message, "事件上报成功，点击返回");
+            String message = String.format("当前用户：%s", userName);
+            new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("成功上报事件").content(message).positiveText("确定").show();
             Log.i(TAG, "保存事件成功");
         } else {
-            AlertDialogUtil.warning(getContext(), "事件上报失败：" + event.getErrorMessage());
+            new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("事件上报失败").content(event.getErrorMessage()).positiveText("确定").show();
+//            AlertDialogUtil.warning(getContext(), "事件上报失败：" + event.getErrorMessage());
         }
     }
 

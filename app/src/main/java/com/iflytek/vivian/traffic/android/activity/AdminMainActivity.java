@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -66,6 +67,11 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     DrawerLayout drawerLayout;
 
     private String[] mTitles;
+    private String userId;
+    private String userName;
+    private String userAge;
+    private String userRole;
+    private String userDepart;
 
     @Override
     protected int getLayoutId() {
@@ -76,8 +82,8 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initData();
         initViews();
-
         initListeners();
     }
 
@@ -85,6 +91,15 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     protected boolean isSupportSlideBack() {
         return false;
     }
+
+    private void initData() {
+        SharedPreferences preferences = this.getSharedPreferences("loginUser", MODE_PRIVATE);
+        userId = preferences.getString("userId", "");
+        userName = preferences.getString("userName", "");
+        userRole = preferences.getString("userRole", "");
+        userDepart = preferences.getString("userDepart", "");
+    }
+
 
     private void initViews() {
         mTitles = ResUtils.getStringArray(R.array.admin_home_titles);
@@ -114,6 +129,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         View headerView = navView.getHeaderView(0);
         LinearLayout navHeader = headerView.findViewById(R.id.nav_header);
         RadiusImageView ivAvatar = headerView.findViewById(R.id.iv_avatar);
+        TextView tvId = headerView.findViewById(R.id.tv_user_id);
         TextView tvAvatar = headerView.findViewById(R.id.tv_avatar);
         TextView tvSign = headerView.findViewById(R.id.tv_sign);
 
@@ -131,11 +147,10 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
             }
         }
 
-        // TODO: 2019-10-09 初始化数据
         ivAvatar.setImageResource(R.drawable.ic_default_head);
-        tvAvatar.setText(R.string.app_name);
-//        tvAvatar.setText();
-        tvSign.setText("这个家伙很懒，什么也没有留下～～");
+        tvId.setText(userId);
+        tvAvatar.setText(userName);
+        tvSign.setText(userRole + " " + userDepart);
         navHeader.setOnClickListener(this);
     }
 
