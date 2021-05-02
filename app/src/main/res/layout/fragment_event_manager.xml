@@ -61,12 +61,12 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1">
                 <Button
-                    android:id="@+id/event_manager_filter"
+                    android:id="@+id/event_manager_delete"
                     android:layout_width="70dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_blue_circular"
                     android:layout_margin="5dp"
-                    android:text="筛 选"
+                    android:text="删 除"
                     android:textColor="@color/black"
                     android:textSize="16dp" />
             </LinearLayout>
@@ -76,12 +76,12 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1">
                 <Button
-                    android:id="@+id/event_manager_delete"
+                    android:id="@+id/event_manager_filter"
                     android:layout_width="70dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_blue_circular"
                     android:layout_margin="5dp"
-                    android:text="删 除"
+                    android:text="筛 选"
                     android:textColor="@color/black"
                     android:textSize="16dp" />
             </LinearLayout>

@@ -37,4 +37,16 @@ public interface EventService {
     @POST("/traffic-server/event/detail/{eventId}")
     Call<Result<Event>> selectEvent(@Path("eventId") String eventId);
 
+    @GET("/traffic-server/event/list/time/asc")
+    Call<Result<List<Event>>> listEventByTimeAsc();
+
+    @GET("/traffic-server/event/list/time/desc")
+    Call<Result<List<Event>>> listEventByTimeDesc();
+
+    @GET("/traffic-server/event/list/event/asc")
+    Call<Result<List<Event>>> listEventByEventAsc();
+
+    @GET("/traffic-server/event/list/event/desc")
+    Call<Result<List<Event>>> listEventByEventDesc();
+
 }

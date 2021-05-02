@@ -81,6 +81,7 @@ public class EventManagerAddFragment extends BaseFragment {
                 event.setPolicemanName(userName.getText().toString());
                 event.setPolicemanId(userId.getText().toString());
                 event.setStartTime(new Date());
+                event.setVehicle(vehicle.getText().toString());
                 event.setEvent(eventDesc.getText().toString());
                 event.setEventResult(eventResult.getText().toString());
 
