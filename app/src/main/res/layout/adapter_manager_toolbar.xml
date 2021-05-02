@@ -8,14 +8,103 @@ android:gravity="center"
 android:orientation="vertical">
 
 <FrameLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical">
+        <com.xuexiang.xui.widget.button.SmoothCheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"/>
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:text="全选"
+            android:textSize="16dp"
+            android:textColor="@color/black"/>
+    </LinearLayout>
 
-    <com.xuexiang.xui.widget.imageview.RadiusImageView
-        android:id="@+id/tool_item"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        tools:src="@mipmap/ic_launcher" />
+    <LinearLayout
+        android:id="@+id/adapter_manager_toolbar"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:orientation="horizontal">
+        <!--<com.xuexiang.xui.widget.imageview.RadiusImageView
+            android:id="@+id/tool_item"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            tools:src="@drawable/ic_manager_plus" />-->
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="match_parent">
+                <com.xuexiang.xui.widget.imageview.RadiusImageView
+                    android:id="@+id/tool_item_add"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_vertical"
+                    tools:src="@drawable/ic_manager_plus" />
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:text="新增"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="match_parent">
+            <com.xuexiang.xui.widget.imageview.RadiusImageView
+                android:id="@+id/tool_item_filter"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                tools:src="@drawable/ic_manager_filter" />
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:text="筛选"
+                android:textSize="16dp"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="match_parent">
+            <com.xuexiang.xui.widget.imageview.RadiusImageView
+                android:id="@+id/tool_item_delete"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                tools:src="@drawable/ic_manager_delete" />
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:text="删除"
+                android:textSize="16dp"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
 
 </FrameLayout>
 

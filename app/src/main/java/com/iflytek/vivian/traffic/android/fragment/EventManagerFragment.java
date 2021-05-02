@@ -1,6 +1,11 @@
 package com.iflytek.vivian.traffic.android.fragment;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +26,7 @@ import com.iflytek.vivian.traffic.android.utils.DateFormatUtil;
 import com.iflytek.vivian.traffic.android.utils.DemoDataProvider;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
@@ -35,6 +41,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import me.samlss.broccoli.Broccoli;
 
 /**
@@ -80,23 +87,24 @@ public class EventManagerFragment extends BaseFragment {
         recyclerView.setRecycledViewPool(viewPool);
         viewPool.setMaxRecycledViews(0,10);
 
-        //管理工具栏（添加 / 筛选 / 多选）
-        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(3);
-        gridLayoutHelper.setPadding(0, 16, 0, 0);
-        gridLayoutHelper.setVGap(10);
-        gridLayoutHelper.setHGap(0);
-        SimpleDelegateAdapter<AdapterManagerItem> commonAdapter = new SimpleDelegateAdapter<AdapterManagerItem>(R.layout.adapter_manager_toolbar, gridLayoutHelper, DemoDataProvider.getManagerItems(getContext())) {
-            @Override
-            protected void bindData(@NonNull RecyclerViewHolder holder, int position, AdapterManagerItem item) {
-                if (item != null) {
-                    RadiusImageView imageView = holder.findViewById(R.id.tool_item);
-                    imageView.setCircle(true);
-                    ImageLoader.get().loadImage(imageView, item.getIcon());
-
-                    holder.click(R.id.toolbar_container, v -> XToastUtils.toast("点击了!"));
-                }
-            }
-        };
+        //管理工具栏（全选 / 添加 / 筛选 / 删除）
+//        frameLayout.bringToFront();
+//        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(3);
+//        gridLayoutHelper.setPadding(0, 16, 0, 0);
+//        gridLayoutHelper.setVGap(10);
+//        gridLayoutHelper.setHGap(0);
+//        SimpleDelegateAdapter<AdapterManagerItem> commonAdapter = new SimpleDelegateAdapter<AdapterManagerItem>(R.id.adapter_manager_toolbar, gridLayoutHelper, DemoDataProvider.getManagerItems(getContext())) {
+//            @Override
+//            protected void bindData(@NonNull RecyclerViewHolder holder, int position, AdapterManagerItem item) {
+//                if (item != null) {
+//                    RadiusImageView imageView = holder.findViewById(R.id.tool_item);
+//                    imageView.setCircle(true);
+//                    ImageLoader.get().loadImage(imageView, item.getIcon());
+//
+//                    holder.click(R.id.toolbar_container, v -> XToastUtils.toast("点击了!"));
+//                }
+//            }
+//        };
 
         //警情
         mEventAdapter = new BroccoliSimpleDelegateAdapter<Event>(R.layout.adapter_event_manager_card_view_list_item, new LinearLayoutHelper(), eventList) {
@@ -124,7 +132,7 @@ public class EventManagerFragment extends BaseFragment {
         };
 
         DelegateAdapter delegateAdapter = new DelegateAdapter(virtualLayoutManager);
-        delegateAdapter.addAdapter(commonAdapter);
+//        delegateAdapter.addAdapter(commonAdapter);
         delegateAdapter.addAdapter(mEventAdapter);
 
         recyclerView.setAdapter(delegateAdapter);
@@ -150,6 +158,10 @@ public class EventManagerFragment extends BaseFragment {
         });*/
 
         refreshLayout.autoRefresh();//第一次进入触发自动刷新，演示效果
+
+
+        ImageView add = findViewById(R.id.tool_item_add);
+
     }
 
     @Override
@@ -157,6 +169,22 @@ public class EventManagerFragment extends BaseFragment {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
     }
+
+    @SingleClick
+    @OnClick({R.id.tool_item_add, R.id.tool_item_filter, R.id.tool_item_delete})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tool_item_add:
+                openNewPage(EventDetailFragment.class);
+
+                break;
+            case R.id.tool_item_filter:
+                break;
+            case R.id.tool_item_delete:
+                break;
+        }
+    }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void getEventList(EventListEvent event) {

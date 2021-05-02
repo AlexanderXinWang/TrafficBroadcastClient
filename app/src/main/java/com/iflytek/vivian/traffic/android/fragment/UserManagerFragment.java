@@ -80,22 +80,22 @@ public class UserManagerFragment extends BaseFragment {
         viewPool.setMaxRecycledViews(0,10);
 
         //管理工具栏（添加 / 筛选 / 多选）
-        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(3);
-        gridLayoutHelper.setPadding(0, 16, 0, 0);
-        gridLayoutHelper.setVGap(10);
-        gridLayoutHelper.setHGap(0);
-        SimpleDelegateAdapter<AdapterManagerItem> commonAdapter = new SimpleDelegateAdapter<AdapterManagerItem>(R.layout.adapter_manager_toolbar, gridLayoutHelper, DemoDataProvider.getManagerItems(getContext())) {
-            @Override
-            protected void bindData(@NonNull RecyclerViewHolder holder, int position, AdapterManagerItem item) {
-                if (item != null) {
-                    RadiusImageView imageView = holder.findViewById(R.id.tool_item);
-                    imageView.setCircle(true);
-                    ImageLoader.get().loadImage(imageView, item.getIcon());
-
-                    holder.click(R.id.toolbar_container, v -> XToastUtils.toast("点击了!"));
-                }
-            }
-        };
+//        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(3);
+//        gridLayoutHelper.setPadding(0, 16, 0, 0);
+//        gridLayoutHelper.setVGap(10);
+//        gridLayoutHelper.setHGap(0);
+//        SimpleDelegateAdapter<AdapterManagerItem> commonAdapter = new SimpleDelegateAdapter<AdapterManagerItem>(R.layout.adapter_manager_toolbar, gridLayoutHelper, DemoDataProvider.getManagerItems(getContext())) {
+//            @Override
+//            protected void bindData(@NonNull RecyclerViewHolder holder, int position, AdapterManagerItem item) {
+//                if (item != null) {
+//                    RadiusImageView imageView = holder.findViewById(R.id.tool_item);
+//                    imageView.setCircle(true);
+//                    ImageLoader.get().loadImage(imageView, item.getIcon());
+//
+//                    holder.click(R.id.toolbar_container, v -> XToastUtils.toast("点击了!"));
+//                }
+//            }
+//        };
 
         //用户列表
         mUserAdapter = new BroccoliSimpleDelegateAdapter<User>(R.layout.adapter_user_manager_card_view_list_item, new LinearLayoutHelper(), userList) {
@@ -123,7 +123,7 @@ public class UserManagerFragment extends BaseFragment {
         };
 
         DelegateAdapter delegateAdapter = new DelegateAdapter(virtualLayoutManager);
-        delegateAdapter.addAdapter(commonAdapter);
+//        delegateAdapter.addAdapter(commonAdapter);
         delegateAdapter.addAdapter(mUserAdapter);
 
         recyclerView.setAdapter(delegateAdapter);
