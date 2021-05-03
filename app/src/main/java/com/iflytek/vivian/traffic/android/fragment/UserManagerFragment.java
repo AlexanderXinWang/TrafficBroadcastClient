@@ -120,6 +120,21 @@ public class UserManagerFragment extends BaseFragment {
                         holder.findView(R.id.tv_summary)
                 );
             }
+
+            @Override
+            public void selectAll() {
+
+            }
+
+            @Override
+            public void unSelectAll() {
+
+            }
+
+            @Override
+            public void initCheck(Boolean flag) {
+
+            }
         };
 
         DelegateAdapter delegateAdapter = new DelegateAdapter(virtualLayoutManager);

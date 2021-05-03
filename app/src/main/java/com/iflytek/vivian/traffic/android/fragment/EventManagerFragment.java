@@ -1,31 +1,21 @@
 package com.iflytek.vivian.traffic.android.fragment;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
-import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.adapter.SimpleRecyclerAdapter;
 import com.iflytek.vivian.traffic.android.adapter.base.broccoli.BroccoliSimpleDelegateAdapter;
 import com.iflytek.vivian.traffic.android.adapter.base.delegate.SimpleDelegateAdapter;
-import com.iflytek.vivian.traffic.android.adapter.entity.AdapterManagerItem;
 import com.iflytek.vivian.traffic.android.client.EventClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.dto.Event;
@@ -41,7 +31,6 @@ import com.iflytek.vivian.traffic.android.event.event.EventListByTimeDescEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListEvent;
 import com.iflytek.vivian.traffic.android.utils.DataProvider;
 import com.iflytek.vivian.traffic.android.utils.DateFormatUtil;
-import com.iflytek.vivian.traffic.android.utils.DemoDataProvider;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.scwang.smartrefresh.layout.adapter.SmartViewHolder;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -52,10 +41,7 @@ import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.button.SmoothCheckBox;
-import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
-import com.xuexiang.xui.widget.imageview.ImageLoader;
-import com.xuexiang.xui.widget.imageview.RadiusImageView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -65,7 +51,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -83,14 +68,17 @@ public class EventManagerFragment extends BaseFragment {
     RecyclerView recyclerView;
     @BindView(R.id.event_manager_refreshLayout)
     RefreshLayout refreshLayout;
+    @BindView(R.id.event_manager_select_all)
+    SmoothCheckBox selectAll;
 
-    private SimpleDelegateAdapter<Event> mEventAdapter;
+    private BroccoliSimpleDelegateAdapter<Event> mEventAdapter;
 
     private List<Event> eventList = new ArrayList<>();
-//    private List<String> eventsToDelete = new ArrayList<>();
 
-    // 警情id及对应是否已经勾选
-    private Map<String, Boolean> isChosen = new HashMap<>();
+    private Map<Integer, String> eventPosition = new HashMap<>();
+
+    //用来记录所有checkbox的状态
+    private Map<Integer, Boolean> checkStatus = new HashMap<>();
 
 
     @Override
@@ -111,6 +99,12 @@ public class EventManagerFragment extends BaseFragment {
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_event_manager;
+    }
+
+    public void initData() {
+        for (int i = 0; i < eventList.size(); i++) {
+            checkStatus.put(i, false);
+        }
     }
 
     @Override
@@ -143,23 +137,37 @@ public class EventManagerFragment extends BaseFragment {
         //警情
         mEventAdapter = new BroccoliSimpleDelegateAdapter<Event>(R.layout.adapter_event_manager_card_view_list_item, new LinearLayoutHelper(), eventList) {
 
-            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void selectAll() {
+                initCheck(true);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void unSelectAll() {
+                initCheck(false);
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void initCheck(Boolean flag) {
+                for (int i = 0; i < eventList.size() ; i++) {
+                    checkStatus.put(i, flag);
+                }
+            }
+
             @Override
             protected void onBindData(RecyclerViewHolder holder, Event model, int position) {
+
                 if (model != null) {
+
                     SmoothCheckBox smoothCheckBox = holder.findViewById(R.id.checkbox);
+                    smoothCheckBox.setOnCheckedChangeListener(null);
+                    smoothCheckBox.setChecked(checkStatus.get(position));
+                    smoothCheckBox.setOnCheckedChangeListener(((checkBox, isChecked) -> checkStatus.put(position, isChecked)));
+                    eventPosition.put(position, model.getId());
 
-                    isChosen.put(model.getId(), false);
-
-                    smoothCheckBox.setOnCheckedChangeListener(((checkBox, isChecked) -> {
-                        if (isChecked) {
-                            isChosen.replace(model.getId(), true);
-                        } else {
-                            isChosen.replace(model.getId(), false);
-                        }
-                    }));
-
-                    holder.setIsRecyclable(false);
+//                    holder.setIsRecyclable(false);
 
                     holder.text(R.id.tv_user_name, model.getPolicemanName());
                     holder.text(R.id.tv_tag, DateFormatUtil.format(model.getStartTime()));
@@ -199,15 +207,15 @@ public class EventManagerFragment extends BaseFragment {
             }, 1000);
         });
 
-        //上拉加载
-        /*refreshLayout.setOnLoadMoreListener(refreshLayout -> {
-            refreshLayout.getLayout().postDelayed(() -> {
-                mEventAdapter.loadMore(eventList);
-                refreshLayout.finishLoadMore();
-            }, 1000);
-        });*/
-
         refreshLayout.autoRefresh();//第一次进入触发自动刷新，演示效果
+
+        selectAll.setOnCheckedChangeListener(((checkBox, isChecked) -> {
+            if (selectAll.isChecked()) {
+                mEventAdapter.selectAll();
+            } else {
+                mEventAdapter.unSelectAll();
+            }
+        }));
     }
 
     @Override
@@ -228,14 +236,13 @@ public class EventManagerFragment extends BaseFragment {
                 break;
             case R.id.event_manager_delete:
                 List<String> eventsToDelete = new ArrayList<>();
-                Log.i(TAG, isChosen.toString());
-                for (String key : isChosen.keySet()) {
-                    if (isChosen.get(key)) {
-                        if (!eventsToDelete.contains(key)) {
-                            eventsToDelete.add(key);
-                        }
+
+                for (Integer position : checkStatus.keySet()) {
+                    if (checkStatus.get(position)) {
+                        eventsToDelete.add(eventPosition.get(position));
                     }
                 }
+
                 if (!eventsToDelete.isEmpty()) {
                     new MaterialDialog.Builder(getContext()).title("确认删除？").content(eventsToDelete.toString()).positiveText("确认").negativeText("取消")
                             .onPositive((dialog, which) -> EventClient.deleteEvent(getString(R.string.server_url), eventsToDelete)).show();
@@ -248,7 +255,6 @@ public class EventManagerFragment extends BaseFragment {
                 break;
         }
     }
-
 
     /**
      * 筛选底部弹窗
@@ -318,6 +324,7 @@ public class EventManagerFragment extends BaseFragment {
     public void getEventList(EventListEvent event) {
         if (event.isSuccess()) {
             eventList = event.getData();
+            initData();
         } else {
             XToastUtils.error("刷新事件列表错误！");
             Log.e(TAG, event.getErrorMessage());

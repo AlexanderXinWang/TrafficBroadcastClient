@@ -24,10 +24,13 @@ import androidx.annotation.NonNull;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.iflytek.vivian.traffic.android.adapter.base.delegate.SimpleDelegateAdapter;
 import com.iflytek.vivian.traffic.android.adapter.base.delegate.XDelegateAdapter;
+import com.iflytek.vivian.traffic.android.dto.Event;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import me.samlss.broccoli.Broccoli;
@@ -52,6 +55,7 @@ public abstract class BroccoliSimpleDelegateAdapter<T> extends SimpleDelegateAda
 
     public BroccoliSimpleDelegateAdapter(int layoutId, LayoutHelper layoutHelper, Collection<T> list) {
         super(layoutId, layoutHelper, list);
+
     }
 
     public BroccoliSimpleDelegateAdapter(int layoutId, LayoutHelper layoutHelper, T[] data) {
@@ -109,4 +113,32 @@ public abstract class BroccoliSimpleDelegateAdapter<T> extends SimpleDelegateAda
         mBroccoliMap.clear();
         clear();
     }
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+
+    public void initData(Collection<T> list) {
+        for (int i = 0; i < list.size(); i++) {
+
+        }
+    }
+
+    /**
+     * 全选
+     */
+    public abstract void selectAll();
+
+    /**
+     * 全不选
+     */
+    public abstract void unSelectAll();
+
+    /**
+     * 更改集合内部存储的状态
+     * @param flag
+     */
+    public abstract void initCheck(Boolean flag);
+
+
 }
