@@ -115,25 +115,6 @@ public class EventManagerFragment extends BaseFragment {
         recyclerView.setRecycledViewPool(viewPool);
         viewPool.setMaxRecycledViews(0,10);
 
-        //管理工具栏（全选 / 添加 / 筛选 / 删除）
-//        frameLayout.bringToFront();
-//        GridLayoutHelper gridLayoutHelper = new GridLayoutHelper(3);
-//        gridLayoutHelper.setPadding(0, 16, 0, 0);
-//        gridLayoutHelper.setVGap(10);
-//        gridLayoutHelper.setHGap(0);
-//        SimpleDelegateAdapter<AdapterManagerItem> commonAdapter = new SimpleDelegateAdapter<AdapterManagerItem>(R.id.adapter_manager_toolbar, gridLayoutHelper, DemoDataProvider.getManagerItems(getContext())) {
-//            @Override
-//            protected void bindData(@NonNull RecyclerViewHolder holder, int position, AdapterManagerItem item) {
-//                if (item != null) {
-//                    RadiusImageView imageView = holder.findViewById(R.id.tool_item);
-//                    imageView.setCircle(true);
-//                    ImageLoader.get().loadImage(imageView, item.getIcon());
-//
-//                    holder.click(R.id.toolbar_container, v -> XToastUtils.toast("点击了!"));
-//                }
-//            }
-//        };
-
         //警情
         mEventAdapter = new BroccoliSimpleDelegateAdapter<Event>(R.layout.adapter_event_manager_card_view_list_item, new LinearLayoutHelper(), eventList) {
 
@@ -190,9 +171,7 @@ public class EventManagerFragment extends BaseFragment {
         };
 
         DelegateAdapter delegateAdapter = new DelegateAdapter(virtualLayoutManager);
-//        delegateAdapter.addAdapter(commonAdapter);
         delegateAdapter.addAdapter(mEventAdapter);
-
         recyclerView.setAdapter(delegateAdapter);
     }
 
@@ -224,6 +203,10 @@ public class EventManagerFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    /**
+     * 管理工具栏（全选 / 添加 / 筛选 / 删除）
+     * @param view
+     */
     @SingleClick
     @OnClick({R.id.event_manager_add, R.id.event_manager_filter, R.id.event_manager_delete})
     public void onViewClicked(View view) {
@@ -250,8 +233,8 @@ public class EventManagerFragment extends BaseFragment {
 //                    new MaterialDialog.Builder(getContext()).title("请选择事件！").positiveText("确认").show();
                     XToastUtils.error("请选择事件！");
                 }
-
-
+                break;
+            default:
                 break;
         }
     }

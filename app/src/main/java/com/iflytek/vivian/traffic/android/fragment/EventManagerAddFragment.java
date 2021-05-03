@@ -14,10 +14,12 @@ import com.iflytek.vivian.traffic.android.event.event.EventDetailEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventSaveEvent;
 import com.iflytek.vivian.traffic.android.utils.DateFormatUtil;
 import com.iflytek.vivian.traffic.android.utils.StringUtil;
+import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
+import com.xuexiang.xutil.tip.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -46,7 +48,7 @@ public class EventManagerAddFragment extends BaseFragment {
     @BindView(R.id.event_add_result)
     TextView eventResult;
 
-    private Event event;
+    private Event event = new Event();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +87,10 @@ public class EventManagerAddFragment extends BaseFragment {
                 event.setEvent(eventDesc.getText().toString());
                 event.setEventResult(eventResult.getText().toString());
 
-                EventClient.saveEvent(getString(R.string.server_url), event);
+                new MaterialDialog.Builder(getContext()).title("确认保存？").positiveText("确认").negativeText("取消")
+                        .onPositive((dialog, which) -> EventClient.saveEvent(getString(R.string.server_url), event)).show();
+                break;
+            default:
                 break;
         }
     }
@@ -94,11 +99,10 @@ public class EventManagerAddFragment extends BaseFragment {
     public void onSaveEvent(EventSaveEvent saveEvent) {
         if (saveEvent.isSuccess()) {
             event = saveEvent.getData();
-            new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about)
-                    .title("新增警情事件成功").content(event.toString()).positiveText("确定").show();
+            XToastUtils.success("新增警情事件成功");
+            popToBack();
         } else {
-            new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about)
-                    .title("新增警情事件失败").content(saveEvent.getErrorMessage()).positiveText("确定").show();
+            XToastUtils.error("新增警情事件失败");
         }
     }
 }

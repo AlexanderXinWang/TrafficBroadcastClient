@@ -19,7 +19,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 
 @Page(anim = CoreAnim.none, name = "警员详情")
-public class UserDetailFragment extends BaseFragment {
+public class UserManagerDetailFragment extends BaseFragment {
 
     @BindView(R.id.user_detail_name)
     EditText name;
@@ -49,7 +49,7 @@ public class UserDetailFragment extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_user_detail;
+        return R.layout.fragment_user_manager_detail;
     }
 
     @Override
