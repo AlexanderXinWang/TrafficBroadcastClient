@@ -1,15 +1,18 @@
 package com.iflytek.vivian.traffic.android.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,8 +29,13 @@ import com.iflytek.vivian.traffic.android.adapter.entity.AdapterManagerItem;
 import com.iflytek.vivian.traffic.android.client.EventClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.dto.Event;
+import com.iflytek.vivian.traffic.android.event.event.EventDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListByEventAscEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListByEventDescEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventListByLocationAscEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventListByLocationDescEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventListByNameAscEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventListByNameDescEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListByTimeAscEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListByTimeDescEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListEvent;
@@ -43,6 +51,9 @@ import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
+import com.xuexiang.xui.widget.button.SmoothCheckBox;
+import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.imageview.ImageLoader;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 
@@ -51,7 +62,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -72,8 +86,12 @@ public class EventManagerFragment extends BaseFragment {
 
     private SimpleDelegateAdapter<Event> mEventAdapter;
 
-    private List<Event> eventList = null;
-    private Boolean dialogFlag = false;
+    private List<Event> eventList = new ArrayList<>();
+//    private List<String> eventsToDelete = new ArrayList<>();
+
+    // 警情id及对应是否已经勾选
+    private Map<String, Boolean> isChosen = new HashMap<>();
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,9 +142,25 @@ public class EventManagerFragment extends BaseFragment {
 
         //警情
         mEventAdapter = new BroccoliSimpleDelegateAdapter<Event>(R.layout.adapter_event_manager_card_view_list_item, new LinearLayoutHelper(), eventList) {
+
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             protected void onBindData(RecyclerViewHolder holder, Event model, int position) {
                 if (model != null) {
+                    SmoothCheckBox smoothCheckBox = holder.findViewById(R.id.checkbox);
+
+                    isChosen.put(model.getId(), false);
+
+                    smoothCheckBox.setOnCheckedChangeListener(((checkBox, isChecked) -> {
+                        if (isChecked) {
+                            isChosen.replace(model.getId(), true);
+                        } else {
+                            isChosen.replace(model.getId(), false);
+                        }
+                    }));
+
+                    holder.setIsRecyclable(false);
+
                     holder.text(R.id.tv_user_name, model.getPolicemanName());
                     holder.text(R.id.tv_tag, DateFormatUtil.format(model.getStartTime()));
                     holder.text(R.id.tv_title, model.getLocation());
@@ -193,11 +227,32 @@ public class EventManagerFragment extends BaseFragment {
                 showFilterDialog();
                 break;
             case R.id.event_manager_delete:
+                List<String> eventsToDelete = new ArrayList<>();
+                Log.i(TAG, isChosen.toString());
+                for (String key : isChosen.keySet()) {
+                    if (isChosen.get(key)) {
+                        if (!eventsToDelete.contains(key)) {
+                            eventsToDelete.add(key);
+                        }
+                    }
+                }
+                if (!eventsToDelete.isEmpty()) {
+                    new MaterialDialog.Builder(getContext()).title("确认删除？").content(eventsToDelete.toString()).positiveText("确认").negativeText("取消")
+                            .onPositive((dialog, which) -> EventClient.deleteEvent(getString(R.string.server_url), eventsToDelete)).show();
+                } else {
+//                    new MaterialDialog.Builder(getContext()).title("请选择事件！").positiveText("确认").show();
+                    XToastUtils.error("请选择事件！");
+                }
+
+
                 break;
         }
     }
 
 
+    /**
+     * 筛选底部弹窗
+     */
     private void showFilterDialog() {
         BottomSheetDialog dialog = new BottomSheetDialog(getContext());
         View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_bottom_sheet, null);
@@ -212,6 +267,10 @@ public class EventManagerFragment extends BaseFragment {
         dialog.show();
     }
 
+    /**
+     * 初始化底部弹窗数据
+     * @param recyclerView
+     */
     private void initDialogList(RecyclerView recyclerView) {
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         manager.setOrientation(RecyclerView.VERTICAL);
@@ -232,10 +291,16 @@ public class EventManagerFragment extends BaseFragment {
                             EventClient.listEventByTimeDesc(ResUtils.getString(R.string.server_url));
                             break;
                         case 2:
-                            EventClient.listEventByEventAsc(ResUtils.getString(R.string.server_url));
+                            EventClient.listEventByNameAsc(ResUtils.getString(R.string.server_url));
                             break;
                         case 3:
-                            EventClient.listEventByEventDesc(ResUtils.getString(R.string.server_url));
+                            EventClient.listEventByNameDesc(ResUtils.getString(R.string.server_url));
+                            break;
+                        case 4:
+                            EventClient.listEventByLocationAsc(ResUtils.getString(R.string.server_url));
+                            break;
+                        case 5:
+                            EventClient.listEventByLocationDesc(ResUtils.getString(R.string.server_url));
                             break;
                         default:
                             break;
@@ -260,10 +325,21 @@ public class EventManagerFragment extends BaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventDelete(EventDeleteEvent event) {
+        if (event.isSuccess()) {
+            XToastUtils.success("删除事件成功");
+            refreshLayout.autoRefresh(5000);
+        } else {
+            XToastUtils.error("删除事件失败");
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventListByTimeAsc(EventListByTimeAscEvent event) {
         if (event.isSuccess()) {
             eventList = event.getData();
             refreshLayout.autoRefresh();
+//            mEventAdapter.refresh(eventList);
             XToastUtils.success("根据时间升序排列");
         } else {
             XToastUtils.error("按照时间升序排列错误！");
@@ -306,4 +382,54 @@ public class EventManagerFragment extends BaseFragment {
             Log.e(TAG, "事件名称降序" + event.getErrorMessage());
         }
     }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventListByNameAsc(EventListByNameAscEvent event) {
+        if (event.isSuccess()) {
+            eventList = event.getData();
+            refreshLayout.autoRefresh();
+            XToastUtils.success("根据上报人升序排列");
+        } else {
+            XToastUtils.error("按照上报人升序排列错误！");
+            Log.e(TAG, "上报人升序" + event.getErrorMessage());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventListByNameDesc(EventListByNameDescEvent event) {
+        if (event.isSuccess()) {
+            eventList = event.getData();
+            refreshLayout.autoRefresh();
+            XToastUtils.success("根据上报人降序排列");
+        } else {
+            XToastUtils.error("按照上报人降序排列错误！");
+            Log.e(TAG, "上报人名称降序" + event.getErrorMessage());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventListByLocationAsc(EventListByLocationAscEvent event) {
+        if (event.isSuccess()) {
+            eventList = event.getData();
+            refreshLayout.autoRefresh();
+            XToastUtils.success("根据地点升序排列");
+        } else {
+            XToastUtils.error("按照地点升序排列错误！");
+            Log.e(TAG, "地点升序" + event.getErrorMessage());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventListByLocationDesc(EventListByLocationDescEvent event) {
+        if (event.isSuccess()) {
+            eventList = event.getData();
+            refreshLayout.autoRefresh();
+            XToastUtils.success("根据地点降序排列");
+        } else {
+            XToastUtils.error("按照地点降序排列错误！");
+            Log.e(TAG, "地点名称降序" + event.getErrorMessage());
+        }
+    }
+
 }

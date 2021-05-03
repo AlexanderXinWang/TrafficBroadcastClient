@@ -10,6 +10,10 @@ import com.iflytek.vivian.traffic.android.event.event.EventDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventDetailEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListByEventAscEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListByEventDescEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventListByLocationAscEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventListByLocationDescEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventListByNameAscEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventListByNameDescEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListByTimeAscEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListByTimeDescEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListEvent;
@@ -381,6 +385,134 @@ public class EventClient {
             public void onFailure(Call<Result<List<Event>>> call, Throwable t) {
                 Log.e(TAG, "listEventByTimeAsc请求异常" + t.getMessage(), t);
                 EventBus.getDefault().post(EventListByEventDescEvent.fail(new ApiInvokeException(t), t.getMessage()));
+            }
+        });
+    }
+
+    public static void listEventByNameAsc(String serverUrl) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(EventService.class).listEventByNameAsc().enqueue(new Callback<Result<List<Event>>>() {
+            @Override
+            public void onResponse(Call<Result<List<Event>>> call, Response<Result<List<Event>>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "listEventByNameAsc接口返回：" + response.message());
+                        Result<List<Event>> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(EventListByNameAscEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(EventListByNameAscEvent.fail(new ApiInvokeException("listEventByNameAsc接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求listEventByNameAsc接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(EventListByNameAscEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(EventListByNameAscEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<List<Event>>> call, Throwable t) {
+                Log.e(TAG, "listEventByNameAsc请求异常" + t.getMessage(), t);
+                EventBus.getDefault().post(EventListByNameAscEvent.fail(new ApiInvokeException(t), t.getMessage()));
+            }
+        });
+    }
+
+    public static void listEventByNameDesc(String serverUrl) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(EventService.class).listEventByNameDesc().enqueue(new Callback<Result<List<Event>>>() {
+            @Override
+            public void onResponse(Call<Result<List<Event>>> call, Response<Result<List<Event>>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "listEventByNameDesc接口返回：" + response.message());
+                        Result<List<Event>> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(EventListByNameDescEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(EventListByNameDescEvent.fail(new ApiInvokeException("listEventByNameDesc接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求listEventByNameDesc接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(EventListByNameDescEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(EventListByNameDescEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<List<Event>>> call, Throwable t) {
+                Log.e(TAG, "listEventByNameDesc请求异常" + t.getMessage(), t);
+                EventBus.getDefault().post(EventListByNameDescEvent.fail(new ApiInvokeException(t), t.getMessage()));
+            }
+        });
+    }
+
+    public static void listEventByLocationAsc(String serverUrl) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(EventService.class).listEventByLocationAsc().enqueue(new Callback<Result<List<Event>>>() {
+            @Override
+            public void onResponse(Call<Result<List<Event>>> call, Response<Result<List<Event>>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "listEventByLocationAsc接口返回：" + response.message());
+                        Result<List<Event>> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(EventListByLocationAscEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(EventListByLocationAscEvent.fail(new ApiInvokeException("listEventByLocationAsc接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求listEventByLocationAsc接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(EventListByLocationAscEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(EventListByLocationAscEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<List<Event>>> call, Throwable t) {
+                Log.e(TAG, "listEventByLocationAsc请求异常" + t.getMessage(), t);
+                EventBus.getDefault().post(EventListByLocationAscEvent.fail(new ApiInvokeException(t), t.getMessage()));
+            }
+        });
+    }
+
+    public static void listEventByLocationDesc(String serverUrl) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(EventService.class).listEventByLocationDesc().enqueue(new Callback<Result<List<Event>>>() {
+            @Override
+            public void onResponse(Call<Result<List<Event>>> call, Response<Result<List<Event>>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "listEventByLocationDesc接口返回：" + response.message());
+                        Result<List<Event>> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(EventListByLocationDescEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(EventListByLocationDescEvent.fail(new ApiInvokeException("listEventByLocationDesc接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求listEventByLocationDesc接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(EventListByLocationDescEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(EventListByLocationDescEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<List<Event>>> call, Throwable t) {
+                Log.e(TAG, "listEventByLocationDesc请求异常" + t.getMessage(), t);
+                EventBus.getDefault().post(EventListByLocationDescEvent.fail(new ApiInvokeException(t), t.getMessage()));
             }
         });
     }

@@ -1,6 +1,8 @@
 package com.iflytek.vivian.traffic.android.fragment;
 
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +17,7 @@ import com.iflytek.vivian.traffic.android.adapter.base.delegate.SingleDelegateAd
 import com.iflytek.vivian.traffic.android.client.EventClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.dto.Event;
+import com.iflytek.vivian.traffic.android.event.event.EventListByTimeDescEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListEvent;
 import com.iflytek.vivian.traffic.android.utils.DateFormatUtil;
 import com.iflytek.vivian.traffic.android.utils.DemoDataProvider;
@@ -40,6 +43,8 @@ import me.samlss.broccoli.Broccoli;
  */
 @Page(anim = CoreAnim.none)
 public class EventFragment extends BaseFragment {
+
+    private static final String TAG = "EventFragment";
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -174,9 +179,9 @@ public class EventFragment extends BaseFragment {
     public void getEventList(EventListEvent event) {
         if (event.isSuccess()) {
             eventList = event.getData();
-            System.out.println(eventList);
+            Log.i(TAG, eventList.toString());
         } else {
-            // TODO 弹出请求错误
+            XToastUtils.error("加载失败！");
         }
     }
 

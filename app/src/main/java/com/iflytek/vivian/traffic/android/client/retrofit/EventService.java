@@ -49,4 +49,15 @@ public interface EventService {
     @GET("/traffic-server/event/list/event/desc")
     Call<Result<List<Event>>> listEventByEventDesc();
 
+    @GET("/traffic-server/event/list/location/asc")
+    Call<Result<List<Event>>> listEventByLocationAsc();
+
+    @GET("/traffic-server/event/list/location/desc")
+    Call<Result<List<Event>>> listEventByLocationDesc();
+
+    @GET("/traffic-server/event/list/name/asc")
+    Call<Result<List<Event>>> listEventByNameAsc();
+
+    @GET("/traffic-server/event/list/name/desc")
+    Call<Result<List<Event>>> listEventByNameDesc();
 }
