@@ -37,6 +37,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import me.samlss.broccoli.Broccoli;
+import me.samlss.broccoli.PlaceholderParameter;
 
 /**
  * 警情动态
@@ -51,7 +52,7 @@ public class EventFragment extends BaseFragment {
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
 
-    private SimpleDelegateAdapter<Event> mEventAdapter;
+    private BroccoliSimpleDelegateAdapter<Event> mEventAdapter;
 
     private List<Event> eventList = null;
 
@@ -59,7 +60,7 @@ public class EventFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        EventClient.listEvent(getString(R.string.server_url));
+//        EventClient.listEvent(getString(R.string.server_url));
     }
 
     /**
@@ -140,15 +141,11 @@ public class EventFragment extends BaseFragment {
             public void selectAll() {
 
             }
-
             @Override
             public void unSelectAll() {
-
             }
-
             @Override
             public void initCheck(Boolean flag) {
-
             }
         };
 
@@ -163,29 +160,25 @@ public class EventFragment extends BaseFragment {
     @Override
     protected void initListeners() {
         //下拉刷新
-        refreshLayout.setOnRefreshListener(refreshLayout -> {
-
-            refreshLayout.getLayout().postDelayed(() -> {
-//                mEventAdapter.refresh(DemoDataProvider.getDemoEventInfo());
-                EventClient.listEvent(getString(R.string.server_url));
-                mEventAdapter.refresh(eventList);
-                refreshLayout.finishRefresh();
-            }, 1000);
-        });
+        refreshLayout.setOnRefreshListener(refreshLayout -> refreshLayout.getLayout().postDelayed(() -> {
+            EventClient.listEvent(getString(R.string.server_url));
+            mEventAdapter.refresh(eventList);
+            refreshLayout.finishRefresh();
+        }, 1000));
 
         //上拉加载
-        /*refreshLayout.setOnLoadMoreListener(refreshLayout -> {
-            refreshLayout.getLayout().postDelayed(() -> {
-                mEventAdapter.loadMore(eventList);
-                refreshLayout.finishLoadMore();
-            }, 1000);
-        });*/
+        /*refreshLayout.setOnLoadMoreListener(refreshLayout -> refreshLayout.getLayout().postDelayed(() -> {
+            mEventAdapter.loadMore(DemoDataProvider.getDemoEventInfo());
+            refreshLayout.finishLoadMore();
+        }, 1000));*/
 
+        refreshLayout.setDisableContentWhenRefresh(true);
         refreshLayout.autoRefresh();//第一次进入触发自动刷新，演示效果
     }
 
     @Override
     public void onDestroyView() {
+        mEventAdapter.recycle();
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
     }

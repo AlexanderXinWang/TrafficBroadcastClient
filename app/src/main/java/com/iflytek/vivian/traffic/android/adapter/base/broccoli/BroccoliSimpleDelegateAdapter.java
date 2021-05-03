@@ -118,12 +118,6 @@ public abstract class BroccoliSimpleDelegateAdapter<T> extends SimpleDelegateAda
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //
 
-    public void initData(Collection<T> list) {
-        for (int i = 0; i < list.size(); i++) {
-
-        }
-    }
-
     /**
      * 全选
      */

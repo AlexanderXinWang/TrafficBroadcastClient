@@ -159,12 +159,10 @@ public class UserManagerFragment extends BaseFragment {
     @Override
     protected void initListeners() {
         //下拉刷新
-        refreshLayout.setOnRefreshListener(refreshLayout -> {
-            refreshLayout.getLayout().postDelayed(() -> {
-                mUserAdapter.refresh(userList);
-                refreshLayout.finishRefresh();
-            }, 1000);
-        });
+        refreshLayout.setOnRefreshListener(refreshLayout -> refreshLayout.getLayout().postDelayed(() -> {
+            mUserAdapter.refresh(userList);
+            refreshLayout.finishRefresh();
+        }, 1000));
 
         //上拉加载
         /*refreshLayout.setOnLoadMoreListener(refreshLayout -> {
