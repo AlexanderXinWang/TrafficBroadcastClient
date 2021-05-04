@@ -18,7 +18,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
-@Page(anim = CoreAnim.none, name = "警员详情")
+@Page(anim = CoreAnim.slide, name = "警员详情")
 public class UserManagerDetailFragment extends BaseFragment {
 
     @BindView(R.id.user_detail_name)
@@ -37,14 +37,6 @@ public class UserManagerDetailFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         UserClient.selectUser(getString(R.string.server_url), getArguments().getString("userId"));
-    }
-
-    /**
-     * @return 返回为 null意为不需要导航栏
-     */
-    @Override
-    protected TitleBar initTitle() {
-        return null;
     }
 
     @Override

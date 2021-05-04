@@ -18,7 +18,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
-@Page(anim = CoreAnim.none, name = "警情大厅详情")
+@Page(anim = CoreAnim.slide, name = "警情大厅详情")
 public class EventDetailFragment extends BaseFragment {
 
     @BindView(R.id.event_hall_detail_location)

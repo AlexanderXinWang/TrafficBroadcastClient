@@ -5,7 +5,7 @@ import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 
-@Page(anim = CoreAnim.none, name = "新增警员用户")
+@Page(anim = CoreAnim.slide, name = "新增警员用户")
 public class UserManagerAddFragment extends BaseFragment {
     @Override
     protected int getLayoutId() {

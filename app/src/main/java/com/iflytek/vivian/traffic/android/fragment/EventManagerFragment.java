@@ -328,6 +328,8 @@ public class EventManagerFragment extends BaseFragment {
     public void onEventListByTimeAsc(EventListByTimeAscEvent event) {
         if (event.isSuccess()) {
             eventList = event.getData();
+            selectAll.setChecked(false);
+            mEventAdapter.unSelectAll();
             refreshLayout.autoRefresh();
 //            mEventAdapter.refresh(eventList);
             XToastUtils.success("根据时间升序排列");
@@ -341,6 +343,8 @@ public class EventManagerFragment extends BaseFragment {
     public void onEventListByTimeDesc(EventListByTimeDescEvent event) {
         if (event.isSuccess()) {
             eventList = event.getData();
+            selectAll.setChecked(false);
+            mEventAdapter.unSelectAll();
             refreshLayout.autoRefresh();
             XToastUtils.success("根据时间降序排列");
         } else {
@@ -353,6 +357,8 @@ public class EventManagerFragment extends BaseFragment {
     public void onEventListByEventAsc(EventListByEventAscEvent event) {
         if (event.isSuccess()) {
             eventList = event.getData();
+            selectAll.setChecked(false);
+            mEventAdapter.unSelectAll();
             refreshLayout.autoRefresh();
             XToastUtils.success("根据事件名称升序排列");
         } else {
@@ -365,6 +371,8 @@ public class EventManagerFragment extends BaseFragment {
     public void onEventListByEventDesc(EventListByEventDescEvent event) {
         if (event.isSuccess()) {
             eventList = event.getData();
+            selectAll.setChecked(false);
+            mEventAdapter.unSelectAll();
             refreshLayout.autoRefresh();
             XToastUtils.success("根据事件名称降序排列");
         } else {
@@ -378,6 +386,8 @@ public class EventManagerFragment extends BaseFragment {
     public void onEventListByNameAsc(EventListByNameAscEvent event) {
         if (event.isSuccess()) {
             eventList = event.getData();
+            selectAll.setChecked(false);
+            mEventAdapter.unSelectAll();
             refreshLayout.autoRefresh();
             XToastUtils.success("根据上报人升序排列");
         } else {
@@ -390,6 +400,8 @@ public class EventManagerFragment extends BaseFragment {
     public void onEventListByNameDesc(EventListByNameDescEvent event) {
         if (event.isSuccess()) {
             eventList = event.getData();
+            selectAll.setChecked(false);
+            mEventAdapter.unSelectAll();
             refreshLayout.autoRefresh();
             XToastUtils.success("根据上报人降序排列");
         } else {
@@ -402,6 +414,8 @@ public class EventManagerFragment extends BaseFragment {
     public void onEventListByLocationAsc(EventListByLocationAscEvent event) {
         if (event.isSuccess()) {
             eventList = event.getData();
+            selectAll.setChecked(false);
+            mEventAdapter.unSelectAll();
             refreshLayout.autoRefresh();
             XToastUtils.success("根据地点升序排列");
         } else {
@@ -414,6 +428,8 @@ public class EventManagerFragment extends BaseFragment {
     public void onEventListByLocationDesc(EventListByLocationDescEvent event) {
         if (event.isSuccess()) {
             eventList = event.getData();
+            selectAll.setChecked(false);
+            mEventAdapter.unSelectAll();
             refreshLayout.autoRefresh();
             XToastUtils.success("根据地点降序排列");
         } else {

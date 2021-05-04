@@ -30,7 +30,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-@Page(anim = CoreAnim.none, name = "新增警情事件")
+@Page(anim = CoreAnim.slide, name = "新增警情事件")
 public class EventManagerAddFragment extends BaseFragment {
 
     @BindView(R.id.event_add_location)
