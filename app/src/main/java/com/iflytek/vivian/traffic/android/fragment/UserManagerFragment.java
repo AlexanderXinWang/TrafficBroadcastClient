@@ -67,6 +67,8 @@ public class UserManagerFragment extends BaseFragment {
     //用来记录所有checkbox的状态
     private Map<Integer, Boolean> checkStatus = new HashMap<>();
 
+    private Integer checkBoxStatus = 0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,7 +130,16 @@ public class UserManagerFragment extends BaseFragment {
                     SmoothCheckBox smoothCheckBox = holder.findViewById(R.id.checkbox);
                     smoothCheckBox.setOnCheckedChangeListener(null);
                     smoothCheckBox.setChecked(checkStatus.get(position));
-                    smoothCheckBox.setOnCheckedChangeListener(((checkBox, isChecked) -> checkStatus.put(position, isChecked)));
+                    smoothCheckBox.setOnCheckedChangeListener(((checkBox, isChecked) -> {
+                        checkStatus.put(position, isChecked);
+                        if (checkAllChoose()) {
+                            // 已选中所有item -> 让全选按钮为选中状态
+                            selectAll.setChecked(true);
+                        } else {
+                            // 所有item未选中 -> 让全选按钮为未选中状态
+                            selectAll.setChecked(false);
+                        }
+                    }));
                     userPosition.put(position, model.getId());
 
                     holder.text(R.id.tv_user_name, model.getName());
@@ -177,9 +188,13 @@ public class UserManagerFragment extends BaseFragment {
 
         selectAll.setOnCheckedChangeListener(((checkBox, isChecked) -> {
             if (selectAll.isChecked()) {
-                mUserAdapter.selectAll();
+                if (!checkAllChoose()) {
+                    mUserAdapter.selectAll();
+                }
             } else {
-                mUserAdapter.unSelectAll();
+                if (!checkPartlyChoose() || checkAllChoose()) {
+                    mUserAdapter.unSelectAll();
+                }
             }
         }));
     }
@@ -189,6 +204,36 @@ public class UserManagerFragment extends BaseFragment {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
     }
+
+
+    /**
+     * 检验是否部分选择
+     * @return
+     */
+    public Boolean checkPartlyChoose() {
+        Boolean flag = false;
+        for(Integer position : checkStatus.keySet()) {
+            if (checkStatus.get(position)) {
+                flag =  true;
+            }
+        }
+        return flag;
+    }
+
+    public Boolean checkAllChoose() {
+        Boolean flag = false;
+        int count = 0;
+        for(Integer position : checkStatus.keySet()) {
+            if (checkStatus.get(position)) {
+                count++;
+            }
+        }
+        if (count == userList.size()) {
+            flag = true;
+        }
+        return flag;
+    }
+
 
     /**
      * 管理工具栏（全选 / 添加 / 筛选 / 删除）
@@ -217,9 +262,10 @@ public class UserManagerFragment extends BaseFragment {
                     new MaterialDialog.Builder(getContext()).title("确认删除？").content(usersToDelete.toString()).positiveText("确认").negativeText("取消")
                             .onPositive((dialog, which) -> UserClient.deleteUser(getString(R.string.server_url), usersToDelete)).show();
                 } else {
-//                    new MaterialDialog.Builder(getContext()).title("请选择事件！").positiveText("确认").show();
                     XToastUtils.error("请选择事件！");
                 }
+                break;
+            default:
                 break;
         }
     }

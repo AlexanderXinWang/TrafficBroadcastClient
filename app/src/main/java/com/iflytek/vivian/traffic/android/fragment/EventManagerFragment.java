@@ -145,10 +145,19 @@ public class EventManagerFragment extends BaseFragment {
                     SmoothCheckBox smoothCheckBox = holder.findViewById(R.id.checkbox);
                     smoothCheckBox.setOnCheckedChangeListener(null);
                     smoothCheckBox.setChecked(checkStatus.get(position));
-                    smoothCheckBox.setOnCheckedChangeListener(((checkBox, isChecked) -> checkStatus.put(position, isChecked)));
+                    smoothCheckBox.setOnCheckedChangeListener(((checkBox, isChecked) -> {
+                        checkStatus.put(position, isChecked);
+                        if (checkAllChoose()) {
+                            // 已选中所有item -> 让全选按钮为选中状态
+                            selectAll.setChecked(true);
+                        } else {
+                            // 所有item未选中 -> 让全选按钮为未选中状态
+                            selectAll.setChecked(false);
+                        }
+                    }));
                     eventPosition.put(position, model.getId());
 
-//                    holder.setIsRecyclable(false);
+                    holder.setIsRecyclable(false);
 
                     holder.text(R.id.tv_user_name, model.getPolicemanName());
                     holder.text(R.id.tv_tag, DateFormatUtil.format(model.getStartTime()));
@@ -190,9 +199,15 @@ public class EventManagerFragment extends BaseFragment {
 
         selectAll.setOnCheckedChangeListener(((checkBox, isChecked) -> {
             if (selectAll.isChecked()) {
-                mEventAdapter.selectAll();
+                if (!checkAllChoose()) {
+                    // 只有不是手动达到全选的情况下才触发自动全选
+                    mEventAdapter.selectAll();
+                }
             } else {
-                mEventAdapter.unSelectAll();
+                // 只有不是部分选中 || 点击全选后再次点击（当前所有item状态仍为选中）触发取消全选
+                if (!checkPartlyChoose() || checkAllChoose()) {
+                    mEventAdapter.unSelectAll();
+                }
             }
         }));
     }
@@ -298,6 +313,38 @@ public class EventManagerFragment extends BaseFragment {
             }
         };
         recyclerView.setAdapter(adapter);
+    }
+
+    /**
+     * 检验是否部分选择
+     * @return
+     */
+    public Boolean checkPartlyChoose() {
+        Boolean flag = false;
+        for(Integer position : checkStatus.keySet()) {
+            if (checkStatus.get(position)) {
+                flag =  true;
+            }
+        }
+        return flag;
+    }
+
+    /**
+     * 检验是否全部选择
+     * @return
+     */
+    public Boolean checkAllChoose() {
+        Boolean flag = false;
+        int count = 0;
+        for(Integer position : checkStatus.keySet()) {
+            if (checkStatus.get(position)) {
+                count++;
+            }
+        }
+        if (count == eventList.size()) {
+            flag = true;
+        }
+        return flag;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

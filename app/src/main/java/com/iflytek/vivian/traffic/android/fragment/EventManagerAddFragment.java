@@ -78,7 +78,7 @@ public class EventManagerAddFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.event_add_save:
-                Event event = new Event();
+                event = new Event();
                 event.setLocation(location.getText().toString());
                 event.setPolicemanName(userName.getText().toString());
                 event.setPolicemanId(userId.getText().toString());
@@ -98,7 +98,6 @@ public class EventManagerAddFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSaveEvent(EventSaveEvent saveEvent) {
         if (saveEvent.isSuccess()) {
-            event = saveEvent.getData();
             XToastUtils.success("新增警情事件成功");
             popToBack();
         } else {

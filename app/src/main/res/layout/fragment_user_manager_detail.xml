@@ -183,20 +183,20 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="380dp"
+                            android:layout_height="400dp"
                             android:orientation="vertical">
 
                             <FrameLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="80dp"
-                                android:layout_marginTop="30dp">
+                                android:layout_marginTop="15dp">
 
                                 <com.xuexiang.xui.widget.imageview.RadiusImageView
                                     android:id="@+id/iv_avatar"
                                     android:layout_width="70dp"
                                     android:layout_height="70dp"
                                     android:layout_gravity="center"
-                                    android:src="@mipmap/ic_launcher"
+                                    app:srcCompat="@drawable/ic_default_head"
                                     app:riv_is_circle="true" />
 
                             </FrameLayout>
@@ -238,7 +238,7 @@
                                     android:layout_width="60dp"
                                     android:layout_height="wrap_content"
                                     android:text="年龄"
-                                    android:textSize="22dp"
+                                    android:textSize="20dp"
                                     android:textColor="@color/black"
                                     android:textColorHighlight="@color/colorAccent"
                                     android:layout_marginLeft="5dp"/>
@@ -249,7 +249,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="3"
                                     android:text="29"
-                                    android:textSize="20dp"
+                                    android:textSize="18dp"
                                     android:textColor="@color/xui_config_color_blue"
                                     android:textAlignment="center">
 
@@ -269,7 +269,7 @@
                                     android:layout_width="60dp"
                                     android:layout_height="wrap_content"
                                     android:text="职位"
-                                    android:textSize="22dp"
+                                    android:textSize="20dp"
                                     android:textColor="@color/black"
                                     android:textColorHighlight="@color/colorAccent"
                                     android:layout_marginLeft="5dp"/>
@@ -280,13 +280,45 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="3"
                                     android:text="警督"
-                                    android:textSize="20dp"
+                                    android:textSize="18dp"
                                     android:textAlignment="center"
                                     android:textColor="@color/xui_config_color_blue">
 
                                 </EditText>
 
                             </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="16dp"
+                                android:baselineAligned="false" android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="60dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="区位"
+                                    android:textSize="20dp"
+                                    android:textColor="@color/black"
+                                    android:textColorHighlight="@color/colorAccent"
+                                    android:layout_marginLeft="5dp"/>
+
+                                <EditText
+                                    android:id="@+id/user_detail_place"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="3"
+                                    android:text="安徽省合肥市包河区"
+                                    android:textSize="18dp"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/xui_config_color_blue">
+
+                                </EditText>
+
+                            </LinearLayout>
+
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -301,7 +333,7 @@
                                     android:layout_width="60dp"
                                     android:layout_height="wrap_content"
                                     android:text="部门"
-                                    android:textSize="22dp"
+                                    android:textSize="20dp"
                                     android:textColor="@color/black"
                                     android:textColorHighlight="@color/colorAccent"
                                     android:layout_marginLeft="5dp"/>
@@ -312,7 +344,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="3"
                                     android:text="合肥市包河区交警一大队"
-                                    android:textSize="20dp"
+                                    android:textSize="18dp"
                                     android:textAlignment="center"
                                     android:textColor="@color/xui_config_color_blue">
 
@@ -331,15 +363,15 @@
                     android:orientation="vertical">
 
                     <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:id="@+id/user_detail_delete"
+                        android:id="@+id/user_detail_update"
                         style="@style/InfoItem"
                         android:layout_marginTop="20dp"
                         app:sCenterTextColor="@color/xui_config_color_blue"
                         app:sDividerLineType="none"
-                        app:sCenterTextString="保存信息" />
+                        app:sCenterTextString="提交更改" />
 
                     <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:id="@+id/user_detail_save"
+                        android:id="@+id/user_detail_delete"
                         style="@style/InfoItem"
                         android:layout_marginTop="20dp"
                         app:sCenterTextColor="@color/xui_config_color_red"

@@ -20,10 +20,12 @@ package com.iflytek.vivian.traffic.android.dto;
 public class User {
     private String id;
     private String name;
+    private String imageUrl;
     private String age;
     private String password;
     private Integer isAdmin;
     private String role;
+    private String place;
     private String department;
 
     public User() {
@@ -54,6 +56,22 @@ public class User {
         this.isAdmin = isAdmin;
         this.role = role;
         this.department = department;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
     }
 
     public String getId() {
