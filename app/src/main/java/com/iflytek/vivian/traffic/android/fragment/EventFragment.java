@@ -254,8 +254,8 @@ public class EventFragment extends BaseFragment {
             } else {
                 CookieBar.builder(getActivity()).setMessage("您有新的警情信息").setDuration(-1)
                         .setActionWithIcon(R.drawable.ic_action_close_white, view -> XToastUtils.info("已关闭")).show();
-                new Thread(new PlayTask()).start();
             }
+            new Thread(new PlayTask()).start();
         } else {
             Log.e(TAG, "请求播放路径错误" + event.getErrorMessage());
             XToastUtils.error("请求播放路径失败！");
