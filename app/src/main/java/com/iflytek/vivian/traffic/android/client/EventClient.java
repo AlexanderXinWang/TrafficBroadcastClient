@@ -3,11 +3,13 @@ package com.iflytek.vivian.traffic.android.client;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.support.spring.FastjsonSockJsMessageCodec;
 import com.iflytek.vivian.traffic.android.client.retrofit.EventService;
 import com.iflytek.vivian.traffic.android.dto.Event;
 import com.iflytek.vivian.traffic.android.dto.Result;
 import com.iflytek.vivian.traffic.android.event.event.EventDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventDetailEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventGetPlayPathEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListByEventAscEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListByEventDescEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListByLocationAscEvent;
@@ -40,6 +42,38 @@ import retrofit2.converter.fastjson.FastJsonConverterFactory;
 public class EventClient {
 
     private final static String TAG="EventClient";
+
+    public static void getEventPlayPath(String serverUrl) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(EventService.class).getEventPlayPath().enqueue(new Callback<Result<List<String>>>() {
+            @Override
+            public void onResponse(Call<Result<List<String>>> call, Response<Result<List<String>>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "调用getEventPlayPath接口返回：" + response.message());
+                        Result<List<String>> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(EventGetPlayPathEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(EventGetPlayPathEvent.fail(new ApiInvokeException("getEventPlayPath接口返回失败" + result.getErrorMessage()),result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求getEventPlayPath接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(EventGetPlayPathEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(EventGetPlayPathEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<List<String>>> call, Throwable t) {
+                Log.e(TAG, "请求异常：" + t.getMessage());
+                EventBus.getDefault().post(EventGetPlayPathEvent.fail(new ApiInvokeException(t.getMessage()), t.getMessage()));
+            }
+        });
+    }
 
     /**
      * 语音识别警情信息

@@ -32,14 +32,31 @@
         android:paddingEnd="16dp"
         tools:text="标题" />
 
-    <TextView
-        android:id="@+id/tv_action"
-        style="@style/TextStyle.Explain"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        tools:text="更多" />
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_gravity="right"
+        android:background="@drawable/bg_white_circular">
+
+        <com.xuexiang.xui.widget.button.SmoothCheckBox
+            android:id="@+id/event_auto_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </com.xuexiang.xui.widget.button.SmoothCheckBox>
+
+        <TextView
+            android:id="@+id/tv_play"
+            style="@style/TextStyle.Explain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginLeft="10dp"
+            android:paddingEnd="16dp"
+            tools:text="自动播报警情"
+            android:textSize="16dp"
+            android:textColor="@color/black"/>
+    </LinearLayout>
 
 </FrameLayout>
