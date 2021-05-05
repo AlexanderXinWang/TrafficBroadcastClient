@@ -39,6 +39,7 @@ import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.banner.widget.banner.SimpleImageBanner;
 import com.xuexiang.xui.widget.button.SmoothCheckBox;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
+import com.xuexiang.xui.widget.popupwindow.bar.CookieBar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -85,7 +86,7 @@ public class EventFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         EventClient.listEvent(getString(R.string.server_url));
-        timer.schedule(task, 0, 15 * 1000);
+        timer.schedule(task, 0, 10 * 1000);
     }
 
     /**
@@ -246,10 +247,13 @@ public class EventFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetEventPlayPath(EventGetPlayPathEvent event) {
         if (event.isSuccess()) {
+            mp3List = new ArrayList<>();
             mp3List = event.getData();
-            if (mp3List == null) {
+            if (mp3List.size() == 0) {
                 XToastUtils.toast("警情已全部播报！");
             } else {
+                CookieBar.builder(getActivity()).setMessage("您有新的警情信息").setDuration(-1)
+                        .setActionWithIcon(R.drawable.ic_action_close_white, view -> XToastUtils.info("已关闭")).show();
                 new Thread(new PlayTask()).start();
             }
         } else {
