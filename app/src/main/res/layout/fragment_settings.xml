@@ -38,10 +38,10 @@
                     app:sLeftTextString="帮助" />
 
                 <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                    android:id="@+id/menu_change_account"
+                    android:id="@+id/menu_change_password"
                     style="@style/InfoItem"
                     android:layout_marginTop="16dp"
-                    app:sCenterTextString="切换账号"
+                    app:sCenterTextString="修改密码"
                     app:sDividerLineType="none" />
 
                 <com.xuexiang.xui.widget.textview.supertextview.SuperTextView

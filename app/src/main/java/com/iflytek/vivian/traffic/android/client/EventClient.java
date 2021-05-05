@@ -29,9 +29,11 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,6 +45,13 @@ public class EventClient {
 
     private final static String TAG="EventClient";
 
+    private static final OkHttpClient CLIENT = new OkHttpClient().newBuilder()
+            .connectTimeout(100, TimeUnit.SECONDS).readTimeout(100, TimeUnit.SECONDS).build();
+
+    /**
+     * 获取未播报警情的MP3地址
+     * @param serverUrl
+     */
     public static void getEventPlayPath(String serverUrl) {
         new Retrofit.Builder()
                 .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
@@ -84,7 +93,7 @@ public class EventClient {
         MultipartBody.Part file = MultipartBody.Part
                 .createFormData("file", "file.pcm", RequestBody.create(MediaType.parse("audio/pcm"), voiceData));
 
-        new Retrofit.Builder()
+        new Retrofit.Builder().client(CLIENT)
                 .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
                 .create(EventService.class).iatEvent(file).enqueue(new Callback<Result<Event>>() {
             @Override

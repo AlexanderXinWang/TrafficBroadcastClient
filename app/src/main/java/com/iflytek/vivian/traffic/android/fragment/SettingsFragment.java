@@ -41,7 +41,7 @@ public class SettingsFragment extends BaseFragment implements SuperTextView.OnSu
     SuperTextView menuPush;
     @BindView(R.id.menu_helper)
     SuperTextView menuHelper;
-    @BindView(R.id.menu_change_account)
+    @BindView(R.id.menu_change_password)
     SuperTextView menuChangeAccount;
     @BindView(R.id.menu_logout)
     SuperTextView menuLogout;
@@ -71,7 +71,7 @@ public class SettingsFragment extends BaseFragment implements SuperTextView.OnSu
             case R.id.menu_helper:
                 XToastUtils.toast(superTextView.getLeftString());
                 break;
-            case R.id.menu_change_account:
+            case R.id.menu_change_password:
                 XToastUtils.toast(superTextView.getCenterString());
                 break;
             case R.id.menu_logout:
