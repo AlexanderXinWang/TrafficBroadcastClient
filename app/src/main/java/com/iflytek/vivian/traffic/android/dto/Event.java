@@ -23,13 +23,22 @@ public class Event {
     private String id;
     private String policemanId;
     private String policemanName;
+    private String policemanImage;
     private String location;
     private String vehicle;
     private String event;
     private String eventResult;
     private String iatResult;
     private Date startTime;
-    private byte[] pcm;
+    private byte[] mp3;
+
+    public String getPolicemanImage() {
+        return policemanImage;
+    }
+
+    public void setPolicemanImage(String policemanImage) {
+        this.policemanImage = policemanImage;
+    }
 
     public Event(String policemanName, String location, String event, Date startTime) {
         this.policemanName = policemanName;
@@ -48,7 +57,7 @@ public class Event {
         this.eventResult = eventResult;
         this.iatResult = iatResult;
         this.startTime = startTime;
-        this.pcm = pcm;
+        this.mp3 = this.mp3;
     }
 
     public Event() {
@@ -112,11 +121,11 @@ public class Event {
     }
 
     public byte[] getMp3() {
-        return pcm;
+        return mp3;
     }
 
     public void setMp3(byte[] mp3) {
-        this.pcm = pcm;
+        this.mp3 = this.mp3;
     }
 
     public Date getStartTime() {

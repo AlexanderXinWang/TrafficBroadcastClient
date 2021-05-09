@@ -34,8 +34,10 @@ import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xpage.utils.Utils;
 import com.xuexiang.xrouter.facade.service.SerializationService;
 import com.xuexiang.xrouter.launcher.XRouter;
+import com.xuexiang.xui.utils.WidgetUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.actionbar.TitleUtils;
+import com.xuexiang.xui.widget.progress.loading.IMessageLoader;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -50,6 +52,11 @@ public abstract class BaseFragment extends XPageFragment {
 
     private IProgressLoader mIProgressLoader;
 
+    /**
+     * 消息加载框
+     */
+    private IMessageLoader mMessageLoader;
+
     @Override
     protected void initPage() {
         initTitle();
@@ -59,6 +66,22 @@ public abstract class BaseFragment extends XPageFragment {
 
     protected TitleBar initTitle() {
         return TitleUtils.addTitleBarDynamic((ViewGroup) getRootView(), getPageTitle(), v -> popToBack());
+    }
+
+    public IMessageLoader getMessageLoader() {
+        if (mMessageLoader == null) {
+            mMessageLoader = WidgetUtils.getMiniLoadingDialog(getContext());
+        }
+        return mMessageLoader;
+    }
+
+    public IMessageLoader getMessageLoader(String message) {
+        if (mMessageLoader == null) {
+            mMessageLoader = WidgetUtils.getMiniLoadingDialog(getContext(), message);
+        } else {
+            mMessageLoader.updateMessage(message);
+        }
+        return mMessageLoader;
     }
 
     @Override

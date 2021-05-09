@@ -1,6 +1,7 @@
 package com.iflytek.vivian.traffic.android.fragment;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,12 +42,17 @@ import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.button.SmoothCheckBox;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
+import com.xuexiang.xui.widget.imageview.ImageLoader;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
+import com.xuexiang.xui.widget.imageview.strategy.DiskCacheStrategyEnum;
+import com.xuexiang.xui.widget.imageview.strategy.ILoadListener;
 import com.xuexiang.xui.widget.popupwindow.popup.XUISimplePopup;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,6 +92,12 @@ public class EventManagerFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
         EventBus.getDefault().register(this);
         EventClient.listEvent(getString(R.string.server_url));
         initFilterPopup();
@@ -166,6 +178,14 @@ public class EventManagerFragment extends BaseFragment {
                     holder.text(R.id.tv_tag, DateFormatUtil.format(model.getStartTime()));
                     holder.text(R.id.tv_title, model.getLocation());
                     holder.text(R.id.tv_summary, model.getEvent());
+
+                    RadiusImageView image = holder.findViewById(R.id.iv_avatar);
+                    try {
+                        image.setImageBitmap(DataProvider.getBitmap(model.getPolicemanImage()));
+                    } catch (IOException e) {
+                        image.setImageResource(R.drawable.ic_default_head);
+                        Log.e(TAG, "加载头像图片错误" + e.getMessage());
+                    }
 
                     holder.click(R.id.card_view, v -> openNewPage(EventManagerDetailFragment.class, "eventManagerId", model.getId()));
                 }
@@ -384,7 +404,7 @@ public class EventManagerFragment extends BaseFragment {
     // EventBus 订阅事件
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getEventList(EventListEvent event) {
+    public void onEventList(EventListEvent event) {
         if (event.isSuccess()) {
             eventList = event.getData();
             initData();

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Looper;
+import android.os.StrictMode;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,7 @@ import com.iflytek.vivian.traffic.android.dto.Event;
 import com.iflytek.vivian.traffic.android.event.event.EventGetPlayPathEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListByTimeDescEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListEvent;
+import com.iflytek.vivian.traffic.android.utils.DataProvider;
 import com.iflytek.vivian.traffic.android.utils.DateFormatUtil;
 import com.iflytek.vivian.traffic.android.utils.DemoDataProvider;
 import com.iflytek.vivian.traffic.android.utils.StringUtil;
@@ -39,6 +41,7 @@ import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.banner.widget.banner.SimpleImageBanner;
 import com.xuexiang.xui.widget.button.SmoothCheckBox;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xui.widget.popupwindow.bar.CookieBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -84,6 +87,12 @@ public class EventFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
         EventBus.getDefault().register(this);
         EventClient.listEvent(getString(R.string.server_url));
         timer.schedule(task, 0, 10 * 1000);
@@ -160,6 +169,14 @@ public class EventFragment extends BaseFragment {
                     holder.text(R.id.tv_tag, DateFormatUtil.format(model.getStartTime()));
                     holder.text(R.id.tv_title, model.getLocation());
                     holder.text(R.id.tv_summary, model.getEvent());
+
+                    RadiusImageView image = holder.findViewById(R.id.iv_avatar);
+                    try {
+                        image.setImageBitmap(DataProvider.getBitmap(model.getPolicemanImage()));
+                    } catch (IOException e) {
+                        image.setImageResource(R.drawable.ic_default_head);
+                        Log.e(TAG, "加载头像图片错误" + e.getMessage());
+                    }
 
                     holder.click(R.id.card_view, v -> openNewPage(EventDetailFragment.class, "eventId", model.getId()));
                 }

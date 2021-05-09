@@ -9,6 +9,8 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +28,7 @@ import com.iflytek.vivian.traffic.android.fragment.EventFragment;
 import com.iflytek.vivian.traffic.android.fragment.EventManagerFragment;
 import com.iflytek.vivian.traffic.android.fragment.SettingsFragment;
 import com.iflytek.vivian.traffic.android.fragment.UserManagerFragment;
+import com.iflytek.vivian.traffic.android.utils.DataProvider;
 import com.iflytek.vivian.traffic.android.utils.Utils;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.iflytek.vivian.traffic.android.widget.GuideTipsDialog;
@@ -33,7 +36,9 @@ import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
+import com.xuexiang.xui.widget.imageview.ImageLoader;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
+import com.xuexiang.xui.widget.imageview.strategy.DiskCacheStrategyEnum;
 import com.xuexiang.xutil.XUtil;
 import com.xuexiang.xutil.common.ClickUtils;
 import com.xuexiang.xutil.common.CollectionUtils;
@@ -42,12 +47,16 @@ import com.xuexiang.xutil.display.Colors;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 
 /**
  * 管理员程序主页面
  */
 public class AdminMainActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener, BottomNavigationView.OnNavigationItemSelectedListener, ClickUtils.OnClick2ExitListener, Toolbar.OnMenuItemClickListener {
+
+    private static final String TAG = "AdminMainActivity";
 
     @BindView(R.id.admin_toolbar)
     Toolbar toolbar;
@@ -72,6 +81,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     private String userAge;
     private String userRole;
     private String userDepart;
+    private String imageUrl;
 
     @Override
     protected int getLayoutId() {
@@ -81,6 +91,11 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         initData();
         initViews();
@@ -98,6 +113,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         userName = preferences.getString("userName", "");
         userRole = preferences.getString("userRole", "");
         userDepart = preferences.getString("userDepart", "");
+        imageUrl = preferences.getString("imageUrl", "");
     }
 
 
@@ -148,6 +164,13 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         }
 
         ivAvatar.setImageResource(R.drawable.ic_default_head);
+        try {
+            ivAvatar.setImageBitmap(DataProvider.getBitmap(imageUrl));
+        } catch (IOException e) {
+            ivAvatar.setImageResource(R.drawable.ic_default_head);
+            Log.e(TAG, "加载头像图片错误" + imageUrl + e.getMessage());
+        }
+//        ImageLoader.get().loadImage(findViewById(R.id.iv_avatar), imageUrl, DiskCacheStrategyEnum.AUTOMATIC);
         tvId.setText(userId);
         tvAvatar.setText(userName);
         tvSign.setText(userRole + " " + userDepart);

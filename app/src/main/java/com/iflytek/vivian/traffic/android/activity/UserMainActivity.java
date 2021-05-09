@@ -20,6 +20,7 @@ package com.iflytek.vivian.traffic.android.activity;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -43,6 +44,7 @@ import com.iflytek.vivian.traffic.android.fragment.profile.ProfileFragment;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.core.BaseActivity;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
+import com.iflytek.vivian.traffic.android.utils.DataProvider;
 import com.iflytek.vivian.traffic.android.utils.Utils;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.iflytek.vivian.traffic.android.widget.GuideTipsDialog;
@@ -50,11 +52,15 @@ import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
+import com.xuexiang.xui.widget.imageview.ImageLoader;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
+import com.xuexiang.xui.widget.imageview.strategy.DiskCacheStrategyEnum;
 import com.xuexiang.xutil.XUtil;
 import com.xuexiang.xutil.common.ClickUtils;
 import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.display.Colors;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 
@@ -89,7 +95,7 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
     private String userAge;
     private String userRole;
     private String userDepart;
-
+    private String imageUrl;
 
 
     @Override
@@ -101,7 +107,11 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        EventBus.getDefault().register(this);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         initData();
         initViews();
@@ -148,6 +158,7 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
         userName = preferences.getString("userName", "");
         userRole = preferences.getString("userRole", "");
         userDepart = preferences.getString("userDepart", "");
+        imageUrl = preferences.getString("imageUrl", "");
 
         Log.i(TAG, "当前用户id" + userId);
 
@@ -211,7 +222,15 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
         }
 
         // TODO: 2019-10-09 初始化数据
-        ivAvatar.setImageResource(R.drawable.ic_default_head);
+//        ivAvatar.setImageResource(R.drawable.ic_default_head);
+        try {
+            ivAvatar.setImageBitmap(DataProvider.getBitmap(imageUrl));
+        } catch (IOException e) {
+            ivAvatar.setImageResource(R.drawable.ic_default_head);
+            Log.e(TAG, "加载头像图片错误" + imageUrl + e.getMessage());
+        }
+
+//        ImageLoader.get().loadImage(findViewById(R.id.iv_avatar), imageUrl, DiskCacheStrategyEnum.AUTOMATIC);
         tvId.setText(userId);
         tvAvatar.setText(userName);
         tvSign.setText(userRole + "   " + userDepart);

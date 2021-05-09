@@ -50,7 +50,7 @@
                     android:background="@color/white">
 
                     <com.xuexiang.xui.widget.imageview.RadiusImageView
-                        android:id="@+id/event_hall_detail_user_image"
+                        android:id="@+id/event_detail_user_image"
                         android:scaleType="centerCrop"
                         android:layout_gravity="center"
                         app:riv_is_circle="true"

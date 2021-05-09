@@ -1,6 +1,7 @@
 package com.iflytek.vivian.traffic.android.fragment;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -13,17 +14,20 @@ import com.iflytek.vivian.traffic.android.dto.User;
 import com.iflytek.vivian.traffic.android.event.user.UserDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDetailEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserUpdateEvent;
+import com.iflytek.vivian.traffic.android.utils.DataProvider;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,12 +51,18 @@ public class UserManagerDetailFragment extends BaseFragment {
     EditText place;
     @BindView(R.id.user_detail_department)
     EditText department;
+    @BindView(R.id.user_detail_image)
+    RadiusImageView image;
 
     private User user = new User();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
         EventBus.getDefault().register(this);
         UserClient.selectUser(getString(R.string.server_url), getArguments().getString("userId"));
     }
@@ -110,6 +120,12 @@ public class UserManagerDetailFragment extends BaseFragment {
             age.setText(user.getAge());
             role.setText(user.getRole());
             department.setText(user.getDepartment());
+            try {
+                image.setImageBitmap(DataProvider.getBitmap(user.getImageUrl()));
+            } catch (IOException e) {
+                image.setImageResource(R.drawable.ic_default_head);
+                Log.e(TAG, "加载头像图片错误" + e.getMessage());
+            }
         } else {
             XToastUtils.error("加载用户详情信息错误！");
             Log.e(TAG, "加载用户详情信息错误" + event.getErrorMessage());

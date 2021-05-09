@@ -1,6 +1,7 @@
 package com.iflytek.vivian.traffic.android.fragment;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 
@@ -33,12 +34,14 @@ import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.button.SmoothCheckBox;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
+import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xui.widget.popupwindow.popup.XUISimplePopup;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,6 +83,12 @@ public class UserManagerFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
         EventBus.getDefault().register(this);
         UserClient.listUser(getString(R.string.server_url));
         initFilterPopup();
@@ -155,6 +164,15 @@ public class UserManagerFragment extends BaseFragment {
                     holder.text(R.id.tv_user_id, model.getId());
                     holder.text(R.id.tv_role, model.getRole());
                     holder.text(R.id.tv_depart, model.getDepartment());
+
+                    RadiusImageView image = holder.findViewById(R.id.iv_avatar);
+                    try {
+                        image.setImageBitmap(DataProvider.getBitmap(model.getImageUrl()));
+                    } catch (IOException e) {
+                        image.setImageResource(R.drawable.ic_default_head);
+                        Log.e(TAG, "加载头像图片错误" + e.getMessage());
+                    }
+
 
                     holder.click(R.id.card_view, v -> openNewPage(UserManagerDetailFragment.class, "userId", model.getId()));
                 }
@@ -308,7 +326,7 @@ public class UserManagerFragment extends BaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getUserList(UserListEvent event) {
+    public void onUserList(UserListEvent event) {
         if (event.isSuccess()) {
             userList = event.getData();
             initData();

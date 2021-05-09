@@ -17,6 +17,9 @@
 
 package com.iflytek.vivian.traffic.android.fragment;
 
+import android.os.Bundle;
+import android.os.StrictMode;
+
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.utils.TokenUtils;
@@ -26,6 +29,8 @@ import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xui.widget.dialog.DialogLoader;
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView;
 import com.xuexiang.xutil.XUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 
@@ -45,6 +50,16 @@ public class SettingsFragment extends BaseFragment implements SuperTextView.OnSu
     SuperTextView menuChangeAccount;
     @BindView(R.id.menu_logout)
     SuperTextView menuLogout;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+        EventBus.getDefault().register(this);
+    }
 
     @Override
     protected int getLayoutId() {
@@ -72,6 +87,7 @@ public class SettingsFragment extends BaseFragment implements SuperTextView.OnSu
                 XToastUtils.toast(superTextView.getLeftString());
                 break;
             case R.id.menu_change_password:
+                // TODO
                 XToastUtils.toast(superTextView.getCenterString());
                 break;
             case R.id.menu_logout:

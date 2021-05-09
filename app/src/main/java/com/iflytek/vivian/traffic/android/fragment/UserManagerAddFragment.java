@@ -2,6 +2,7 @@ package com.iflytek.vivian.traffic.android.fragment;
 
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -52,6 +53,10 @@ public class UserManagerAddFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
         EventBus.getDefault().register(this);
     }
 
@@ -86,6 +91,7 @@ public class UserManagerAddFragment extends BaseFragment {
                 user.setPlace(place.getText().toString());
                 user.setDepartment(place.getText().toString());
                 user.setPassword(id.getText().toString());
+                // TODO 上传头像
 
                 new MaterialDialog.Builder(getContext()).title("确认保存？").positiveText("确认").negativeText("取消")
                         .onPositive(((dialog, which) -> UserClient.saveUser(getString(R.string.server_url), user))).show();

@@ -8,6 +8,7 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -93,6 +94,10 @@ public class EventReportFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
         EventBus.getDefault().register(this);
         initData();
     }
