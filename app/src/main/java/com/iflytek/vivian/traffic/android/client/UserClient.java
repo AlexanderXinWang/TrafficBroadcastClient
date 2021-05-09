@@ -11,6 +11,12 @@ import com.iflytek.vivian.traffic.android.event.event.EventDetailEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventSaveEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDetailEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserListByAgeAscEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserListByAgeDescEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserListByIdAscEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserListByIdDescEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserListByNameAscEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserListByNameDescEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserListEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserLoginEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserSaveEvent;
@@ -254,6 +260,198 @@ public class UserClient {
             public void onFailure(Call<Result<User>> call, Throwable t) {
                 Log.e(TAG, "请求异常：" + t.getMessage());
                 EventBus.getDefault().post(EventDetailEvent.fail(new ApiInvokeException(t.getMessage()), t.getMessage()));
+            }
+        });
+    }
+
+    public static void listUserByNameAsc(String serverUrl) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(UserService.class).listUserByNameAsc().enqueue(new Callback<Result<List<User>>>() {
+            @Override
+            public void onResponse(Call<Result<List<User>>> call, Response<Result<List<User>>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "调用listUserByNameAsc接口返回：" + response.message());
+                        Result<List<User>> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(UserListByNameAscEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(UserListByNameAscEvent.fail(new ApiInvokeException("listUserByNameAsc接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求listUserByNameAsc接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(UserListByNameAscEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(UserListByNameAscEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<List<User>>> call, Throwable t) {
+                Log.e(TAG, "请求异常：" + t.getMessage());
+                EventBus.getDefault().post(UserListByNameAscEvent.fail(new ApiInvokeException(t.getMessage()), t.getMessage()));
+            }
+        });
+    }
+
+    public static void listUserByNameDesc(String serverUrl) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(UserService.class).listUserByNameDesc().enqueue(new Callback<Result<List<User>>>() {
+            @Override
+            public void onResponse(Call<Result<List<User>>> call, Response<Result<List<User>>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "调用listUserByNameDesc接口返回：" + response.message());
+                        Result<List<User>> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(UserListByNameDescEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(UserListByNameDescEvent.fail(new ApiInvokeException("listUserByNameDesc接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求listUserByNameDesc接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(UserListByNameDescEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(UserListByNameDescEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<List<User>>> call, Throwable t) {
+                Log.e(TAG, "请求异常：" + t.getMessage());
+                EventBus.getDefault().post(UserListByNameDescEvent.fail(new ApiInvokeException(t.getMessage()), t.getMessage()));
+            }
+        });
+    }
+
+    public static void listUserByIdAsc(String serverUrl) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(UserService.class).listUserByIdAsc().enqueue(new Callback<Result<List<User>>>() {
+            @Override
+            public void onResponse(Call<Result<List<User>>> call, Response<Result<List<User>>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "调用listUserByIdAsc接口返回：" + response.message());
+                        Result<List<User>> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(UserListByIdAscEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(UserListByIdAscEvent.fail(new ApiInvokeException("listUserByIdAsc接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求listUserByIdAsc接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(UserListByIdAscEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(UserListByIdAscEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<List<User>>> call, Throwable t) {
+                Log.e(TAG, "请求异常：" + t.getMessage());
+                EventBus.getDefault().post(UserListByIdAscEvent.fail(new ApiInvokeException(t.getMessage()), t.getMessage()));
+            }
+        });
+    }
+
+    public static void listUserByIdDesc(String serverUrl) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(UserService.class).listUserByIdDesc().enqueue(new Callback<Result<List<User>>>() {
+            @Override
+            public void onResponse(Call<Result<List<User>>> call, Response<Result<List<User>>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "调用listUserByIdDesc接口返回：" + response.message());
+                        Result<List<User>> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(UserListByIdDescEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(UserListByIdDescEvent.fail(new ApiInvokeException("listUserByIdDesc接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求listUserByIdDesc接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(UserListByIdDescEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(UserListByIdDescEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<List<User>>> call, Throwable t) {
+                Log.e(TAG, "请求异常：" + t.getMessage());
+                EventBus.getDefault().post(UserListByIdDescEvent.fail(new ApiInvokeException(t.getMessage()), t.getMessage()));
+            }
+        });
+    }
+
+    public static void listUserByAgeAsc(String serverUrl) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(UserService.class).listUserByAgeAsc().enqueue(new Callback<Result<List<User>>>() {
+            @Override
+            public void onResponse(Call<Result<List<User>>> call, Response<Result<List<User>>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "调用listUserByAgeAsc接口返回：" + response.message());
+                        Result<List<User>> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(UserListByAgeAscEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(UserListByAgeAscEvent.fail(new ApiInvokeException("listUserByAgeAsc接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求listUserByAgeAsc接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(UserListByAgeAscEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(UserListByAgeAscEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<List<User>>> call, Throwable t) {
+                Log.e(TAG, "请求异常：" + t.getMessage());
+                EventBus.getDefault().post(UserListByAgeAscEvent.fail(new ApiInvokeException(t.getMessage()), t.getMessage()));
+            }
+        });
+    }
+
+    public static void listUserByAgeDesc(String serverUrl) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(UserService.class).listUserByAgeDesc().enqueue(new Callback<Result<List<User>>>() {
+            @Override
+            public void onResponse(Call<Result<List<User>>> call, Response<Result<List<User>>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "调用listUserByAgeDesc接口返回：" + response.message());
+                        Result<List<User>> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(UserListByAgeDescEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(UserListByAgeDescEvent.fail(new ApiInvokeException("listUserByAgeDesc接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求listUserByAgeDesc接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(UserListByAgeDescEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(UserListByAgeDescEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<List<User>>> call, Throwable t) {
+                Log.e(TAG, "请求异常：" + t.getMessage());
+                EventBus.getDefault().post(UserListByAgeDescEvent.fail(new ApiInvokeException(t.getMessage()), t.getMessage()));
             }
         });
     }

@@ -36,4 +36,22 @@ public interface UserService {
     @POST("/traffic-server/user/detail/{userId}")
     Call<Result<User>> selectUser(@Path("userId") String userId);
 
+    @GET("/traffic-server/user/list/name/asc")
+    Call<Result<List<User>>> listUserByNameAsc();
+
+    @GET("/traffic-server/user/list/name/desc")
+    Call<Result<List<User>>> listUserByNameDesc();
+
+    @GET("/traffic-server/user/list/id/asc")
+    Call<Result<List<User>>> listUserByIdAsc();
+
+    @GET("/traffic-server/user/list/id/desc")
+    Call<Result<List<User>>> listUserByIdDesc();
+
+    @GET("/traffic-server/user/list/age/asc")
+    Call<Result<List<User>>> listUserByAgeAsc();
+
+    @GET("/traffic-server/user/list/age/desc")
+    Call<Result<List<User>>> listUserByAgeDesc();
+
 }

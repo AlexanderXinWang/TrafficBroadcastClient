@@ -11,14 +11,19 @@ import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.adapter.base.broccoli.BroccoliSimpleDelegateAdapter;
-import com.iflytek.vivian.traffic.android.client.EventClient;
 import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.dto.User;
-import com.iflytek.vivian.traffic.android.event.event.EventDeleteEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventListByTimeAscEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDeleteEvent;
-import com.iflytek.vivian.traffic.android.event.user.UserDetailEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserListByAgeAscEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserListByAgeDescEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserListByIdAscEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserListByIdDescEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserListByNameAscEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserListByNameDescEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserListEvent;
+import com.iflytek.vivian.traffic.android.utils.DataProvider;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.xuexiang.xaop.annotation.SingleClick;
@@ -28,6 +33,7 @@ import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.button.SmoothCheckBox;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
+import com.xuexiang.xui.widget.popupwindow.popup.XUISimplePopup;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -69,11 +75,14 @@ public class UserManagerFragment extends BaseFragment {
 
     private Integer checkBoxStatus = 0;
 
+    private XUISimplePopup mFilterPopup;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         UserClient.listUser(getString(R.string.server_url));
+        initFilterPopup();
     }
 
     /**
@@ -205,7 +214,6 @@ public class UserManagerFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
-
     /**
      * 检验是否部分选择
      * @return
@@ -234,6 +242,34 @@ public class UserManagerFragment extends BaseFragment {
         return flag;
     }
 
+    private void initFilterPopup() {
+        int maxHeight = 700;
+        mFilterPopup = new XUISimplePopup(getContext(), DataProvider.userFilterItems)
+                .create(maxHeight, (adapter, item, position) -> {
+                    switch (position) {
+                        case 0:
+                            UserClient.listUserByNameAsc(getString(R.string.server_url));
+                            break;
+                        case 1:
+                            UserClient.listUserByNameDesc(getString(R.string.server_url));
+                            break;
+                        case 2:
+                            UserClient.listUserByIdAsc(getString(R.string.server_url));
+                            break;
+                        case 3:
+                            UserClient.listUserByIdDesc(getString(R.string.server_url));
+                            break;
+                        case 4:
+                            UserClient.listUserByAgeAsc(getString(R.string.server_url));
+                            break;
+                        case 5:
+                            UserClient.listUserByAgeDesc(getString(R.string.server_url));
+                            break;
+                        default:
+                            break;
+                    }
+                });
+    }
 
     /**
      * 管理工具栏（全选 / 添加 / 筛选 / 删除）
@@ -247,6 +283,7 @@ public class UserManagerFragment extends BaseFragment {
                 openNewPage(UserManagerAddFragment.class);
                 break;
             case R.id.event_manager_filter:
+                mFilterPopup.showDown(view);
 //                showFilterDialog();
                 break;
             case R.id.event_manager_delete:
@@ -288,6 +325,90 @@ public class UserManagerFragment extends BaseFragment {
             refreshLayout.autoRefresh(5000);
         } else {
             XToastUtils.error("删除用户失败");
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserListByNameAsc(UserListByNameAscEvent event) {
+        if (event.isSuccess()) {
+            userList = event.getData();
+            selectAll.setChecked(false);
+            mUserAdapter.unSelectAll();
+            refreshLayout.autoRefresh();
+            XToastUtils.success("根据姓名升序排列");
+        } else {
+            XToastUtils.error("按照姓名升序排列错误！");
+            Log.e(TAG, "姓名升序" + event.getErrorMessage());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserListByNameDesc(UserListByNameDescEvent event) {
+        if (event.isSuccess()) {
+            userList = event.getData();
+            selectAll.setChecked(false);
+            mUserAdapter.unSelectAll();
+            refreshLayout.autoRefresh();
+            XToastUtils.success("根据姓名降序排列");
+        } else {
+            XToastUtils.error("按照姓名降序排列错误！");
+            Log.e(TAG, "姓名降序" + event.getErrorMessage());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserListByIdAsc(UserListByIdAscEvent event) {
+        if (event.isSuccess()) {
+            userList = event.getData();
+            selectAll.setChecked(false);
+            mUserAdapter.unSelectAll();
+            refreshLayout.autoRefresh();
+            XToastUtils.success("根据编号升序排列");
+        } else {
+            XToastUtils.error("按照编号升序排列错误！");
+            Log.e(TAG, "编号升序" + event.getErrorMessage());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserListByIdDesc(UserListByIdDescEvent event) {
+        if (event.isSuccess()) {
+            userList = event.getData();
+            selectAll.setChecked(false);
+            mUserAdapter.unSelectAll();
+            refreshLayout.autoRefresh();
+            XToastUtils.success("根据编号降序排列");
+        } else {
+            XToastUtils.error("按照编号降序排列错误！");
+            Log.e(TAG, "编号降序" + event.getErrorMessage());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserListByAgeAsc(UserListByAgeAscEvent event) {
+        if (event.isSuccess()) {
+            userList = event.getData();
+            selectAll.setChecked(false);
+            mUserAdapter.unSelectAll();
+            refreshLayout.autoRefresh();
+            XToastUtils.success("根据年龄升序排列");
+        } else {
+            XToastUtils.error("按照年龄升序排列错误！");
+            Log.e(TAG, "年龄升序" + event.getErrorMessage());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserListByAgeDesc(UserListByAgeDescEvent event) {
+        if (event.isSuccess()) {
+            userList = event.getData();
+            selectAll.setChecked(false);
+            mUserAdapter.unSelectAll();
+            refreshLayout.autoRefresh();
+            XToastUtils.success("根据年龄降序排列");
+        } else {
+            XToastUtils.error("按照年龄降序排列错误！");
+            Log.e(TAG, "年龄降序" + event.getErrorMessage());
         }
     }
 }

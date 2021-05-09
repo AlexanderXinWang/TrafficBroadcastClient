@@ -15,7 +15,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.adapter.SimpleRecyclerAdapter;
 import com.iflytek.vivian.traffic.android.adapter.base.broccoli.BroccoliSimpleDelegateAdapter;
-import com.iflytek.vivian.traffic.android.adapter.base.delegate.SimpleDelegateAdapter;
 import com.iflytek.vivian.traffic.android.client.EventClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.dto.Event;
@@ -42,6 +41,7 @@ import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.button.SmoothCheckBox;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
+import com.xuexiang.xui.widget.popupwindow.popup.XUISimplePopup;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -80,12 +80,15 @@ public class EventManagerFragment extends BaseFragment {
     //用来记录所有checkbox的状态
     private Map<Integer, Boolean> checkStatus = new HashMap<>();
 
+    private XUISimplePopup mFilterPopup;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         EventClient.listEvent(getString(R.string.server_url));
+        initFilterPopup();
     }
 
     /**
@@ -218,6 +221,35 @@ public class EventManagerFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 
+    private void initFilterPopup() {
+        int maxHeight = 700;
+        mFilterPopup = new XUISimplePopup(getContext(), DataProvider.eventFilterItems)
+                .create(maxHeight, (adapter, item, position) -> {
+                    switch (position) {
+                        case 0:
+                            EventClient.listEventByTimeAsc(ResUtils.getString(R.string.server_url));
+                            break;
+                        case 1:
+                            EventClient.listEventByTimeDesc(ResUtils.getString(R.string.server_url));
+                            break;
+                        case 2:
+                            EventClient.listEventByNameAsc(ResUtils.getString(R.string.server_url));
+                            break;
+                        case 3:
+                            EventClient.listEventByNameDesc(ResUtils.getString(R.string.server_url));
+                            break;
+                        case 4:
+                            EventClient.listEventByLocationAsc(ResUtils.getString(R.string.server_url));
+                            break;
+                        case 5:
+                            EventClient.listEventByLocationDesc(ResUtils.getString(R.string.server_url));
+                            break;
+                        default:
+                            break;
+                    }
+                });
+    }
+
     /**
      * 管理工具栏（全选 / 添加 / 筛选 / 删除）
      * @param view
@@ -230,7 +262,8 @@ public class EventManagerFragment extends BaseFragment {
                 openNewPage(EventManagerAddFragment.class);
                 break;
             case R.id.event_manager_filter:
-                showFilterDialog();
+                mFilterPopup.showDown(view);
+//                showFilterDialog();
                 break;
             case R.id.event_manager_delete:
                 List<String> eventsToDelete = new ArrayList<>();
