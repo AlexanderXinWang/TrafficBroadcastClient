@@ -1,5 +1,7 @@
 package com.iflytek.vivian.traffic.android.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -7,6 +9,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TableLayout;
 
+import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
@@ -16,6 +23,10 @@ import com.iflytek.vivian.traffic.android.event.user.UserDetailEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserUpdateEvent;
 import com.iflytek.vivian.traffic.android.utils.DataProvider;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
@@ -56,6 +67,8 @@ public class UserManagerDetailFragment extends BaseFragment {
 
     private User user = new User();
 
+    private List<LocalMedia> mSelectList = new ArrayList<>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +97,7 @@ public class UserManagerDetailFragment extends BaseFragment {
     }
 
     @SingleClick
-    @OnClick({R.id.user_detail_update, R.id.user_detail_delete})
+    @OnClick({R.id.user_detail_update, R.id.user_detail_delete, R.id.user_detail_image})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_detail_update:
@@ -106,8 +119,40 @@ public class UserManagerDetailFragment extends BaseFragment {
                 new MaterialDialog.Builder(getContext()).title("确认删除？").positiveText("确认").negativeText("取消")
                         .onPositive((dialog, which) -> UserClient.deleteUser(getString(R.string.server_url), usersToDelete)).show();
                 break;
+            case R.id.user_detail_image:
+                PictureSelector.create(this)
+                        .openGallery(PictureMimeType.ofImage())
+                        .maxSelectNum(1)
+                        .selectionMode(PictureConfig.SINGLE)
+                        .forResult(PictureConfig.CHOOSE_REQUEST);
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case PictureConfig.CHOOSE_REQUEST:
+                    mSelectList = PictureSelector.obtainMultipleResult(data);
+                    LocalMedia media = mSelectList.get(0);
+                    String path = media.getPath();
+                    RequestOptions options = new RequestOptions()
+                            .centerCrop()
+                            .placeholder(R.drawable.ic_default_head)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL);
+                    Glide.with(getContext())
+                            .load(path)
+                            .apply(options)
+                            .into(image);
+                    // TODO 上传
+
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

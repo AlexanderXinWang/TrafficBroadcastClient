@@ -60,12 +60,12 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <com.xuexiang.xui.widget.imageview.RadiusImageView
-                            android:id="@+id/iv_avatar"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@mipmap/ic_launcher"
-                            app:riv_is_circle="true" />
+<!--                        <com.xuexiang.xui.widget.imageview.RadiusImageView-->
+<!--                            android:id="@+id/iv_avatar"-->
+<!--                            android:layout_width="24dp"-->
+<!--                            android:layout_height="24dp"-->
+<!--                            android:src="@mipmap/ic_launcher"-->
+<!--                            app:riv_is_circle="true" />-->
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -82,7 +82,7 @@
                                     android:layout_marginStart="5dp"
                                     android:text="周星星"
                                     android:gravity="center_vertical"
-                                    android:textColor="@color/xui_config_color_pure_black" />
+                                    android:textColor="@color/xui_config_color_blue" />
                             </LinearLayout>
 
                             <LinearLayout

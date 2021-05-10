@@ -2,6 +2,7 @@ package com.iflytek.vivian.traffic.android.client;
 
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.iflytek.vivian.traffic.android.client.retrofit.UserService;
 import com.iflytek.vivian.traffic.android.dto.Event;
 import com.iflytek.vivian.traffic.android.dto.Result;
@@ -9,6 +10,8 @@ import com.iflytek.vivian.traffic.android.dto.User;
 import com.iflytek.vivian.traffic.android.event.event.EventDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventDetailEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventSaveEvent;
+import com.iflytek.vivian.traffic.android.event.event.IatEvent;
+import com.iflytek.vivian.traffic.android.event.user.UploadImageEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDetailEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserListByAgeAscEvent;
@@ -25,10 +28,14 @@ import com.iflytek.vivian.traffic.android.exception.ApiInvokeException;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.interfaces.RSAKey;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -86,6 +93,7 @@ public class UserClient {
      * @param user
      */
     public static void saveUser(String serverUrl, User user) {
+
         new Retrofit.Builder()
                 .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
                 .create(UserService.class).saveUser(user).enqueue(new Callback<Result<User>>() {
@@ -260,6 +268,41 @@ public class UserClient {
             public void onFailure(Call<Result<User>> call, Throwable t) {
                 Log.e(TAG, "请求异常：" + t.getMessage());
                 EventBus.getDefault().post(EventDetailEvent.fail(new ApiInvokeException(t.getMessage()), t.getMessage()));
+            }
+        });
+    }
+
+    public static void uploadImage(String serverUrl, File file, String userId) {
+        MultipartBody.Part image = MultipartBody.Part.createFormData("image", userId + ".jpg",
+                RequestBody.create(MediaType.parse("image/jpg"), file));
+
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(UserService.class).uploadImage(image, userId).enqueue(new Callback<Result<String>>() {
+            @Override
+            public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "调用uploadImage接口返回：" + response.message());
+                        Result<String> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(UploadImageEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(UploadImageEvent.fail(new ApiInvokeException("uploadImage接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求uploadImage接口失败" + response.errorBody().string());
+                        EventBus.getDefault().post(UploadImageEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(UploadImageEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<String>> call, Throwable t) {
+                Log.e(TAG, "请求异常：" + t.getMessage(), t);
+                EventBus.getDefault().post(UploadImageEvent.fail(new ApiInvokeException(t), t.getMessage()));
             }
         });
     }

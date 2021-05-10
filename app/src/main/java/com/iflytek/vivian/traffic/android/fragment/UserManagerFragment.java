@@ -14,6 +14,7 @@ import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.adapter.base.broccoli.BroccoliSimpleDelegateAdapter;
 import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
+import com.iflytek.vivian.traffic.android.dto.Event;
 import com.iflytek.vivian.traffic.android.dto.User;
 import com.iflytek.vivian.traffic.android.event.event.EventListByTimeAscEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDeleteEvent;
@@ -84,10 +85,10 @@ public class UserManagerFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
+//        if (android.os.Build.VERSION.SDK_INT > 9) {
+//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//            StrictMode.setThreadPolicy(policy);
+//        }
 
         EventBus.getDefault().register(this);
         UserClient.listUser(getString(R.string.server_url));
@@ -144,7 +145,19 @@ public class UserManagerFragment extends BaseFragment {
             @Override
             protected void onBindData(RecyclerViewHolder holder, User model, int position) {
                 if (model != null) {
-
+                    // 用户信息加载
+                    RadiusImageView image = holder.findViewById(R.id.iv_avatar);
+                    try {
+                        image.setImageBitmap(DataProvider.getBitmap(model.getImageUrl()));
+                    } catch (IOException e) {
+                        image.setImageResource(R.drawable.ic_default_head);
+                        Log.e(TAG, "加载头像图片错误" + e.getMessage());
+                    }
+                    holder.text(R.id.tv_user_name, model.getName());
+                    holder.text(R.id.tv_user_id, model.getId());
+                    holder.text(R.id.tv_role, model.getRole());
+                    holder.text(R.id.tv_depart, model.getDepartment());
+                    // 选择按钮加载
                     SmoothCheckBox smoothCheckBox = holder.findViewById(R.id.checkbox);
                     smoothCheckBox.setOnCheckedChangeListener(null);
                     smoothCheckBox.setChecked(checkStatus.get(position));
@@ -160,18 +173,6 @@ public class UserManagerFragment extends BaseFragment {
                     }));
                     userPosition.put(position, model.getId());
 
-                    holder.text(R.id.tv_user_name, model.getName());
-                    holder.text(R.id.tv_user_id, model.getId());
-                    holder.text(R.id.tv_role, model.getRole());
-                    holder.text(R.id.tv_depart, model.getDepartment());
-
-                    RadiusImageView image = holder.findViewById(R.id.iv_avatar);
-                    try {
-                        image.setImageBitmap(DataProvider.getBitmap(model.getImageUrl()));
-                    } catch (IOException e) {
-                        image.setImageResource(R.drawable.ic_default_head);
-                        Log.e(TAG, "加载头像图片错误" + e.getMessage());
-                    }
 
 
                     holder.click(R.id.card_view, v -> openNewPage(UserManagerDetailFragment.class, "userId", model.getId()));
@@ -198,6 +199,7 @@ public class UserManagerFragment extends BaseFragment {
     protected void initListeners() {
         //下拉刷新
         refreshLayout.setOnRefreshListener(refreshLayout -> refreshLayout.getLayout().postDelayed(() -> {
+            UserClient.listUser(getString(R.string.server_url));
             mUserAdapter.refresh(userList);
             refreshLayout.finishRefresh();
         }, 1000));

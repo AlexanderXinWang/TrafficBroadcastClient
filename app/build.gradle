@@ -134,6 +134,10 @@ dependencies {
 
     //美团多渠道打包
     implementation 'com.meituan.android.walle:library:1.1.6'
+
+    //PictureSelector图片选择
+    implementation 'com.github.xuexiangjys.PictureSelector:picture-core:1.0.5'
+//    implementation 'io.github.lucksiege:pictureselector:v2.7.0-rc02'
 }
 //自动添加X-Library依赖
 apply from: 'x-library.gradle'

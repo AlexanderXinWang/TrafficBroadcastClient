@@ -3,6 +3,7 @@ package com.iflytek.vivian.traffic.android.fragment;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -18,6 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.adapter.base.broccoli.BroccoliSimpleDelegateAdapter;
 import com.iflytek.vivian.traffic.android.adapter.base.delegate.SimpleDelegateAdapter;
@@ -52,6 +56,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -88,10 +93,10 @@ public class EventFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (android.os.Build.VERSION.SDK_INT > 9) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
+//        if (android.os.Build.VERSION.SDK_INT > 9) {
+//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//            StrictMode.setThreadPolicy(policy);
+//        }
 
         EventBus.getDefault().register(this);
         EventClient.listEvent(getString(R.string.server_url));
@@ -171,12 +176,28 @@ public class EventFragment extends BaseFragment {
                     holder.text(R.id.tv_summary, model.getEvent());
 
                     RadiusImageView image = holder.findViewById(R.id.iv_avatar);
-                    try {
-                        image.setImageBitmap(DataProvider.getBitmap(model.getPolicemanImage()));
-                    } catch (IOException e) {
-                        image.setImageResource(R.drawable.ic_default_head);
-                        Log.e(TAG, "加载头像图片错误" + e.getMessage());
-                    }
+//                    try {
+//                        URL url = new URL(model.getPolicemanImage());
+//                        image.setImageBitmap(BitmapFactory.decodeStream(url.openStream()));
+//                    } catch (IOException e) {
+//                        image.setImageResource(R.drawable.ic_default_head);
+//                        Log.e(TAG, "加载头像图片错误" + e.getMessage());
+//                    }
+//                    try {
+//                        image.setImageBitmap(DataProvider.getBitmap(model.getPolicemanImage()));
+//                    } catch (IOException e) {
+//                        image.setImageResource(R.drawable.ic_default_head);
+//                        Log.e(TAG, "加载头像图片错误" + e.getMessage());
+//                    }
+//                    RequestOptions options = new RequestOptions()
+//                            .centerCrop()
+//                            .placeholder(R.drawable.ic_default_head)
+//                            .diskCacheStrategy(DiskCacheStrategy.ALL);
+//                    try {
+//                        Glide.with(getContext()).load(DataProvider.getBitmap(model.getPolicemanImage())).apply(options).into(image);
+//                    } catch (IOException e) {
+//                        Log.e(TAG, "加载头像图片错误" + e.getMessage());
+//                    }
 
                     holder.click(R.id.card_view, v -> openNewPage(EventDetailFragment.class, "eventId", model.getId()));
                 }
@@ -229,7 +250,7 @@ public class EventFragment extends BaseFragment {
         }, 1000));*/
 
         refreshLayout.setDisableContentWhenRefresh(true);
-        refreshLayout.autoRefresh();//第一次进入触发自动刷新，演示效果
+        refreshLayout.autoRefresh(1000);//第一次进入触发自动刷新，演示效果
 
 //        autoPlay.setOnCheckedChangeListener((checkBox, isChecked) -> {
 //            if (isChecked) {
