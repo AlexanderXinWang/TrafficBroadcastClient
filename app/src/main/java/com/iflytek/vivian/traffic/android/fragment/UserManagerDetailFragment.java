@@ -18,10 +18,12 @@ import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.dto.User;
+import com.iflytek.vivian.traffic.android.event.user.UploadImageEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDetailEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserUpdateEvent;
 import com.iflytek.vivian.traffic.android.utils.DataProvider;
+import com.iflytek.vivian.traffic.android.utils.StringUtil;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
@@ -38,6 +40,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +71,8 @@ public class UserManagerDetailFragment extends BaseFragment {
     private User user = new User();
 
     private List<LocalMedia> mSelectList = new ArrayList<>();
+
+    private String imageUrl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,8 +107,7 @@ public class UserManagerDetailFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.user_detail_update:
                 user = new User();
-                // TODO
-                user.setImageUrl("");
+                user.setImageUrl(imageUrl);
                 user.setId(id.getText().toString());
                 user.setName(name.getText().toString());
                 user.setRole(role.getText().toString());
@@ -136,19 +140,26 @@ public class UserManagerDetailFragment extends BaseFragment {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case PictureConfig.CHOOSE_REQUEST:
-                    mSelectList = PictureSelector.obtainMultipleResult(data);
-                    LocalMedia media = mSelectList.get(0);
-                    String path = media.getPath();
-                    RequestOptions options = new RequestOptions()
-                            .centerCrop()
-                            .placeholder(R.drawable.ic_default_head)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL);
-                    Glide.with(getContext())
-                            .load(path)
-                            .apply(options)
-                            .into(image);
-                    // TODO 上传
+                    // 上传
+                    if (StringUtil.isNotEmpty(id.getText().toString())) {
+                        mSelectList = PictureSelector.obtainMultipleResult(data);
+                        LocalMedia media = mSelectList.get(0);
+                        String path = media.getPath();
+                        RequestOptions options = new RequestOptions()
+                                .centerCrop()
+                                .placeholder(R.drawable.ic_default_head)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL);
+                        Glide.with(getContext())
+                                .load(path)
+                                .apply(options)
+                                .into(image);
 
+                        File file = new File(path);
+                        UserClient.uploadImage(getString(R.string.server_url), file, id.getText().toString());
+                    } else {
+                        Glide.with(getContext()).load(R.drawable.ic_default_head).into(image);
+                        XToastUtils.error("请先输入用户编号！");
+                    }
                     break;
                 default:
                     break;
@@ -196,6 +207,21 @@ public class UserManagerDetailFragment extends BaseFragment {
         } else {
             XToastUtils.error("删除警员用户失败！请重试");
             Log.e(TAG, "删除警员用户失败" + event.getErrorMessage());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUploadImage(UploadImageEvent event) {
+        if (event.isSuccess()) {
+            imageUrl = event.getData();
+            if (StringUtil.isNotEmpty(imageUrl)) {
+                XToastUtils.success("上传头像成功");
+            } else {
+                XToastUtils.error("上传头像失败！");
+            }
+        } else {
+            XToastUtils.error("上传头像失败！");
+            Log.e(TAG, "上传头像失败" + event.getErrorMessage());
         }
     }
 }

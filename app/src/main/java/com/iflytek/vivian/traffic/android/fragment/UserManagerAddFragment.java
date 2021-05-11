@@ -132,7 +132,6 @@ public class UserManagerAddFragment extends BaseFragment {
                 user.setPlace(place.getText().toString());
                 user.setDepartment(depart.getText().toString());
                 user.setPassword(id.getText().toString());
-                // TODO 上传头像
 
                 new MaterialDialog.Builder(getContext()).title("确认保存？").positiveText("确认").negativeText("取消")
                         .onPositive(((dialog, which) -> UserClient.saveUser(getString(R.string.server_url), user))).show();
@@ -184,22 +183,23 @@ public class UserManagerAddFragment extends BaseFragment {
 //                            .load(path)
 //                            .apply(options)
 //                            .into(image);
-                    mSelectList = PictureSelector.obtainMultipleResult(data);
-                    LocalMedia media = mSelectList.get(0);
-                    String path = media.getPath();
-                    RequestOptions options = new RequestOptions()
-                            .centerCrop()
-                            .placeholder(R.drawable.ic_default_head)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL);
-                    Glide.with(getContext())
-                            .load(path)
-                            .apply(options)
-                            .into(image);
-                    // TODO
                     if (StringUtil.isNotEmpty(id.getText().toString())) {
+                        mSelectList = PictureSelector.obtainMultipleResult(data);
+                        LocalMedia media = mSelectList.get(0);
+                        String path = media.getPath();
+                        RequestOptions options = new RequestOptions()
+                                .centerCrop()
+                                .placeholder(R.drawable.ic_default_head)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL);
+                        Glide.with(getContext())
+                                .load(path)
+                                .apply(options)
+                                .into(image);
+
                         File file = new File(path);
                         UserClient.uploadImage(getString(R.string.server_url), file, id.getText().toString());
                     } else {
+                        Glide.with(getContext()).load(R.drawable.ic_default_head).into(image);
                         XToastUtils.error("请先输入用户编号！");
                     }
 
