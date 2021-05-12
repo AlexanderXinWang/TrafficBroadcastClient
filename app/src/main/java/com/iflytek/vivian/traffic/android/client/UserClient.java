@@ -2,16 +2,14 @@ package com.iflytek.vivian.traffic.android.client;
 
 import android.util.Log;
 
-import com.alibaba.fastjson.JSON;
 import com.iflytek.vivian.traffic.android.client.retrofit.UserService;
-import com.iflytek.vivian.traffic.android.dto.Event;
 import com.iflytek.vivian.traffic.android.dto.Result;
 import com.iflytek.vivian.traffic.android.dto.User;
 import com.iflytek.vivian.traffic.android.event.event.EventDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventDetailEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventSaveEvent;
-import com.iflytek.vivian.traffic.android.event.event.IatEvent;
-import com.iflytek.vivian.traffic.android.event.user.UploadImageEvent;
+import com.iflytek.vivian.traffic.android.event.event.GetUserImageEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserUploadImageEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDetailEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserListByAgeAscEvent;
@@ -30,7 +28,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.interfaces.RSAKey;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -272,6 +269,12 @@ public class UserClient {
         });
     }
 
+    /**
+     * 上传头像
+     * @param serverUrl
+     * @param file
+     * @param userId
+     */
     public static void uploadImage(String serverUrl, File file, String userId) {
         MultipartBody.Part image = MultipartBody.Part.createFormData("image", userId + ".jpg",
                 RequestBody.create(MediaType.parse("image/jpg"), file));
@@ -286,23 +289,60 @@ public class UserClient {
                         Log.i(TAG, "调用uploadImage接口返回：" + response.message());
                         Result<String> result = response.body();
                         if (result.isSuccess()) {
-                            EventBus.getDefault().post(UploadImageEvent.success(result.getData()));
+                            EventBus.getDefault().post(UserUploadImageEvent.success(result.getData()));
                         } else {
-                            EventBus.getDefault().post(UploadImageEvent.fail(new ApiInvokeException("uploadImage接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                            EventBus.getDefault().post(UserUploadImageEvent.fail(new ApiInvokeException("uploadImage接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
                         }
                     } else {
                         Log.e(TAG, "请求uploadImage接口失败" + response.errorBody().string());
-                        EventBus.getDefault().post(UploadImageEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                        EventBus.getDefault().post(UserUploadImageEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
                     }
                 } catch (IOException e) {
-                    EventBus.getDefault().post(UploadImageEvent.fail(e, e.getMessage()));
+                    EventBus.getDefault().post(UserUploadImageEvent.fail(e, e.getMessage()));
                 }
             }
 
             @Override
             public void onFailure(Call<Result<String>> call, Throwable t) {
                 Log.e(TAG, "请求异常：" + t.getMessage(), t);
-                EventBus.getDefault().post(UploadImageEvent.fail(new ApiInvokeException(t), t.getMessage()));
+                EventBus.getDefault().post(UserUploadImageEvent.fail(new ApiInvokeException(t), t.getMessage()));
+            }
+        });
+    }
+
+    /**
+     * 根据用户Id获取其头像路径
+     * @param serverUrl
+     * @param userId
+     */
+    public static void getUserImage(String serverUrl, String userId) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(UserService.class).getUserImage(userId).enqueue(new Callback<Result<String>>() {
+            @Override
+            public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "调用getUserImage接口返回：" + response.message());
+                        Result<String> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(GetUserImageEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(GetUserImageEvent.fail(new ApiInvokeException("getUserImage接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求getUserImage接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(GetUserImageEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(GetUserImageEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<String>> call, Throwable t) {
+                Log.e(TAG, "请求异常：" + t.getMessage());
+                EventBus.getDefault().post(GetUserImageEvent.fail(new ApiInvokeException(t.getMessage()), t.getMessage()));
             }
         });
     }

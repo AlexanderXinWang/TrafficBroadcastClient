@@ -7,7 +7,6 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TableLayout;
 
 import androidx.annotation.Nullable;
 
@@ -18,7 +17,7 @@ import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.dto.User;
-import com.iflytek.vivian.traffic.android.event.user.UploadImageEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserUploadImageEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDetailEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserUpdateEvent;
@@ -32,7 +31,6 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
-import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 
@@ -211,7 +209,7 @@ public class UserManagerDetailFragment extends BaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUploadImage(UploadImageEvent event) {
+    public void onUploadImage(UserUploadImageEvent event) {
         if (event.isSuccess()) {
             imageUrl = event.getData();
             if (StringUtil.isNotEmpty(imageUrl)) {

@@ -219,7 +219,18 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                        android:id="@+id/event_detail_time_picker"
+                        style="@style/InfoItem"
+                        android:layout_marginTop="20dp"
+                        app:sCenterTextColor="@color/xui_config_color_blue"
+                        app:sDividerLineType="none"
+                        app:sCenterTextString="修改发生时间" />
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                     <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                         android:id="@+id/event_detail_delete"
                         style="@style/InfoItem"

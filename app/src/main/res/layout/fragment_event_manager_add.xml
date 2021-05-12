@@ -90,11 +90,12 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/event_detail_time"
+                        android:id="@+id/event_add_time"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center|right"
                         android:layout_marginRight="15dp"
+                        android:text="09:01"
                         android:textSize="15dp"
                         android:textColor="@color/black"/>
 
@@ -216,9 +217,13 @@
                         android:textColor="@color/xui_config_color_blue"/>
                 </LinearLayout>
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"/>
+                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                    android:id="@+id/event_add_time_picker"
+                    style="@style/InfoItem"
+                    android:layout_marginTop="20dp"
+                    app:sCenterTextColor="@color/xui_config_color_blue"
+                    app:sDividerLineType="none"
+                    app:sCenterTextString="选择发生时间" />
 
 
             </LinearLayout>

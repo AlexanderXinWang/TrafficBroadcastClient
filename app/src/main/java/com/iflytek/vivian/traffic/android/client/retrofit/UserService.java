@@ -43,6 +43,10 @@ public interface UserService {
     @POST("/traffic-server/user/{userId}/image/upload")
     Call<Result<String>> uploadImage(@Part MultipartBody.Part image, @Path("userId") String userId);
 
+    @POST("/traffic-server/user/{userId}/image")
+    Call<Result<String>> getUserImage(@Path("userId") String userId);
+
+
     @GET("/traffic-server/user/list/name/asc")
     Call<Result<List<User>>> listUserByNameAsc();
 
