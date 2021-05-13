@@ -17,16 +17,50 @@
 
 package com.iflytek.vivian.traffic.android.fragment.profile;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
+
+import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.iflytek.vivian.traffic.android.R;
+import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
+import com.iflytek.vivian.traffic.android.dto.User;
+import com.iflytek.vivian.traffic.android.event.event.GetUserImageEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserChangeImageEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserUploadImageEvent;
 import com.iflytek.vivian.traffic.android.fragment.AboutFragment;
 import com.iflytek.vivian.traffic.android.fragment.SettingsFragment;
+import com.iflytek.vivian.traffic.android.utils.DataProvider;
+import com.iflytek.vivian.traffic.android.utils.StringUtil;
+import com.iflytek.vivian.traffic.android.utils.XToastUtils;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -35,12 +69,23 @@ import butterknife.BindView;
  */
 @Page(anim = CoreAnim.none)
 public class ProfileFragment extends BaseFragment implements SuperTextView.OnSuperTextViewClickListener {
+
+    private static final String TAG = "ProfileFragment";
+
     @BindView(R.id.riv_head_pic)
     RadiusImageView rivHeadPic;
+    @BindView(R.id.profile_image)
+    SuperTextView profileImage;
+    @BindView(R.id.profile_detail)
+    SuperTextView profileDetail;
     @BindView(R.id.menu_settings)
     SuperTextView menuSettings;
     @BindView(R.id.menu_about)
     SuperTextView menuAbout;
+
+    private String userId = new String();
+
+    private List<LocalMedia> mSelectList = new ArrayList<>();
 
     /**
      * @return 返回为 null意为不需要导航栏
@@ -59,6 +104,19 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
         return R.layout.fragment_profile;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+        initData();
+    }
+
+    private void initData() {
+        SharedPreferences preferences = getActivity().getSharedPreferences("loginUser", Context.MODE_PRIVATE);
+        userId = preferences.getString("userId", "");
+        UserClient.getUserImage(getString(R.string.server_url), userId);
+    }
+
     /**
      * 初始化控件
      */
@@ -69,15 +127,29 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
 
     @Override
     protected void initListeners() {
+        profileImage.setOnSuperTextViewClickListener(this);
+        profileDetail.setOnSuperTextViewClickListener(this);
         menuSettings.setOnSuperTextViewClickListener(this);
         menuAbout.setOnSuperTextViewClickListener(this);
-
     }
 
     @SingleClick
     @Override
     public void onClick(SuperTextView view) {
         switch(view.getId()) {
+            case R.id.profile_image:
+                new MaterialDialog.Builder(getContext()).positiveText("确认").negativeText("取消")
+                        .onPositive(((dialog, which) -> {
+                            PictureSelector.create(this)
+                                    .openGallery(PictureMimeType.ofImage())
+                                    .maxSelectNum(1)
+                                    .selectionMode(PictureConfig.SINGLE)
+                                    .forResult(PictureConfig.CHOOSE_REQUEST);
+                        })).show();
+                break;
+            case R.id.profile_detail:
+                openNewPage(ProfileDetailFragment.class);
+                break;
             case R.id.menu_settings:
                 openNewPage(SettingsFragment.class);
                 break;
@@ -87,5 +159,80 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case PictureConfig.CHOOSE_REQUEST:
+                    // 上传
+                    if (StringUtil.isNotEmpty(userId)) {
+                        mSelectList = PictureSelector.obtainMultipleResult(data);
+                        LocalMedia media = mSelectList.get(0);
+                        String path = media.getPath();
+                        RequestOptions options = new RequestOptions()
+                                .centerCrop()
+                                .placeholder(R.drawable.ic_default_head)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL);
+                        Glide.with(getContext())
+                                .load(path)
+                                .apply(options)
+                                .into(rivHeadPic);
+
+                        File file = new File(path);
+                        UserClient.uploadImage(getString(R.string.server_url), file, userId);
+                    } else {
+                        Glide.with(getContext()).load(R.drawable.ic_default_head).into(rivHeadPic);
+                        XToastUtils.error("请先输入用户编号！");
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetUserImage(GetUserImageEvent event) {
+        if (event.isSuccess()) {
+            if (StringUtil.isNotEmpty(event.getData())) {
+                Glide.with(getContext()).load(event.getData()).into(rivHeadPic);
+            }
+        } else {
+            XToastUtils.error("加载用户头像失败");
+            Log.e(TAG, "加载用户头像失败");
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUploadImage(UserUploadImageEvent event) {
+        if (event.isSuccess()) {
+            XToastUtils.error("上头像头成功！");
+            String imageUrl = event.getData();
+            if (StringUtil.isNotEmpty(imageUrl)) {
+                User user = new User();
+                user.setId(userId);
+                user.setImageUrl(imageUrl);
+                UserClient.changeUserImage(getString(R.string.server_url), user);
+            } else {
+                XToastUtils.error("上传头像失败！");
+            }
+        } else {
+            XToastUtils.error("上传头像失败！");
+            Log.e(TAG, "上传头像失败" + event.getErrorMessage());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onChangeImage(UserChangeImageEvent event) {
+        if (event.isSuccess()) {
+            XToastUtils.success("修改头像成功！重新登陆后生效");
+        } else {
+            XToastUtils.error("修改头像失败！");
+            Log.e(TAG, "修改头像失败" + event.getErrorMessage());
+        }
+
     }
 }

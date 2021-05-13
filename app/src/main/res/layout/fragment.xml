@@ -24,51 +24,51 @@
                         android:background="@drawable/bg_white_circular">
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="440dp"
+                            android:layout_height="500dp"
                             android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:textAlignment="center"
+                                    android:text="事件基本信息"
+                                    android:textSize="25sp"
+                                    android:textColor="@color/xui_config_color_pure_black"/>
+                            </LinearLayout>
 
 <!--                            <LinearLayout-->
 <!--                                android:layout_width="match_parent"-->
 <!--                                android:layout_height="wrap_content"-->
+<!--                                android:baselineAligned="false"-->
+<!--                                android:gravity="center_vertical"-->
+<!--                                android:orientation="horizontal"-->
 <!--                                android:layout_marginTop="5dp">-->
 
 <!--                                <TextView-->
-<!--                                    android:layout_width="match_parent"-->
-<!--                                    android:layout_height="40dp"-->
+<!--                                    android:layout_width="80dp"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="当前用户"-->
+<!--                                    android:textSize="18dp"-->
+<!--                                    android:textColor="@color/black"-->
+<!--                                    android:textColorHighlight="@color/colorAccent"-->
+<!--                                    android:layout_marginLeft="5dp"/>-->
+
+<!--                                <TextView-->
+<!--                                    android:id="@+id/event_report_user"-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:layout_weight="3"-->
+<!--                                    android:text="周星星"-->
+<!--                                    android:textSize="16dp"-->
 <!--                                    android:textAlignment="center"-->
-<!--                                    android:text="事件基本信息"-->
-<!--                                    android:textSize="25sp"-->
-<!--                                    android:textColor="@color/xui_config_color_pure_black"/>-->
+<!--                                    android:textColor="@color/xui_config_color_blue" />-->
+
 <!--                            </LinearLayout>-->
-
-                            <!--                            <LinearLayout-->
-                            <!--                                android:layout_width="match_parent"-->
-                            <!--                                android:layout_height="wrap_content"-->
-                            <!--                                android:baselineAligned="false"-->
-                            <!--                                android:gravity="center_vertical"-->
-                            <!--                                android:orientation="horizontal"-->
-                            <!--                                android:layout_marginTop="5dp">-->
-
-                            <!--                                <TextView-->
-                            <!--                                    android:layout_width="80dp"-->
-                            <!--                                    android:layout_height="wrap_content"-->
-                            <!--                                    android:text="当前用户"-->
-                            <!--                                    android:textSize="18dp"-->
-                            <!--                                    android:textColor="@color/black"-->
-                            <!--                                    android:textColorHighlight="@color/colorAccent"-->
-                            <!--                                    android:layout_marginLeft="5dp"/>-->
-
-                            <!--                                <TextView-->
-                            <!--                                    android:id="@+id/event_report_user"-->
-                            <!--                                    android:layout_width="wrap_content"-->
-                            <!--                                    android:layout_height="wrap_content"-->
-                            <!--                                    android:layout_weight="3"-->
-                            <!--                                    android:text="周星星"-->
-                            <!--                                    android:textSize="16dp"-->
-                            <!--                                    android:textAlignment="center"-->
-                            <!--                                    android:textColor="@color/xui_config_color_blue" />-->
-
-                            <!--                            </LinearLayout>-->
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -99,7 +99,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="3"
-                                        android:text="例：沙依巴克区西北路499号"
+                                        android:text="eg.沙依巴克区西北路499号"
                                         android:textSize="16dp"
                                         android:textAlignment="center"
                                         android:textColor="@color/xui_config_color_blue">
@@ -130,7 +130,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="3"
-                                        android:text="例：家用轿车"
+                                        android:text="eg.家用轿车"
                                         android:textSize="16dp"
                                         android:textAlignment="center"
                                         android:textColor="@color/xui_config_color_blue">
@@ -161,7 +161,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="3"
-                                        android:text="例：两车相撞"
+                                        android:text="eg.两车相撞"
                                         android:textSize="16dp"
                                         android:textAlignment="center"
                                         android:textColor="@color/xui_config_color_blue">
@@ -192,7 +192,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="3"
-                                        android:text="例：人在医院"
+                                        android:text="eg.人在医院"
                                         android:textSize="16dp"
                                         android:textAlignment="center"
                                         android:textColor="@color/xui_config_color_blue">
@@ -234,15 +234,15 @@
 
                             </LinearLayout>
 
-<!--                            <TextView-->
-<!--                                android:id="@+id/event_report_status"-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:gravity="center"-->
-<!--                                android:text="当前状态"-->
-<!--                                android:textSize="18dp"-->
-<!--                                android:textColor="@color/white"-->
-<!--                                android:background="@drawable/bg_blue_circular"/>-->
+                            <TextView
+                                android:id="@+id/event_report_status"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="当前状态"
+                                android:textSize="18dp"
+                                android:textColor="@color/white"
+                                android:background="@drawable/bg_blue_circular"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -266,40 +266,40 @@
                                 </LinearLayout>
 
 
-                                <!--                                <LinearLayout-->
-                                <!--                                    android:layout_width="match_parent"-->
-                                <!--                                    android:layout_height="50dp"-->
-                                <!--                                    android:orientation="horizontal">-->
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="50dp"-->
+<!--                                    android:orientation="horizontal">-->
 
-                                <!--                                    <LinearLayout-->
-                                <!--                                        android:layout_width="wrap_content"-->
-                                <!--                                        android:layout_height="match_parent"-->
-                                <!--                                        android:layout_weight="1"-->
-                                <!--                                        android:gravity="left">-->
-                                <!--                                        <Button-->
-                                <!--                                            android:id="@+id/event_report_flush"-->
-                                <!--                                            android:layout_width="130dp"-->
-                                <!--                                            android:layout_height="wrap_content"-->
-                                <!--                                            android:text="清除数据"-->
-                                <!--                                            android:textSize="18dp"-->
-                                <!--                                            android:background="@drawable/bg_blue_circular"/>-->
-                                <!--                                    </LinearLayout>-->
+<!--                                    <LinearLayout-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="match_parent"-->
+<!--                                        android:layout_weight="1"-->
+<!--                                        android:gravity="left">-->
+<!--                                        <Button-->
+<!--                                            android:id="@+id/event_report_flush"-->
+<!--                                            android:layout_width="130dp"-->
+<!--                                            android:layout_height="wrap_content"-->
+<!--                                            android:text="清除数据"-->
+<!--                                            android:textSize="18dp"-->
+<!--                                            android:background="@drawable/bg_blue_circular"/>-->
+<!--                                    </LinearLayout>-->
 
-                                <!--                                    <LinearLayout-->
-                                <!--                                        android:layout_width="wrap_content"-->
-                                <!--                                        android:layout_height="match_parent"-->
-                                <!--                                        android:gravity="right"-->
-                                <!--                                        android:layout_weight="1">-->
-                                <!--                                        <Button-->
-                                <!--                                            android:id="@+id/event_report"-->
-                                <!--                                            android:layout_width="130dp"-->
-                                <!--                                            android:layout_height="wrap_content"-->
-                                <!--                                            android:text="上报事件"-->
-                                <!--                                            android:textSize="18dp"-->
-                                <!--                                            android:background="@drawable/bg_blue_circular"/>-->
-                                <!--                                    </LinearLayout>-->
+<!--                                    <LinearLayout-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="match_parent"-->
+<!--                                        android:gravity="right"-->
+<!--                                        android:layout_weight="1">-->
+<!--                                        <Button-->
+<!--                                            android:id="@+id/event_report"-->
+<!--                                            android:layout_width="130dp"-->
+<!--                                            android:layout_height="wrap_content"-->
+<!--                                            android:text="上报事件"-->
+<!--                                            android:textSize="18dp"-->
+<!--                                            android:background="@drawable/bg_blue_circular"/>-->
+<!--                                    </LinearLayout>-->
 
-                                <!--                                </LinearLayout>-->
+<!--                                </LinearLayout>-->
 
 
                             </LinearLayout>
@@ -318,7 +318,7 @@
                     <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                         android:id="@+id/event_report_clear"
                         style="@style/InfoItem"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="15dp"
                         app:sCenterTextColor="@color/xui_config_color_red"
                         app:sDividerLineType="none"
                         app:sCenterTextString="清除数据" />

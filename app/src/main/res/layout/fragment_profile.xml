@@ -16,6 +16,7 @@
                 android:paddingTop="20dp">
 
                 <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                    android:id="@+id/profile_image"
                     style="@style/InfoItem.Account"
                     android:layout_height="60dp"
                     app:sLeftTextString="头像">
@@ -32,24 +33,25 @@
                 </com.xuexiang.xui.widget.textview.supertextview.SuperTextView>
 
                 <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                    android:id="@+id/profile_detail"
                     style="@style/InfoItem.Account"
                     app:sLeftTextString="账号" />
 
-                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                    style="@style/InfoItem.Account"
-                    app:sLeftTextString="通知" />
+<!--                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView-->
+<!--                    style="@style/InfoItem.Account"-->
+<!--                    app:sLeftTextString="通知" />-->
 
-                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                    style="@style/InfoItem.Account"
-                    app:sDividerLineType="none"
-                    app:sLeftTextString="收藏" />
+<!--                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView-->
+<!--                    style="@style/InfoItem.Account"-->
+<!--                    app:sDividerLineType="none"-->
+<!--                    app:sLeftTextString="收藏" />-->
 
 
-                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                    style="@style/InfoItem.Account"
-                    android:layout_marginTop="20dp"
-                    app:sDividerLineType="none"
-                    app:sLeftTextString="意见反馈" />
+<!--                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView-->
+<!--                    style="@style/InfoItem.Account"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    app:sDividerLineType="none"-->
+<!--                    app:sLeftTextString="意见反馈" />-->
 
                 <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                     android:id="@+id/menu_settings"

@@ -89,6 +89,8 @@ public class SettingsFragment extends BaseFragment implements SuperTextView.OnSu
             case R.id.menu_change_password:
                 // TODO
                 XToastUtils.toast(superTextView.getCenterString());
+
+
                 break;
             case R.id.menu_logout:
                 DialogLoader.getInstance().showConfirmDialog(

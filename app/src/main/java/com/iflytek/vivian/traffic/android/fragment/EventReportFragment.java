@@ -28,6 +28,7 @@ import com.iflytek.vivian.traffic.android.event.event.IatEvent;
 import com.iflytek.vivian.traffic.android.utils.AlertDialogUtil;
 import com.iflytek.vivian.traffic.android.utils.StringUtil;
 import com.iflytek.vivian.traffic.android.utils.WaveUtil;
+import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
@@ -64,8 +65,8 @@ public class EventReportFragment extends BaseFragment {
     EditText eventResult;
     @BindView(R.id.event_report_iat)
     TextView iatResult;
-    @BindView(R.id.event_report_status)
-    TextView reportStatus;
+//    @BindView(R.id.event_report_status)
+//    TextView reportStatus;
     @BindView(R.id.event_report_record)
     Button btnSpeak;
 
@@ -117,8 +118,8 @@ public class EventReportFragment extends BaseFragment {
 
     @Override
     protected void initViews() {
-        TextView currentUser = findViewById(R.id.event_report_user);
-        currentUser.setText(userName + " " + userId);
+//        TextView currentUser = findViewById(R.id.event_report_user);
+//        currentUser.setText(userName + " " + userId);
     }
 
     public void initData() {
@@ -134,11 +135,11 @@ public class EventReportFragment extends BaseFragment {
     }
 
     @SingleClick
-    @OnClick({R.id.event_report_flush, R.id.event_report_record, R.id.event_report})
+    @OnClick({R.id.event_report_clear, R.id.event_report_record, R.id.event_report})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             // 清除数据按钮
-            case R.id.event_report_flush:
+            case R.id.event_report_clear:
                 eventLocation.setText(null);
                 eventVehicle.setText(null);
                 eventDesc.setText(null);
@@ -153,7 +154,8 @@ public class EventReportFragment extends BaseFragment {
 //                    AlertDialogUtil.warning(getContext(), "再次点击按钮结束");
                 } else {
                     startRecord();
-                    reportStatus.setText("请说话...");
+//                    reportStatus.setText("请说话...");
+                    XToastUtils.info("请说话...");
                     btnSpeak.setText("录音中...");
                 }
                 break;
@@ -172,8 +174,11 @@ public class EventReportFragment extends BaseFragment {
                     if ("".equals(event.getLocation()) && "".equals(event.getVehicle()) && "".equals(event.getEvent()) && "".equals(event.getEventResult())) {
                         new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("表单填写错误").content("输入为空").positiveText("确定").show();
 //                        AlertDialogUtil.warning(getContext(), "输入为空");
+                        XToastUtils.error("表单填写错误！输入为空！");
                     } else {
-                        EventClient.saveEvent(getString(R.string.server_url), event);
+                        new MaterialDialog.Builder(getContext()).content("确认上报？").positiveText("确认").negativeText("取消")
+                                .onPositive(((dialog, which) -> EventClient.saveEvent(getString(R.string.server_url), event) )).show();
+//                        EventClient.saveEvent(getString(R.string.server_url), event);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "上报事件失败：" + e.getMessage());
@@ -251,7 +256,8 @@ public class EventReportFragment extends BaseFragment {
         if (voiceData != null) {
             try {
                 EventClient.iatEvent(getString(R.string.server_url), byteMerger(getHead(voiceData.length, audioSampleRate, 16, 1), voiceData));
-                reportStatus.setText("语音识别中...");
+//                reportStatus.setText("语音识别中...");
+                XToastUtils.info("语音识别中，请稍等...");
                 btnSpeak.setText("语音输入");
             } catch (IOException e) {
                 Log.e(TAG, "语音识别异常" + e.getMessage());
@@ -272,7 +278,8 @@ public class EventReportFragment extends BaseFragment {
             event = iatEvent.getData();
             if (StringUtil.isNotEmpty(event.getIatResult())) {
                 iatResult.setText(event.getIatResult());
-                reportStatus.setText("语音识别完成！");
+                XToastUtils.success("语音识别完成！");
+//                reportStatus.setText("语音识别完成！");
             }
             if (null != event) {
                 if (null != event.getLocation()) {
@@ -289,9 +296,10 @@ public class EventReportFragment extends BaseFragment {
                 }
             }
         } else {
-            new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("语音识别失败").content(iatEvent.getErrorMessage()).positiveText("确定").show();
+//            new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("语音识别失败").content(iatEvent.getErrorMessage()).positiveText("确定").show();
+            XToastUtils.error("语音识别失败！请重新进行录音或文字输入。");
 //            AlertDialogUtil.warning(getContext(), "iat响应失败：" + iatEvent.getErrorMessage() );
-            reportStatus.setText("请重新进行录音或文字输入");
+//            reportStatus.setText("请重新进行录音或文字输入");
         }
     }
 
@@ -299,11 +307,14 @@ public class EventReportFragment extends BaseFragment {
     public void onReportEvent(EventSaveEvent event) {
         if (event.isSuccess()) {
             String message = String.format("当前用户：%s", userName);
-            new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("成功上报事件").content(message).positiveText("确定").show();
+//            new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("成功上报事件").content(message).positiveText("确定").show();
+            XToastUtils.success("成功上报事件");
             Log.i(TAG, "保存事件成功");
         } else {
-            new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("事件上报失败").content(event.getErrorMessage()).positiveText("确定").show();
+//            new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("事件上报失败").content(event.getErrorMessage()).positiveText("确定").show();
 //            AlertDialogUtil.warning(getContext(), "事件上报失败：" + event.getErrorMessage());
+            XToastUtils.error("事件上报失败！");
+            Log.e(TAG, "事件上报失败：" + event.getErrorMessage());
         }
     }
 
