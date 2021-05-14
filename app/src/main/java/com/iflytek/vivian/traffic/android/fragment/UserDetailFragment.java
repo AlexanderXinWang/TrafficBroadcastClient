@@ -26,6 +26,7 @@ import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
+import com.xuexiang.xui.widget.textview.supertextview.SuperTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -56,6 +57,8 @@ public class UserDetailFragment extends BaseFragment {
     EditText department;
     @BindView(R.id.user_detail_image)
     RadiusImageView image;
+    @BindView(R.id.user_detail_reported_event)
+    SuperTextView checkEvent;
 
 
     private User user = new User();
@@ -73,69 +76,18 @@ public class UserDetailFragment extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_profile_detail;
+        return R.layout.fragment_user_detail;
     }
 
     @Override
     protected void initViews() {
-//        VirtualLayoutManager virtualLayoutManager = new VirtualLayoutManager(getContext());
-//        recyclerView.setLayoutManager(virtualLayoutManager);
-//        RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
-//        recyclerView.setRecycledViewPool(viewPool);
-//        viewPool.setMaxRecycledViews(0, 10);
-//
-//        mEventAdapter = new BroccoliSimpleDelegateAdapter<Event>(R.layout.adapter_event_card_view_list_item, new LinearLayoutHelper(), eventList) {
-//            @Override
-//            protected void onBindData(RecyclerViewHolder holder, Event model, int position) {
-//                if (model != null) {
-//                    holder.text(R.id.tv_user_name, model.getPolicemanName());
-//                    holder.text(R.id.tv_tag, DateFormatUtil.format(model.getStartTime()));
-//                    holder.text(R.id.tv_title, model.getLocation());
-//                    holder.text(R.id.tv_summary, model.getEvent());
-//
-//                    holder.click(R.id.card_view, v -> openNewPage(EventDetailFragment.class, "eventId", model.getId()));
-//                }
-//            }
-//
-//            @Override
-//            protected void onBindBroccoli(RecyclerViewHolder holder, Broccoli broccoli) {
-//                broccoli.addPlaceholders(
-//                        holder.findView(R.id.tv_user_name),
-//                        holder.findView(R.id.tv_tag),
-//                        holder.findView(R.id.tv_title),
-//                        holder.findView(R.id.tv_summary)
-//                );
-//            }
-//
-//            @Override
-//            public void selectAll() {
-//
-//            }
-//
-//            @Override
-//            public void unSelectAll() {
-//
-//            }
-//
-//            @Override
-//            public void initCheck(Boolean flag) {
-//
-//            }
-//        };
-//
-//        DelegateAdapter delegateAdapter = new DelegateAdapter(virtualLayoutManager);
-//
-//        delegateAdapter.addAdapter(mEventAdapter);
-//
-//        recyclerView.setAdapter(delegateAdapter);
+
     }
 
     @Override
     protected void initListeners() {
-//        super.initListeners();
-//        refreshLayout.setOnRefreshListener(refreshLayout1 -> {
-//            EventClient.findEventByUserId(getString(R.string.server_url), getArguments().getString("userId"));
-//        });
+        super.initListeners();
+        checkEvent.setOnSuperTextViewClickListener(superTextView -> openNewPage(ReportedEventFragment.class, "userId", getArguments().getString("userId")));
     }
 
     @Override
@@ -161,14 +113,14 @@ public class UserDetailFragment extends BaseFragment {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onFindEventByUserId(EventFindByUserIdEvent event) {
-        if (event.isSuccess()) {
-            if (event.getData().size() != 0) {
-                eventList = event.getData();
-            }
-        } else {
-            XToastUtils.error("加载当前用户已上报警情失败！");
-        }
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onFindEventByUserId(EventFindByUserIdEvent event) {
+//        if (event.isSuccess()) {
+//            if (event.getData().size() != 0) {
+//                eventList = event.getData();
+//            }
+//        } else {
+//            XToastUtils.error("加载当前用户已上报警情失败！");
+//        }
+//    }
 }

@@ -206,6 +206,14 @@
                     android:orientation="vertical">
 
                     <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                        android:id="@+id/user_manager_detail_reported_event"
+                        style="@style/InfoItem"
+                        android:layout_marginTop="20dp"
+                        app:sCenterTextColor="@color/xui_config_color_blue"
+                        app:sDividerLineType="none"
+                        app:sCenterTextString="已上报事件" />
+
+                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                         android:id="@+id/user_manager_detail_update"
                         style="@style/InfoItem"
                         android:layout_marginTop="20dp"

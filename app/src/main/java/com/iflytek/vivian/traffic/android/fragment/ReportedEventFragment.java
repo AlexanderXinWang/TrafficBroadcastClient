@@ -153,7 +153,7 @@ public class ReportedEventFragment extends BaseFragment {
         }, 1000));
 
         refreshLayout.setDisableContentWhenRefresh(true);
-        refreshLayout.autoRefresh(1000);//第一次进入触发自动刷新，演示效果
+        refreshLayout.autoRefresh();//第一次进入触发自动刷新，演示效果
     }
 
     @Override

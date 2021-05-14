@@ -80,8 +80,8 @@ public class EventDetailFragment extends BaseFragment {
     protected void initListeners() {
         super.initListeners();
         image.setOnClickListener(view -> {
-            openPage(UserDetailFragment.class, "userId", userId.getText().toString());
-//            openNewPage(UserDetailFragment.class, "userId", userId.getText().toString());
+//            openPage(UserDetailFragment.class, "userId", userId.getText().toString());
+            openNewPage(UserDetailFragment.class, "userId", userId.getText().toString());
         });
     }
 

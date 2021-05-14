@@ -125,7 +125,7 @@ public class EventManagerDetailFragment extends BaseFragment {
     }
 
     @SingleClick
-    @OnClick({R.id.event_detail_update, R.id.event_detail_delete, R.id.event_detail_time_picker})
+    @OnClick({R.id.event_detail_update, R.id.event_detail_delete, R.id.event_detail_time_picker, R.id.event_detail_user_image})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.event_detail_update:
@@ -165,6 +165,11 @@ public class EventManagerDetailFragment extends BaseFragment {
             case R.id.event_detail_time_picker:
                 showTimePickerDialog();
                 break;
+            case R.id.event_detail_user_image:
+                if (StringUtil.isNotEmpty(userId.getText().toString())) {
+                    openNewPage(UserDetailFragment.class, "userId", userId.getText().toString());
+                }
+                XToastUtils.error("获取当前用户Id失败！");
             default:
                 break;
         }

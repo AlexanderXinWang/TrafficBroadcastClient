@@ -199,6 +199,14 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                    android:id="@+id/user_detail_reported_event"
+                    style="@style/InfoItem"
+                    android:layout_marginTop="20dp"
+                    app:sCenterTextColor="@color/xui_config_color_blue"
+                    app:sDividerLineType="none"
+                    app:sCenterTextString="查看此警员上报的事件" />
+
                 <!--<LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

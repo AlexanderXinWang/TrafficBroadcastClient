@@ -66,6 +66,7 @@ public class UserManagerDetailFragment extends BaseFragment {
     @BindView(R.id.user_manager_detail_image)
     RadiusImageView image;
 
+
     private User user = new User();
 
     private List<LocalMedia> mSelectList = new ArrayList<>();
@@ -100,7 +101,7 @@ public class UserManagerDetailFragment extends BaseFragment {
     }
 
     @SingleClick
-    @OnClick({R.id.user_manager_detail_update, R.id.user_manager_detail_delete, R.id.user_manager_detail_image})
+    @OnClick({R.id.user_manager_detail_update, R.id.user_manager_detail_delete, R.id.user_manager_detail_image, R.id.user_manager_detail_reported_event})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.user_manager_detail_update:
@@ -127,6 +128,9 @@ public class UserManagerDetailFragment extends BaseFragment {
                         .maxSelectNum(1)
                         .selectionMode(PictureConfig.SINGLE)
                         .forResult(PictureConfig.CHOOSE_REQUEST);
+            case R.id.user_manager_detail_reported_event:
+                openNewPage(ReportedEventFragment.class, "userId", id.getText().toString());
+                break;
             default:
                 break;
         }
