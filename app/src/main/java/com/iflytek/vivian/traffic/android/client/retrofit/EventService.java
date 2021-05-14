@@ -40,6 +40,9 @@ public interface EventService {
     @GET("/traffic-server/event/play")
     Call<Result<List<String>>> getEventPlayPath();
 
+    @POST("/traffic-server/event/list/{userId}")
+    Call<Result<List<Event>>> findEventByUserId(@Path("userId") String userId);
+
     @GET("/traffic-server/event/list/time/asc")
     Call<Result<List<Event>>> listEventByTimeAsc();
 

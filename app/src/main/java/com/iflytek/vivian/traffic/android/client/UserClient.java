@@ -9,7 +9,7 @@ import com.iflytek.vivian.traffic.android.event.event.EventDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventDetailEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventSaveEvent;
 import com.iflytek.vivian.traffic.android.event.event.GetUserImageEvent;
-import com.iflytek.vivian.traffic.android.event.user.UserChangeImageEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserUpdateImageEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserUploadImageEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDetailEvent;
@@ -353,7 +353,7 @@ public class UserClient {
      * @param serverUrl
      * @param user
      */
-    public static void changeUserImage(String serverUrl, User user) {
+    public static void updateUserImage(String serverUrl, User user) {
         new Retrofit.Builder()
                 .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
                 .create(UserService.class).changeUserImage(user).enqueue(new Callback<Result<User>>() {
@@ -364,16 +364,16 @@ public class UserClient {
                         Log.i(TAG, "调用changeUserImage接口返回：" + response.message());
                         Result<User> result = response.body();
                         if (result.isSuccess()) {
-                            EventBus.getDefault().post(UserChangeImageEvent.success(result.getData()));
+                            EventBus.getDefault().post(UserUpdateImageEvent.success(result.getData()));
                         } else {
-                            EventBus.getDefault().post(UserChangeImageEvent.fail(new ApiInvokeException("changeUserImage接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                            EventBus.getDefault().post(UserUpdateImageEvent.fail(new ApiInvokeException("changeUserImage接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
                         }
                     } else {
                         Log.e(TAG, "请求changeUserImage接口失败：" + response.errorBody().string());
-                        EventBus.getDefault().post(UserChangeImageEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                        EventBus.getDefault().post(UserUpdateImageEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
                     }
                 } catch (IOException e) {
-                    EventBus.getDefault().post(UserChangeImageEvent.fail(e, e.getMessage()));
+                    EventBus.getDefault().post(UserUpdateImageEvent.fail(e, e.getMessage()));
                 }
             }
 

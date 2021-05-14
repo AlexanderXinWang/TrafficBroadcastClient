@@ -131,14 +131,28 @@ public class EventManagerDetailFragment extends BaseFragment {
             case R.id.event_detail_update:
                 Event event = new Event();
                 event.setId(getArguments().getString("eventManagerId"));
-                // TODO 参数校验
-                event.setLocation(location.getText().toString());
-                event.setPolicemanName(userName.getText().toString());
-                event.setPolicemanId(userId.getText().toString());
-                event.setVehicle(vehicle.getText().toString());
-                event.setEvent(eventDesc.getText().toString());
-                event.setEventResult(eventResult.getText().toString());
-
+                // 参数校验
+                if (StringUtil.isNotEmpty(location.getText().toString())) {
+                    event.setLocation(location.getText().toString());
+                }
+                if (StringUtil.isNotEmpty(userName.getText().toString())) {
+                    event.setPolicemanName(userName.getText().toString());
+                }
+                if (StringUtil.isNotEmpty(userId.getText().toString())) {
+                    event.setPolicemanId(userId.getText().toString());
+                }
+                if (StringUtil.isNotEmpty(vehicle.getText().toString())) {
+                    event.setVehicle(vehicle.getText().toString());
+                }
+                if (StringUtil.isNotEmpty(eventDesc.getText().toString())) {
+                    event.setEvent(eventDesc.getText().toString());
+                }
+                if (StringUtil.isNotEmpty(eventResult.getText().toString())) {
+                    event.setEventResult(eventResult.getText().toString());
+                }
+                if (StringUtil.isNotEmpty(time.getText().toString())) {
+                    event.setStartTime(DateUtils.string2Date(time.getText().toString(), DateUtils.yyyyMMddHHmmss.get()));
+                }
                 new MaterialDialog.Builder(getContext()).title("确认保存？").positiveText("确认").negativeText("取消")
                         .onPositive((dialog, which) -> EventClient.updateEvent(getString(R.string.server_url), event)).show();
                 break;
@@ -186,13 +200,14 @@ public class EventManagerDetailFragment extends BaseFragment {
             vehicle.setText(event.getVehicle());
             eventDesc.setText(event.getEvent());
             eventResult.setText(event.getEventResult());
-            try {
-                image.setImageBitmap(DataProvider.getBitmap(event.getPolicemanImage()));
-            } catch (IOException e) {
-                image.setImageResource(R.drawable.ic_default_head);
-                XToastUtils.error("加载此事件上报人头像错误！");
-                Log.e(TAG, "加载头像图片错误" + e.getMessage());
-            }
+//            try {
+//                image.setImageBitmap(DataProvider.getBitmap(event.getPolicemanImage()));
+//            } catch (IOException e) {
+//                image.setImageResource(R.drawable.ic_default_head);
+//                XToastUtils.error("加载此事件上报人头像错误！");
+//                Log.e(TAG, "加载头像图片错误" + e.getMessage());
+//            }
+            UserClient.getUserImage(getString(R.string.server_url), event.getPolicemanId());
         } else {
             XToastUtils.error("加载事件详情错误！");
         }

@@ -175,30 +175,6 @@ public class EventFragment extends BaseFragment {
                     holder.text(R.id.tv_title, model.getLocation());
                     holder.text(R.id.tv_summary, model.getEvent());
 
-                    RadiusImageView image = holder.findViewById(R.id.iv_avatar);
-//                    try {
-//                        URL url = new URL(model.getPolicemanImage());
-//                        image.setImageBitmap(BitmapFactory.decodeStream(url.openStream()));
-//                    } catch (IOException e) {
-//                        image.setImageResource(R.drawable.ic_default_head);
-//                        Log.e(TAG, "加载头像图片错误" + e.getMessage());
-//                    }
-//                    try {
-//                        image.setImageBitmap(DataProvider.getBitmap(model.getPolicemanImage()));
-//                    } catch (IOException e) {
-//                        image.setImageResource(R.drawable.ic_default_head);
-//                        Log.e(TAG, "加载头像图片错误" + e.getMessage());
-//                    }
-//                    RequestOptions options = new RequestOptions()
-//                            .centerCrop()
-//                            .placeholder(R.drawable.ic_default_head)
-//                            .diskCacheStrategy(DiskCacheStrategy.ALL);
-//                    try {
-//                        Glide.with(getContext()).load(DataProvider.getBitmap(model.getPolicemanImage())).apply(options).into(image);
-//                    } catch (IOException e) {
-//                        Log.e(TAG, "加载头像图片错误" + e.getMessage());
-//                    }
-
                     holder.click(R.id.card_view, v -> openNewPage(EventDetailFragment.class, "eventId", model.getId()));
                 }
 

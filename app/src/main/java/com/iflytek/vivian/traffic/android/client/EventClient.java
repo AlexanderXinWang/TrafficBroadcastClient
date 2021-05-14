@@ -9,6 +9,7 @@ import com.iflytek.vivian.traffic.android.dto.Event;
 import com.iflytek.vivian.traffic.android.dto.Result;
 import com.iflytek.vivian.traffic.android.event.event.EventDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventDetailEvent;
+import com.iflytek.vivian.traffic.android.event.event.EventFindByUserIdEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventGetPlayPathEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListByEventAscEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventListByEventDescEvent;
@@ -300,6 +301,43 @@ public class EventClient {
             public void onFailure(Call<Result<Event>> call, Throwable t) {
                 Log.e(TAG, "请求异常：" + t.getMessage());
                 EventBus.getDefault().post(EventDetailEvent.fail(new ApiInvokeException(t), t.getMessage()));
+            }
+        });
+    }
+
+    /**
+     * 根据用户Id获取事件列表
+     * @param serverUrl
+     * @param userId
+     */
+    public static void findEventByUserId(String serverUrl, String userId) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(EventService.class).findEventByUserId(userId).enqueue(new Callback<Result<List<Event>>>() {
+            @Override
+            public void onResponse(Call<Result<List<Event>>> call, Response<Result<List<Event>>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "findEventByUserId接口返回：" + response.message());
+                        Result<List<Event>> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(EventFindByUserIdEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(EventFindByUserIdEvent.fail(new ApiInvokeException("findEventByUserId接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求findEventByUserId接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(EventFindByUserIdEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(EventFindByUserIdEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<List<Event>>> call, Throwable t) {
+                Log.e(TAG, "findEventByUserId请求异常" + t.getMessage(), t);
+                EventBus.getDefault().post(EventFindByUserIdEvent.fail(new ApiInvokeException(t), t.getMessage()));
             }
         });
     }

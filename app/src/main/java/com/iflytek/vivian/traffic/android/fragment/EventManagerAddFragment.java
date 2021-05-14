@@ -134,13 +134,27 @@ public class EventManagerAddFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.event_add_save:
                 event = new Event();
-                event.setLocation(location.getText().toString());
-                event.setPolicemanName(userName.getText().toString());
-                event.setPolicemanId(userId.getText().toString());
-                event.setStartTime(new Date());
-                event.setVehicle(vehicle.getText().toString());
-                event.setEvent(eventDesc.getText().toString());
-                event.setEventResult(eventResult.getText().toString());
+                if (StringUtil.isNotEmpty(location.getText().toString())) {
+                    event.setLocation(location.getText().toString());
+                }
+                if (StringUtil.isNotEmpty(userName.getText().toString())) {
+                    event.setPolicemanName(userName.getText().toString());
+                }
+                if (StringUtil.isNotEmpty(userId.getText().toString())) {
+                    event.setPolicemanId(userId.getText().toString());
+                }
+                if (StringUtil.isNotEmpty(vehicle.getText().toString())) {
+                    event.setVehicle(vehicle.getText().toString());
+                }
+                if (StringUtil.isNotEmpty(eventDesc.getText().toString())) {
+                    event.setEvent(eventDesc.getText().toString());
+                }
+                if (StringUtil.isNotEmpty(eventResult.getText().toString())) {
+                    event.setEventResult(eventResult.getText().toString());
+                }
+                if (StringUtil.isNotEmpty(time.getText().toString())) {
+                    event.setStartTime(DateUtils.string2Date(time.getText().toString(), DateUtils.yyyyMMddHHmmss.get()));
+                }
 
                 new MaterialDialog.Builder(getContext()).title("确认保存？").positiveText("确认").negativeText("取消")
                         .onPositive((dialog, which) -> EventClient.saveEvent(getString(R.string.server_url), event)).show();

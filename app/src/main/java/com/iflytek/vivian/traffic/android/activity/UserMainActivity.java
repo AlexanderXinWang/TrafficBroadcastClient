@@ -148,7 +148,7 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
         viewPager.setOffscreenPageLimit(mTitles.length - 1);
         viewPager.setAdapter(adapter);
 
-        GuideTipsDialog.showTips(this);
+//        GuideTipsDialog.showTips(this);
     }
 
     private void initData() {

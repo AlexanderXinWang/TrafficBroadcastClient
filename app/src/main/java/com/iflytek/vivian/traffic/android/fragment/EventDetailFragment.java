@@ -3,13 +3,17 @@ package com.iflytek.vivian.traffic.android.fragment;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.client.EventClient;
+import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.dto.Event;
 import com.iflytek.vivian.traffic.android.event.event.EventDetailEvent;
+import com.iflytek.vivian.traffic.android.event.event.GetUserImageEvent;
 import com.iflytek.vivian.traffic.android.utils.DataProvider;
 import com.iflytek.vivian.traffic.android.utils.DateFormatUtil;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
@@ -73,6 +77,15 @@ public class EventDetailFragment extends BaseFragment {
     }
 
     @Override
+    protected void initListeners() {
+        super.initListeners();
+        image.setOnClickListener(view -> {
+            openPage(UserDetailFragment.class, "userId", userId.getText().toString());
+//            openNewPage(UserDetailFragment.class, "userId", userId.getText().toString());
+        });
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         EventBus.getDefault().unregister(this);
@@ -91,16 +104,26 @@ public class EventDetailFragment extends BaseFragment {
             vehicle.setText(event.getVehicle());
             eventDesc.setText(event.getEvent());
             eventResult.setText(event.getEventResult());
-            try {
-                image.setImageBitmap(DataProvider.getBitmap(event.getPolicemanImage()));
-            } catch (IOException e) {
-                XToastUtils.error("加载此事件上报人头像失败！");
-                image.setImageResource(R.drawable.ic_default_head);
-                Log.e(TAG, "加载头像图片错误" + e.getMessage());
-            }
+//            try {
+//                image.setImageBitmap(DataProvider.getBitmap(event.getPolicemanImage()));
+//            } catch (IOException e) {
+//                XToastUtils.error("加载此事件上报人头像失败！");
+//                image.setImageResource(R.drawable.ic_default_head);
+//                Log.e(TAG, "加载头像图片错误" + e.getMessage());
+//            }
+            UserClient.getUserImage(getString(R.string.server_url), event.getPolicemanId());
 
         } else {
-            // TODO 弹出请求错误
+            XToastUtils.error("加载失败！");
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetUserImage(GetUserImageEvent event) {
+        if (event.isSuccess()) {
+            Glide.with(getContext()).load(event.getData()).into(image);
+        } else {
+            XToastUtils.error("加载头像出错！");
         }
     }
 }

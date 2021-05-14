@@ -34,11 +34,11 @@ import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.dto.User;
 import com.iflytek.vivian.traffic.android.event.event.GetUserImageEvent;
-import com.iflytek.vivian.traffic.android.event.user.UserChangeImageEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserUpdateImageEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserUploadImageEvent;
 import com.iflytek.vivian.traffic.android.fragment.AboutFragment;
+import com.iflytek.vivian.traffic.android.fragment.ReportedEventFragment;
 import com.iflytek.vivian.traffic.android.fragment.SettingsFragment;
-import com.iflytek.vivian.traffic.android.utils.DataProvider;
 import com.iflytek.vivian.traffic.android.utils.StringUtil;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.luck.picture.lib.PictureSelector;
@@ -58,7 +58,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +77,8 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     SuperTextView profileImage;
     @BindView(R.id.profile_detail)
     SuperTextView profileDetail;
+    @BindView(R.id.profile_reported)
+    SuperTextView reportedEvent;
     @BindView(R.id.menu_settings)
     SuperTextView menuSettings;
     @BindView(R.id.menu_about)
@@ -129,6 +130,7 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     protected void initListeners() {
         profileImage.setOnSuperTextViewClickListener(this);
         profileDetail.setOnSuperTextViewClickListener(this);
+        reportedEvent.setOnSuperTextViewClickListener(this);
         menuSettings.setOnSuperTextViewClickListener(this);
         menuAbout.setOnSuperTextViewClickListener(this);
     }
@@ -148,7 +150,10 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
                         })).show();
                 break;
             case R.id.profile_detail:
-                openNewPage(ProfileDetailFragment.class);
+                openNewPage(ProfileDetailFragment.class, "userId", userId);
+                break;
+            case R.id.profile_reported:
+                openNewPage(ReportedEventFragment.class, "userId", userId);
                 break;
             case R.id.menu_settings:
                 openNewPage(SettingsFragment.class);
@@ -215,7 +220,7 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
                 User user = new User();
                 user.setId(userId);
                 user.setImageUrl(imageUrl);
-                UserClient.changeUserImage(getString(R.string.server_url), user);
+                UserClient.updateUserImage(getString(R.string.server_url), user);
             } else {
                 XToastUtils.error("上传头像失败！");
             }
@@ -226,7 +231,7 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onChangeImage(UserChangeImageEvent event) {
+    public void onUpdateImage(UserUpdateImageEvent event) {
         if (event.isSuccess()) {
             XToastUtils.success("修改头像成功！重新登陆后生效");
         } else {

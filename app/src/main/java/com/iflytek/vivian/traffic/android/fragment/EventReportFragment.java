@@ -43,6 +43,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
@@ -170,6 +171,7 @@ public class EventReportFragment extends BaseFragment {
                     event.setIatResult(iatResult.getText().toString());
                     event.setPolicemanId(userId);
                     event.setPolicemanName(userName);
+                    event.setStartTime(new Date());
 
                     if ("".equals(event.getLocation()) && "".equals(event.getVehicle()) && "".equals(event.getEvent()) && "".equals(event.getEventResult())) {
                         new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("表单填写错误").content("输入为空").positiveText("确定").show();

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -26,7 +27,7 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="400dp"
+                            android:layout_height="300dp"
                             android:orientation="vertical">
 
                             <FrameLayout
@@ -35,7 +36,7 @@
                                 android:layout_marginTop="15dp">
 
                                 <com.xuexiang.xui.widget.imageview.RadiusImageView
-                                    android:id="@+id/user_manager_detail_image"
+                                    android:id="@+id/profile_detail_image"
                                     android:layout_width="70dp"
                                     android:layout_height="70dp"
                                     android:layout_gravity="center"
@@ -47,8 +48,8 @@
                             <FrameLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <EditText
-                                    android:id="@+id/user_manager_detail_name"
+                                <TextView
+                                    android:id="@+id/profile_detail_name"
                                     style="@style/TextStyle.Explain"
                                     android:layout_gravity="center"
                                     android:text="周星星"
@@ -59,8 +60,8 @@
                             <FrameLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
-                                <EditText
-                                    android:id="@+id/user_manager_detail_id"
+                                <TextView
+                                    android:id="@+id/profile_detail_id"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="20172501203"
@@ -72,6 +73,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
                                 android:baselineAligned="false" android:gravity="center_vertical"
@@ -86,23 +88,23 @@
                                     android:textColorHighlight="@color/colorAccent"
                                     android:layout_marginLeft="5dp"/>
 
-                                <EditText
-                                    android:id="@+id/user_manager_detail_age"
+                                <TextView
+                                    android:id="@+id/profile_detail_age"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="3"
+                                    android:autoLink="all"
                                     android:text="29"
                                     android:textSize="18dp"
                                     android:textColor="@color/xui_config_color_blue"
-                                    android:textAlignment="center">
-
-                                </EditText>
+                                    android:textAlignment="center" />
 
                             </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
                                 android:baselineAligned="false" android:gravity="center_vertical"
@@ -117,23 +119,22 @@
                                     android:textColorHighlight="@color/colorAccent"
                                     android:layout_marginLeft="5dp"/>
 
-                                <EditText
-                                    android:id="@+id/user_manager_detail_role"
+                                <TextView
+                                    android:id="@+id/profile_detail_role"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="3"
                                     android:text="警督"
                                     android:textSize="18dp"
                                     android:textAlignment="center"
-                                    android:textColor="@color/xui_config_color_blue">
-
-                                </EditText>
+                                    android:textColor="@color/xui_config_color_blue" />
 
                             </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
                                 android:baselineAligned="false" android:gravity="center_vertical"
@@ -148,17 +149,16 @@
                                     android:textColorHighlight="@color/colorAccent"
                                     android:layout_marginLeft="5dp"/>
 
-                                <EditText
-                                    android:id="@+id/user_manager_detail_place"
+                                <TextView
+                                    android:id="@+id/profile_detail_place"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="3"
                                     android:text="安徽省合肥市包河区"
                                     android:textSize="18dp"
                                     android:textAlignment="center"
-                                    android:textColor="@color/xui_config_color_blue">
+                                    android:textColor="@color/xui_config_color_blue" />
 
-                                </EditText>
 
                             </LinearLayout>
 
@@ -166,6 +166,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
                                 android:baselineAligned="false"
@@ -181,17 +182,16 @@
                                     android:textColorHighlight="@color/colorAccent"
                                     android:layout_marginLeft="5dp"/>
 
-                                <EditText
-                                    android:id="@+id/user_manager_detail_department"
+                                <TextView
+                                    android:id="@+id/profile_detail_department"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="3"
                                     android:text="合肥市包河区交警一大队"
                                     android:textSize="18dp"
                                     android:textAlignment="center"
-                                    android:textColor="@color/xui_config_color_blue">
+                                    android:textColor="@color/xui_config_color_blue" />
 
-                                </EditText>
 
                             </LinearLayout>
 
@@ -202,25 +202,50 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_weight="1">
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:background="@drawable/bg_white_circular"
+                            android:text="此用户已上报事件"
+                            android:textSize="20sp"
+                            android:textColor="@color/black"
+                            android:textAlignment="center"/>
+                    </FrameLayout>
+                </LinearLayout>
 
-                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:id="@+id/user_manager_detail_update"
-                        style="@style/InfoItem"
-                        android:layout_marginTop="20dp"
-                        app:sCenterTextColor="@color/xui_config_color_blue"
-                        app:sDividerLineType="none"
-                        app:sCenterTextString="提交更改" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                        android:id="@+id/profile_detail_event_refreshLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:srlEnableAutoLoadMore="true"
+                        app:srlEnableLoadMore="true">
 
-                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:id="@+id/user_manager_detail_delete"
-                        style="@style/InfoItem"
-                        android:layout_marginTop="20dp"
-                        app:sCenterTextColor="@color/xui_config_color_red"
-                        app:sDividerLineType="none"
-                        app:sCenterTextString="删除此用户" />
+                        <com.scwang.smartrefresh.header.MaterialHeader
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
 
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/profile_detail_event_recyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:overScrollMode="never"
+                            tools:listitem="@layout/adapter_event_card_view_list_item" />
+
+                        <!--    注意修改包名时，这里也需要修改    -->
+                        <com.iflytek.vivian.traffic.android.widget.MaterialFooter
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
                 </LinearLayout>
 
             </LinearLayout>

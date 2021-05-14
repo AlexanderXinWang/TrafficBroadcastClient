@@ -51,19 +51,19 @@ public class UserManagerDetailFragment extends BaseFragment {
 
     private static final String TAG = "UserManagerDetail";
 
-    @BindView(R.id.user_detail_name)
+    @BindView(R.id.user_manager_detail_name)
     EditText name;
-    @BindView(R.id.user_detail_id)
+    @BindView(R.id.user_manager_detail_id)
     EditText id;
-    @BindView(R.id.user_detail_age)
+    @BindView(R.id.user_manager_detail_age)
     EditText age;
-    @BindView(R.id.user_detail_role)
+    @BindView(R.id.user_manager_detail_role)
     EditText role;
-    @BindView(R.id.user_detail_place)
+    @BindView(R.id.user_manager_detail_place)
     EditText place;
-    @BindView(R.id.user_detail_department)
+    @BindView(R.id.user_manager_detail_department)
     EditText department;
-    @BindView(R.id.user_detail_image)
+    @BindView(R.id.user_manager_detail_image)
     RadiusImageView image;
 
     private User user = new User();
@@ -100,10 +100,10 @@ public class UserManagerDetailFragment extends BaseFragment {
     }
 
     @SingleClick
-    @OnClick({R.id.user_detail_update, R.id.user_detail_delete, R.id.user_detail_image})
+    @OnClick({R.id.user_manager_detail_update, R.id.user_manager_detail_delete, R.id.user_manager_detail_image})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.user_detail_update:
+            case R.id.user_manager_detail_update:
                 user = new User();
                 user.setImageUrl(imageUrl);
                 user.setId(id.getText().toString());
@@ -115,13 +115,13 @@ public class UserManagerDetailFragment extends BaseFragment {
                 new MaterialDialog.Builder(getContext()).title("确认修改？").positiveText("确认").negativeText("取消")
                         .onPositive((dialog, which) -> UserClient.updateUser(getString(R.string.server_url), user)).show();
                 break;
-            case R.id.user_detail_delete:
+            case R.id.user_manager_detail_delete:
                 List<String> usersToDelete = new ArrayList<>();
                 usersToDelete.add(getArguments().getString("userId"));
                 new MaterialDialog.Builder(getContext()).title("确认删除？").positiveText("确认").negativeText("取消")
                         .onPositive((dialog, which) -> UserClient.deleteUser(getString(R.string.server_url), usersToDelete)).show();
                 break;
-            case R.id.user_detail_image:
+            case R.id.user_manager_detail_image:
                 PictureSelector.create(this)
                         .openGallery(PictureMimeType.ofImage())
                         .maxSelectNum(1)
@@ -180,6 +180,7 @@ public class UserManagerDetailFragment extends BaseFragment {
                 image.setImageResource(R.drawable.ic_default_head);
                 Log.e(TAG, "加载头像图片错误" + e.getMessage());
             }
+            // TODO 改为Glide
         } else {
             XToastUtils.error("加载用户详情信息错误！");
             Log.e(TAG, "加载用户详情信息错误" + event.getErrorMessage());
