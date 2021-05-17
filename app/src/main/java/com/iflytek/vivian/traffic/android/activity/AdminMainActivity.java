@@ -6,10 +6,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.speech.RecognizerIntent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -26,12 +30,12 @@ import com.iflytek.vivian.traffic.android.event.user.UserLoginEvent;
 import com.iflytek.vivian.traffic.android.fragment.AboutFragment;
 import com.iflytek.vivian.traffic.android.fragment.EventFragment;
 import com.iflytek.vivian.traffic.android.fragment.EventManagerFragment;
+import com.iflytek.vivian.traffic.android.fragment.SearchViewFragment;
 import com.iflytek.vivian.traffic.android.fragment.SettingsFragment;
 import com.iflytek.vivian.traffic.android.fragment.UserManagerFragment;
 import com.iflytek.vivian.traffic.android.utils.DataProvider;
 import com.iflytek.vivian.traffic.android.utils.Utils;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
-import com.iflytek.vivian.traffic.android.widget.GuideTipsDialog;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
@@ -39,6 +43,7 @@ import com.xuexiang.xui.utils.ThemeUtils;
 import com.xuexiang.xui.widget.imageview.ImageLoader;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xui.widget.imageview.strategy.DiskCacheStrategyEnum;
+import com.xuexiang.xui.widget.searchview.MaterialSearchView;
 import com.xuexiang.xutil.XUtil;
 import com.xuexiang.xutil.common.ClickUtils;
 import com.xuexiang.xutil.common.CollectionUtils;
@@ -48,8 +53,11 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  * 管理员程序主页面
@@ -62,6 +70,8 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     Toolbar toolbar;
     @BindView(R.id.admin_view_pager)
     ViewPager viewPager;
+//    @BindView(R.id.search_view)
+//    MaterialSearchView mSearchView;
     /**
      * 底部导航栏
      */
@@ -137,7 +147,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         viewPager.setOffscreenPageLimit(mTitles.length - 1);
         viewPager.setAdapter(adapter);
 
-        GuideTipsDialog.showTips(this);
+//        GuideTipsDialog.showTips(this)
     }
 
     private void initHeader() {
@@ -208,6 +218,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
         bottomNavigation.setOnNavigationItemSelectedListener(this);
     }
 
+
     /**
      * 处理侧边栏点击事件
      * @param menuItem
@@ -227,7 +238,11 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
-                Utils.showPrivacyDialog(this, null);
+//                Utils.showPrivacyDialog(this, null);
+//                startActivity(new Intent(AdminMainActivity.this, SearchViewActivity.class));
+//                toolbar.inflateMenu(R.layout.fragment_searchview);
+//                mSearchView.showSearch();
+                openNewPage(SearchViewFragment.class);
                 break;
             default:
                 break;

@@ -35,16 +35,20 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.iflytek.vivian.traffic.android.R;
+import com.iflytek.vivian.traffic.android.activity.AdminMainActivity;
+import com.iflytek.vivian.traffic.android.activity.UserMainActivity;
 import com.iflytek.vivian.traffic.android.core.webview.AgentWebActivity;
 import com.luck.picture.lib.PictureSelectionModel;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureMimeType;
+import com.xuexiang.xui.XUI;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.widget.dialog.DialogLoader;
 import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xutil.XUtil;
+import com.xuexiang.xutil.app.ActivityUtils;
 import com.xuexiang.xutil.data.DateUtils;
 import com.xuexiang.xutil.file.FileIOUtils;
 import com.xuexiang.xutil.file.FileUtils;
@@ -122,6 +126,31 @@ public final class Utils {
         dialog.getContentView().setMovementMethod(LinkMovementMethod.getInstance());
         dialog.show();
         return dialog;
+    }
+
+    /**
+     * 初始化主题
+     */
+    public static void initTheme(Activity activity) {
+        if (SettingSPUtils.getInstance().isUseCustomTheme()) {
+            activity.setTheme(R.style.CustomAppTheme);
+        } else {
+            XUI.initTheme(activity);
+        }
+    }
+
+    /**
+     * 同步首页状态,未启动就启动
+     */
+    public static void syncAdminMainPageStatus() {
+        if (!XUtil.getActivityLifecycleHelper().isActivityExist(AdminMainActivity.class)) {
+            ActivityUtils.startActivity(AdminMainActivity.class);
+        }
+    }
+    public static void syncUserMainPageStatus() {
+        if (!XUtil.getActivityLifecycleHelper().isActivityExist(UserMainActivity.class)) {
+            ActivityUtils.startActivity(UserMainActivity.class);
+        }
     }
 
     /**

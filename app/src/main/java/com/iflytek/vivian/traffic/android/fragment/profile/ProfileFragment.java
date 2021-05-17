@@ -140,7 +140,7 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     public void onClick(SuperTextView view) {
         switch(view.getId()) {
             case R.id.profile_image:
-                new MaterialDialog.Builder(getContext()).positiveText("确认").negativeText("取消")
+                new MaterialDialog.Builder(getContext()).title("确认修改头像？").positiveText("确认").negativeText("取消")
                         .onPositive(((dialog, which) -> {
                             PictureSelector.create(this)
                                     .openGallery(PictureMimeType.ofImage())
