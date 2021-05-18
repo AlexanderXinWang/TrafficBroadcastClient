@@ -6,11 +6,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
 import com.alibaba.fastjson.JSON;
+import com.bumptech.glide.Glide;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.activity.AdminMainActivity;
 import com.iflytek.vivian.traffic.android.activity.LoginActivity;
@@ -18,6 +22,7 @@ import com.iflytek.vivian.traffic.android.activity.UserMainActivity;
 import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.dto.User;
+import com.iflytek.vivian.traffic.android.event.event.GetUserImageEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserLoginEvent;
 import com.iflytek.vivian.traffic.android.utils.RandomUtils;
 import com.iflytek.vivian.traffic.android.utils.SettingUtils;
@@ -56,13 +61,22 @@ public class LoginFragment extends BaseFragment {
     MaterialEditText etUsername;
     @BindView(R.id.et_password)
     MaterialEditText etPassword;
+    @BindView(R.id.login_image)
+    ImageView loginImage;
 
     private CountDownButtonHelper mCountDownHelper;
 
+    private String imageUrl;
 
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_login;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -94,6 +108,31 @@ public class LoginFragment extends BaseFragment {
                 SettingUtils.setIsAgreePrivacy(true);
             });
         }
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+
+
+        etUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                loginImage.setImageResource(R.drawable.ic_default_head);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                loginImage.setImageResource(R.drawable.ic_default_head);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (etUsername.validate()) {
+                    UserClient.getUserImage(getString(R.string.server_url), etUsername.getEditValue());
+                }
+            }
+        });
     }
 
     /**
@@ -128,12 +167,6 @@ public class LoginFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        EventBus.getDefault().register(this);
-    }
-
 
     /**
      * 登录成功的处理
@@ -144,33 +177,41 @@ public class LoginFragment extends BaseFragment {
 
         String token = RandomUtils.getRandomNumbersAndLetters(16);
 
-            if (event.isSuccess()) {
+        if (event.isSuccess()) {
 //                Intent intent = new Intent();
 //                intent.putExtra("userData", JSON.toJSONString(event.getData()));
-                if (TokenUtils.handleLoginSuccess(token)) {
-                    setLoginToken(event.getData());
-                    popToBack();    // 弹出当前framework
-                    /**
-                     * 区分用户类型
-                     * 普通用户 —— 0
-                     * 管理员 —— 1
-                     */
-                    if (event.getData().getIsAdmin() == 0) {
+            if (TokenUtils.handleLoginSuccess(token)) {
+                setLoginToken(event.getData());
+                popToBack();    // 弹出当前framework
+                /**
+                 * 区分用户类型
+                 * 普通用户 —— 0
+                 * 管理员 —— 1
+                 */
+                if (event.getData().getIsAdmin() == 0) {
 //                    Intent userIntent = new Intent(getActivity(), UserMainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                    userIntent.putExtra("userData", JSON.toJSONString(event.getData()));
 //                    ActivityUtils.startActivity(userIntent);
-                        ActivityUtils.startActivity(UserMainActivity.class);
-                    } else {
+                    ActivityUtils.startActivity(UserMainActivity.class);
+                } else {
 //                    Intent adminIntent = new Intent(getActivity(), AdminMainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                    adminIntent.putExtra("userData", JSON.toJSONString(event.getData()));
 //                    ActivityUtils.startActivity(adminIntent);
-                        ActivityUtils.startActivity(AdminMainActivity.class);
-                    }
+                    ActivityUtils.startActivity(AdminMainActivity.class);
                 }
-            } else {
-                XToastUtils.error("登陆失败，用户名或密码错误");
             }
+        } else {
+            XToastUtils.error("登陆失败，用户名或密码错误");
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetUserImage(GetUserImageEvent event) {
+        if (event.isSuccess()) {
+            imageUrl = event.getData();
+            Glide.with(getContext()).load(imageUrl).into(loginImage);
+        }
+    }
 
 
     @Override

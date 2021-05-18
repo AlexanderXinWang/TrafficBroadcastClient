@@ -7,11 +7,20 @@
     android:orientation="vertical">
 
 
-    <androidx.appcompat.widget.AppCompatImageView
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        android:id="@+id/login_image"-->
+<!--        android:layout_width="120dp"-->
+<!--        android:layout_height="120dp"-->
+<!--        android:layout_gravity="center_horizontal"-->
+<!--        app:srcCompat="@drawable/ic_default_head" />-->
+
+    <com.xuexiang.xui.widget.imageview.RadiusImageView
+        android:id="@+id/login_image"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_gravity="center_horizontal"
-        app:srcCompat="@drawable/ic_default_head" />
+        app:srcCompat="@drawable/ic_default_head"
+        app:riv_is_circle="true"/>
 
 
     <TextView
