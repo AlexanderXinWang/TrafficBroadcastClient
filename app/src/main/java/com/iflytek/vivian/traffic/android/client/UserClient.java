@@ -9,7 +9,9 @@ import com.iflytek.vivian.traffic.android.event.event.EventDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventDetailEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventSaveEvent;
 import com.iflytek.vivian.traffic.android.event.event.GetUserImageEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserCheckPwdEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserUpdateImageEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserUpdatePwdEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserUploadImageEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDeleteEvent;
 import com.iflytek.vivian.traffic.android.event.user.UserDetailEvent;
@@ -381,6 +383,75 @@ public class UserClient {
             public void onFailure(Call<Result<User>> call, Throwable t) {
                 Log.e(TAG, "请求异常：" + t.getMessage());
                 EventBus.getDefault().post(GetUserImageEvent.fail(new ApiInvokeException(t.getMessage()), t.getMessage()));
+            }
+        });
+    }
+
+    /**
+     * 检验旧密码
+     * @param serverUrl
+     * @param user
+     */
+    public static void checkOldPassword(String serverUrl, User user) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(UserService.class).checkOldPassword(user).enqueue(new Callback<Result<Boolean>>() {
+            @Override
+            public void onResponse(Call<Result<Boolean>> call, Response<Result<Boolean>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "调用checkOldPassword接口返回：" + response.message());
+                        Result<Boolean> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(UserCheckPwdEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(UserCheckPwdEvent.fail(new ApiInvokeException("checkOldPassword接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求checkOldPassword接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(UserCheckPwdEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(UserCheckPwdEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<Boolean>> call, Throwable t) {
+                Log.e(TAG, "请求异常：" + t.getMessage());
+                EventBus.getDefault().post(UserCheckPwdEvent.fail(new ApiInvokeException(t.getMessage()), t.getMessage()));
+            }
+        });
+    }
+
+    public static void updatePassword(String serverUrl, User user) {
+        new Retrofit.Builder()
+                .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
+                .create(UserService.class).updatePassword(user).enqueue(new Callback<Result<Boolean>>() {
+            @Override
+            public void onResponse(Call<Result<Boolean>> call, Response<Result<Boolean>> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.i(TAG, "调用updatePassword接口返回：" + response.message());
+                        Result<Boolean> result = response.body();
+                        if (result.isSuccess()) {
+                            EventBus.getDefault().post(UserUpdatePwdEvent.success(result.getData()));
+                        } else {
+                            EventBus.getDefault().post(UserUpdatePwdEvent.fail(new ApiInvokeException("updatePassword接口返回失败：" + result.getErrorMessage()), result.getErrorMessage()));
+                        }
+                    } else {
+                        Log.e(TAG, "请求updatePassword接口失败：" + response.errorBody().string());
+                        EventBus.getDefault().post(UserUpdatePwdEvent.fail(new ApiInvokeException(response.errorBody().string()), response.errorBody().string()));
+                    }
+                } catch (IOException e) {
+                    EventBus.getDefault().post(UserUpdatePwdEvent.fail(e, e.getMessage()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Result<Boolean>> call, Throwable t) {
+                Log.e(TAG, "请求异常：" + t.getMessage());
+                EventBus.getDefault().post(UserUpdatePwdEvent.fail(new ApiInvokeException(t.getMessage()), t.getMessage()));
             }
         });
     }

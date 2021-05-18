@@ -1,42 +1,40 @@
-/*
- * Copyright (C) 2021 xuexiangjys(xuexiangjys@163.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+
 
 package com.iflytek.vivian.traffic.android.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.InputType;
+import android.util.Log;
 
 import com.iflytek.vivian.traffic.android.R;
+import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
+import com.iflytek.vivian.traffic.android.dto.User;
+import com.iflytek.vivian.traffic.android.event.user.UserCheckPwdEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserUpdatePwdEvent;
 import com.iflytek.vivian.traffic.android.utils.TokenUtils;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xui.widget.dialog.DialogLoader;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView;
 import com.xuexiang.xutil.XUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 
 
 @Page(name = "设置")
 public class SettingsFragment extends BaseFragment implements SuperTextView.OnSuperTextViewClickListener {
+
+    private static final String TAG = "SettingsFragment";
 
     @BindView(R.id.menu_common)
     SuperTextView menuCommon;
@@ -51,6 +49,9 @@ public class SettingsFragment extends BaseFragment implements SuperTextView.OnSu
     @BindView(R.id.menu_logout)
     SuperTextView menuLogout;
 
+    private String userId;
+    private String password;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +59,14 @@ public class SettingsFragment extends BaseFragment implements SuperTextView.OnSu
 //            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 //            StrictMode.setThreadPolicy(policy);
 //        }
-//        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
+        initData();
+    }
+
+    private void initData() {
+        SharedPreferences preferences = getActivity().getSharedPreferences("loginUser", Context.MODE_PRIVATE);
+        userId = preferences.getString("userId", "");
+        Log.i(TAG, "当前用户Id" + userId);
     }
 
     @Override
@@ -88,9 +96,8 @@ public class SettingsFragment extends BaseFragment implements SuperTextView.OnSu
                 break;
             case R.id.menu_change_password:
                 // TODO
-                XToastUtils.toast(superTextView.getCenterString());
-
-
+//                XToastUtils.toast(superTextView.getCenterString());
+                checkOldPwdDialog();
                 break;
             case R.id.menu_logout:
                 DialogLoader.getInstance().showConfirmDialog(
@@ -108,6 +115,82 @@ public class SettingsFragment extends BaseFragment implements SuperTextView.OnSu
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * 带输入框的对话框
+     */
+    private void checkOldPwdDialog() {
+        new MaterialDialog.Builder(getContext())
+                .iconRes(R.drawable.icon_warning)
+                .title("修改密码")
+                .inputType(
+                        InputType.TYPE_CLASS_TEXT
+                                | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                                | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                .input(
+                        getString(R.string.hint_please_input_old_password),
+                        "",
+                        false,
+                        ((dialog, input) -> {
+                        }))
+//                .inputRange(3, 5)
+                .positiveText("继续")
+                .negativeText("取消")
+                .onPositive((dialog, which) -> {
+                    User user = new User();
+                    password = dialog.getInputEditText().getText().toString();
+                    user.setId(userId);
+                    user.setPassword(password);
+                    UserClient.checkOldPassword(getString(R.string.server_url), user);
+                })
+                .cancelable(true)
+                .show();
+    }
+
+    public void updatePwdDialog() {
+        new MaterialDialog.Builder(getContext())
+                .title("修改密码")
+                .inputType(InputType.TYPE_CLASS_TEXT
+                        | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                        | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                .input(getString(R.string.hint_please_input_new_password),
+                        "",
+                        false,
+                        ((dialog, input) -> {
+//                            password = input.toString();
+                        }))
+                .positiveText("确认")
+                .negativeText("取消")
+                .onPositive((dialog, which) -> {
+                    User user = new User();
+                    password = dialog.getInputEditText().getText().toString();
+                    user.setId(userId);
+                    user.setPassword(password);
+                    UserClient.updatePassword(getString(R.string.server_url), user);
+                })
+                .cancelable(true)
+                .show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCheckPassword(UserCheckPwdEvent event) {
+        if (event.isSuccess()) {
+            updatePwdDialog();
+        } else {
+            XToastUtils.error("密码错误");
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdatePassword(UserUpdatePwdEvent event) {
+        if (event.isSuccess()) {
+            XToastUtils.success("修改密码成功，请重新登录");
+            XUtil.getActivityLifecycleHelper().exit();
+            TokenUtils.handleLogoutSuccess();
+        } else {
+            XToastUtils.error("修改密码失败");
         }
     }
 }

@@ -144,34 +144,33 @@ public class LoginFragment extends BaseFragment {
 
         String token = RandomUtils.getRandomNumbersAndLetters(16);
 
-        if (TokenUtils.handleLoginSuccess(token)) {
             if (event.isSuccess()) {
 //                Intent intent = new Intent();
 //                intent.putExtra("userData", JSON.toJSONString(event.getData()));
-                setLoginToken(event.getData());
-                popToBack();    // 弹出当前framework
-                /**
-                 * 区分用户类型
-                 * 普通用户 —— 0
-                 * 管理员 —— 1
-                 */
-                if (event.getData().getIsAdmin() == 0) {
+                if (TokenUtils.handleLoginSuccess(token)) {
+                    setLoginToken(event.getData());
+                    popToBack();    // 弹出当前framework
+                    /**
+                     * 区分用户类型
+                     * 普通用户 —— 0
+                     * 管理员 —— 1
+                     */
+                    if (event.getData().getIsAdmin() == 0) {
 //                    Intent userIntent = new Intent(getActivity(), UserMainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                    userIntent.putExtra("userData", JSON.toJSONString(event.getData()));
 //                    ActivityUtils.startActivity(userIntent);
-                    ActivityUtils.startActivity(UserMainActivity.class);
-                } else {
+                        ActivityUtils.startActivity(UserMainActivity.class);
+                    } else {
 //                    Intent adminIntent = new Intent(getActivity(), AdminMainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                    adminIntent.putExtra("userData", JSON.toJSONString(event.getData()));
 //                    ActivityUtils.startActivity(adminIntent);
-                    ActivityUtils.startActivity(AdminMainActivity.class);
+                        ActivityUtils.startActivity(AdminMainActivity.class);
+                    }
                 }
             } else {
-                new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("登陆失败")
-                        .content("用户名或密码错误！").positiveText("确定").show();
+                XToastUtils.error("登陆失败，用户名或密码错误");
             }
         }
-    }
 
 
     @Override

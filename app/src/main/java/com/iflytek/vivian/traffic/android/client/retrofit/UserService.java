@@ -49,6 +49,11 @@ public interface UserService {
     @POST("/traffic-server/user/image/update")
     Call<Result<User>> changeUserImage(@Body User user);
 
+    @POST("/traffic-server/user/password/check")
+    Call<Result<Boolean>> checkOldPassword(@Body User user);
+
+    @POST("traffic-server/user/password/update")
+    Call<Result<Boolean>> updatePassword(@Body User user);
 
     @GET("/traffic-server/user/list/name/asc")
     Call<Result<List<User>>> listUserByNameAsc();
