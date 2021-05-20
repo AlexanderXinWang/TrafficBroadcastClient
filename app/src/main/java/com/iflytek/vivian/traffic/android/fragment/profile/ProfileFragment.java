@@ -214,7 +214,7 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUploadImage(UserUploadImageEvent event) {
         if (event.isSuccess()) {
-            XToastUtils.error("上头像头成功！");
+            XToastUtils.success("上头像头成功！");
             String imageUrl = event.getData();
             if (StringUtil.isNotEmpty(imageUrl)) {
                 User user = new User();
