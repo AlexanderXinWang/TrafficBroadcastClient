@@ -171,7 +171,7 @@ public class EventManagerDetailFragment extends BaseFragment {
                 if (StringUtil.isNotEmpty(userId.getText().toString())) {
                     openNewPage(UserDetailFragment.class, "userId", userId.getText().toString());
                 }
-                XToastUtils.error("获取当前用户Id失败！");
+//                XToastUtils.error("获取当前用户Id失败！");
             default:
                 break;
         }
@@ -214,7 +214,8 @@ public class EventManagerDetailFragment extends BaseFragment {
 //                XToastUtils.error("加载此事件上报人头像错误！");
 //                Log.e(TAG, "加载头像图片错误" + e.getMessage());
 //            }
-            UserClient.getUserImage(getString(R.string.server_url), event.getPolicemanId());
+//            UserClient.getUserImage(getString(R.string.server_url), event.getPolicemanId());
+            UserClient.selectUser(getString(R.string.server_url), event.getPolicemanId());
         } else {
             XToastUtils.error("加载事件详情错误！");
         }

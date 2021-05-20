@@ -128,6 +128,7 @@ public class UserManagerDetailFragment extends BaseFragment {
                         .maxSelectNum(1)
                         .selectionMode(PictureConfig.SINGLE)
                         .forResult(PictureConfig.CHOOSE_REQUEST);
+                break;
             case R.id.user_manager_detail_reported_event:
                 openNewPage(ReportedEventFragment.class, "userId", id.getText().toString());
                 break;

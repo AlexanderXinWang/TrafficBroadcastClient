@@ -71,7 +71,7 @@ public class UserDetailFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         UserClient.selectUser(getString(R.string.server_url), getArguments().getString("userId"));
-        EventClient.findEventByUserId(getString(R.string.server_url), getArguments().getString("userId"));
+//        EventClient.findEventByUserId(getString(R.string.server_url), getArguments().getString("userId"));
     }
 
     @Override
