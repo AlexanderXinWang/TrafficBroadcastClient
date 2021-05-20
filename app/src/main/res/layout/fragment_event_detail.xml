@@ -28,6 +28,7 @@
                         android:layout_marginLeft="15dp"
                         android:text="@string/event_detail_location"
                         android:textSize="22sp"
+                        android:gravity="center_vertical"
                         android:textColor="@color/xui_config_color_blue" />
                 </LinearLayout>
 
@@ -68,6 +69,7 @@
                             android:layout_marginStart="4dp"
                             android:text="周星星"
                             android:textSize="15dp"
+                            android:gravity="center_vertical"
                             android:textColor="@color/xui_config_color_blue"/>
 
                         <TextView
@@ -77,6 +79,7 @@
                             android:layout_marginStart="4dp"
                             android:text="编号：20172501203"
                             android:textSize="15dp"
+                            android:gravity="center_vertical"
                             android:textColor="@color/xui_config_color_blue"/>
                     </LinearLayout>
 
@@ -104,19 +107,21 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_margin="10dp"
                         android:text="车辆类型"
                         android:textSize="16sp"
+                        android:gravity="center_vertical"
                         android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/event_hall_detail_vehicle"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_margin="10dp"
                         android:text="两个电动车"
                         android:textSize="15dp"
+                        android:gravity="center_vertical"
                         android:textColor="@color/xui_config_color_blue"/>
                 </LinearLayout>
 
@@ -132,19 +137,21 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_margin="10dp"
                         android:text="当前状态"
                         android:textSize="16sp"
+                        android:gravity="center_vertical"
                         android:textColor="@color/black"/>
 
                     <TextView
                         android:id="@+id/event_hall_detail_status"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_margin="10dp"
                         android:text="已处理"
                         android:textSize="15dp"
+                        android:gravity="center_vertical"
                         android:textColor="@color/xui_config_color_blue"/>
                 </LinearLayout>
 
@@ -164,6 +171,7 @@
                         android:layout_margin="10dp"
                         android:text="事件描述"
                         android:textSize="16sp"
+                        android:gravity="center_vertical"
                         android:textColor="@color/black"/>
 
                     <TextView
@@ -175,6 +183,7 @@
                         android:layout_marginBottom="10dp"
                         android:text="撞了，现在人在医院了，电动车还在现场,有人员头部受伤"
                         android:textSize="15dp"
+                        android:gravity="center_vertical"
                         android:textColor="@color/xui_config_color_blue"/>
                 </LinearLayout>
 
@@ -194,6 +203,7 @@
                         android:layout_margin="10dp"
                         android:text="事件结果"
                         android:textSize="16sp"
+                        android:gravity="center_vertical"
                         android:textColor="@color/black"/>
 
                     <TextView
@@ -205,6 +215,7 @@
                         android:layout_marginBottom="10dp"
                         android:text="撞了，现在人在医院了，电动车还在现场,有人员头部受伤"
                         android:textSize="15dp"
+                        android:gravity="center_vertical"
                         android:textColor="@color/xui_config_color_blue"/>
                 </LinearLayout>
 
