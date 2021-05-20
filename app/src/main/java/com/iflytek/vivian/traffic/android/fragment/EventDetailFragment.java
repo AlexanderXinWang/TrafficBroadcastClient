@@ -123,7 +123,7 @@ public class EventDetailFragment extends BaseFragment {
         if (event.isSuccess()) {
             Glide.with(getContext()).load(event.getData()).into(image);
         } else {
-            XToastUtils.error("加载头像出错！");
+//            XToastUtils.error("加载头像出错！");
         }
     }
 }

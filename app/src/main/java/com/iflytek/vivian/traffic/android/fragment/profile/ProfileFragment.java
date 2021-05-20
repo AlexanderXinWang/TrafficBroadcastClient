@@ -206,7 +206,7 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
                 Glide.with(getContext()).load(event.getData()).into(rivHeadPic);
             }
         } else {
-            XToastUtils.error("加载用户头像失败");
+//            XToastUtils.error("加载用户头像失败");
             Log.e(TAG, "加载用户头像失败");
         }
     }

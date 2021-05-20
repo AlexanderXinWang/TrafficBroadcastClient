@@ -243,14 +243,14 @@ public class EventManagerDetailFragment extends BaseFragment {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetUserImage(GetUserImageEvent event) {
-        if (event.isSuccess()) {
-            Glide.with(getContext()).load(event.getData()).into(image);
-        } else {
-//            XToastUtils.error("加载用户头像失败！");
-        }
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onGetUserImage(GetUserImageEvent event) {
+//        if (event.isSuccess()) {
+//            Glide.with(getContext()).load(event.getData()).into(image);
+//        } else {
+////            XToastUtils.error("加载用户头像失败！");
+//        }
+//    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetUserDetail(UserDetailEvent event) {
