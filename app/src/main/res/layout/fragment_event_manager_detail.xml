@@ -69,21 +69,21 @@
                         android:orientation="vertical">
 
                         <EditText
+                            android:id="@+id/event_detail_user_id"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="4dp"
+                            android:text="编号：20172501203"
+                            android:textSize="15dp"
+                            android:textColor="@color/xui_config_color_blue"/>
+
+                        <EditText
                             android:id="@+id/event_detail_user_name"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_gravity="end"
                             android:layout_marginStart="4dp"
                             android:text="周星星"
-                            android:textSize="15dp"
-                            android:textColor="@color/xui_config_color_blue"/>
-
-                        <EditText
-                            android:id="@+id/event_detail_user_id"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginStart="4dp"
-                            android:text="编号：20172501203"
                             android:textSize="15dp"
                             android:textColor="@color/xui_config_color_blue"/>
                     </LinearLayout>

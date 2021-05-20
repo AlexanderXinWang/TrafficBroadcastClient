@@ -44,6 +44,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
@@ -145,6 +146,7 @@ public class EventReportFragment extends BaseFragment {
                 eventVehicle.setText(null);
                 eventDesc.setText(null);
                 eventResult.setText(null);
+                iatResult.setText("请按照：事件是XXX，地点是XXX，车辆类型是XXX，事件结果是XXX的格式进行描述。");
                 break;
             // 语音输入按钮绑定事件
             case R.id.event_report_record:
@@ -259,7 +261,7 @@ public class EventReportFragment extends BaseFragment {
             try {
                 EventClient.iatEvent(getString(R.string.server_url), byteMerger(getHead(voiceData.length, audioSampleRate, 16, 1), voiceData));
 //                reportStatus.setText("语音识别中...");
-                XToastUtils.info("语音识别中，请稍等...");
+                XToastUtils.info("语音识别中，大约需要20秒，请稍等......", 2000000);
                 btnSpeak.setText("语音输入");
             } catch (IOException e) {
                 Log.e(TAG, "语音识别异常" + e.getMessage());
@@ -311,6 +313,11 @@ public class EventReportFragment extends BaseFragment {
             String message = String.format("当前用户：%s", userName);
 //            new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("成功上报事件").content(message).positiveText("确定").show();
             XToastUtils.success("成功上报事件");
+            eventLocation.setText("例：沙依巴克区西北路499号");
+            eventVehicle.setText("例：家用轿车");
+            eventDesc.setText("例：两车相撞");
+            eventResult.setText("例：人在医院");
+            iatResult.setText("请按照：事件是XXX，地点是XXX，车辆类型是XXX，事件结果是XXX的格式进行描述。");
             Log.i(TAG, "保存事件成功");
         } else {
 //            new MaterialDialog.Builder(getContext()).iconRes(R.drawable.ic_menu_about).title("事件上报失败").content(event.getErrorMessage()).positiveText("确定").show();

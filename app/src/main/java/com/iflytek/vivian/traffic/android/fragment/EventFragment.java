@@ -132,7 +132,7 @@ public class EventFragment extends BaseFragment {
         recyclerView.setRecycledViewPool(viewPool);
         viewPool.setMaxRecycledViews(0, 10);
 
-        //轮播条
+        //轮播
         SingleDelegateAdapter bannerAdapter = new SingleDelegateAdapter(R.layout.include_head_view_banner) {
             @Override
             public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {

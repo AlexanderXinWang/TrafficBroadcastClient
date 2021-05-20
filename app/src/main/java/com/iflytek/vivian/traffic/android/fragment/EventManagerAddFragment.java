@@ -21,6 +21,7 @@ import com.iflytek.vivian.traffic.android.dto.Event;
 import com.iflytek.vivian.traffic.android.event.event.EventDetailEvent;
 import com.iflytek.vivian.traffic.android.event.event.EventSaveEvent;
 import com.iflytek.vivian.traffic.android.event.event.GetUserImageEvent;
+import com.iflytek.vivian.traffic.android.event.user.UserDetailEvent;
 import com.iflytek.vivian.traffic.android.utils.DataProvider;
 import com.iflytek.vivian.traffic.android.utils.DateFormatUtil;
 import com.iflytek.vivian.traffic.android.utils.StringUtil;
@@ -115,7 +116,8 @@ public class EventManagerAddFragment extends BaseFragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (StringUtil.isNotEmpty(userId.getText().toString())) {
-                    UserClient.getUserImage(getString(R.string.server_url), userId.getText().toString());
+//                    UserClient.getUserImage(getString(R.string.server_url), userId.getText().toString());
+                    UserClient.selectUser(getString(R.string.server_url), userId.getText().toString());
                 }
             }
         });
@@ -196,10 +198,20 @@ public class EventManagerAddFragment extends BaseFragment {
         }
     }
 
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onGetUserImage(GetUserImageEvent event) {
+//        if (event.isSuccess()) {
+//            Glide.with(getContext()).load(event.getData()).into(image);
+//        }
+//    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onGetUserImage(GetUserImageEvent event) {
+    public void onGetUserDetail(UserDetailEvent event) {
         if (event.isSuccess()) {
-            Glide.with(getContext()).load(event.getData()).into(image);
+            if (null != event.getData()) {
+                Glide.with(getContext()).load(event.getData().getImageUrl()).into(image);
+                userName.setText(event.getData().getName());
+            }
         }
     }
 }

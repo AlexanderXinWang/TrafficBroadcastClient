@@ -47,7 +47,7 @@ public class EventClient {
     private final static String TAG="EventClient";
 
     private static final OkHttpClient CLIENT = new OkHttpClient().newBuilder()
-            .connectTimeout(100, TimeUnit.SECONDS).readTimeout(100, TimeUnit.SECONDS).build();
+            .connectTimeout(60, TimeUnit.SECONDS).readTimeout(60, TimeUnit.SECONDS).build();
 
     /**
      * 获取未播报警情的MP3地址
