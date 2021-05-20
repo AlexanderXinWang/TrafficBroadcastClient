@@ -34,12 +34,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.fragment.AboutFragment;
 import com.iflytek.vivian.traffic.android.fragment.EventFragment;
 import com.iflytek.vivian.traffic.android.fragment.EventReportFragment;
 import com.iflytek.vivian.traffic.android.fragment.SettingsFragment;
+import com.iflytek.vivian.traffic.android.fragment.UserDetailFragment;
 import com.iflytek.vivian.traffic.android.fragment.profile.ProfileFragment;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.core.BaseActivity;
@@ -48,6 +52,7 @@ import com.iflytek.vivian.traffic.android.utils.DataProvider;
 import com.iflytek.vivian.traffic.android.utils.Utils;
 import com.iflytek.vivian.traffic.android.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
+import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
@@ -222,12 +227,14 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
 
         // TODO: 2019-10-09 初始化数据
 //        ivAvatar.setImageResource(R.drawable.ic_default_head);
-        try {
-            ivAvatar.setImageBitmap(DataProvider.getBitmap(imageUrl));
-        } catch (IOException e) {
-            ivAvatar.setImageResource(R.drawable.ic_default_head);
-            Log.e(TAG, "加载头像图片错误" + imageUrl + e.getMessage());
-        }
+//        try {
+//            ivAvatar.setImageBitmap(DataProvider.getBitmap(imageUrl));
+//        } catch (IOException e) {
+//            ivAvatar.setImageResource(R.drawable.ic_default_head);
+//            Log.e(TAG, "加载头像图片错误" + imageUrl + e.getMessage());
+//        }
+        Glide.with(this).load(imageUrl).skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE).into(ivAvatar);
 
 //        ImageLoader.get().loadImage(findViewById(R.id.iv_avatar), imageUrl, DiskCacheStrategyEnum.AUTOMATIC);
         tvId.setText(userId);
@@ -243,6 +250,7 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
 
         //侧边栏点击事件
         navView.setNavigationItemSelectedListener(menuItem -> {
+            UserClient.getUserImage(getString(R.string.server_url), userId);
             if (menuItem.isCheckable()) {
                 drawerLayout.closeDrawers();
                 return handleNavigationItemSelected(menuItem);
@@ -300,7 +308,11 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.nav_header:
-                XToastUtils.toast("点击头部！");
+//                XToastUtils.toast("点击头部！");
+//                Bundle bundle = new Bundle();
+//                bundle.putString("userId", userId);
+////                openPage(UserDetailFragment.class, bundle);
+//                openPage("UserDetailFragment", bundle, CoreAnim.fade);
                 break;
             default:
                 break;

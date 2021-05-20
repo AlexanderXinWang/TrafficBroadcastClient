@@ -179,13 +179,14 @@ public class UserManagerDetailFragment extends BaseFragment {
             age.setText(user.getAge());
             role.setText(user.getRole());
             department.setText(user.getDepartment());
-            try {
-                image.setImageBitmap(DataProvider.getBitmap(user.getImageUrl()));
-            } catch (IOException e) {
-                image.setImageResource(R.drawable.ic_default_head);
-                Log.e(TAG, "加载头像图片错误" + e.getMessage());
-            }
-            // TODO 改为Glide
+//            try {
+//                image.setImageBitmap(DataProvider.getBitmap(user.getImageUrl()));
+//            } catch (IOException e) {
+//                image.setImageResource(R.drawable.ic_default_head);
+//                Log.e(TAG, "加载头像图片错误" + e.getMessage());
+//            }
+            Glide.with(getContext()).load(imageUrl).skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).into(image);
         } else {
             XToastUtils.error("加载用户详情信息错误！");
             Log.e(TAG, "加载用户详情信息错误" + event.getErrorMessage());

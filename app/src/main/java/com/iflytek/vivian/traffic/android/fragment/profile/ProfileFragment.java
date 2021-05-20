@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 
@@ -71,13 +72,12 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
 
     private static final String TAG = "ProfileFragment";
 
-    @BindView(R.id.riv_head_pic)
+    @BindView(R.id.profile_head_pic)
     RadiusImageView rivHeadPic;
     @BindView(R.id.profile_image)
     SuperTextView profileImage;
     @BindView(R.id.profile_detail)
-    SuperTextView profileDetail;
-    @BindView(R.id.profile_reported)
+    SuperTextView profileDetail;    @BindView(R.id.profile_reported)
     SuperTextView reportedEvent;
     @BindView(R.id.menu_settings)
     SuperTextView menuSettings;
@@ -199,11 +199,18 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetUserImage(GetUserImageEvent event) {
         if (event.isSuccess()) {
             if (StringUtil.isNotEmpty(event.getData())) {
-                Glide.with(getContext()).load(event.getData()).into(rivHeadPic);
+                Glide.with(getContext()).load(event.getData()).skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE).into(rivHeadPic);
             }
         } else {
 //            XToastUtils.error("加载用户头像失败");
@@ -214,8 +221,9 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUploadImage(UserUploadImageEvent event) {
         if (event.isSuccess()) {
-            XToastUtils.success("上头像头成功！");
+            XToastUtils.success("上头像头成功！重新登陆后生效");
             String imageUrl = event.getData();
+
             if (StringUtil.isNotEmpty(imageUrl)) {
                 User user = new User();
                 user.setId(userId);

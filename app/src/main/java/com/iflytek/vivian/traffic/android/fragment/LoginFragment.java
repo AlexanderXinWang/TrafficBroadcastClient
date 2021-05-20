@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.activity.AdminMainActivity;
 import com.iflytek.vivian.traffic.android.activity.LoginActivity;
@@ -209,10 +210,10 @@ public class LoginFragment extends BaseFragment {
     public void onGetUserImage(GetUserImageEvent event) {
         if (event.isSuccess()) {
             imageUrl = event.getData();
-            Glide.with(getContext()).load(imageUrl).into(loginImage);
+            Glide.with(getContext()).load(imageUrl).skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).into(loginImage);
         }
     }
-
 
     @Override
     public void onDestroyView() {

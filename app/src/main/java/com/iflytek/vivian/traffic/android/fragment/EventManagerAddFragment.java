@@ -209,7 +209,8 @@ public class EventManagerAddFragment extends BaseFragment {
     public void onGetUserDetail(UserDetailEvent event) {
         if (event.isSuccess()) {
             if (null != event.getData()) {
-                Glide.with(getContext()).load(event.getData().getImageUrl()).into(image);
+                Glide.with(getContext()).load(event.getData().getImageUrl())
+                        .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE).into(image);
                 userName.setText(event.getData().getName());
             }
         }

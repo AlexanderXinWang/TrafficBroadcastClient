@@ -21,9 +21,12 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.iflytek.vivian.traffic.android.R;
+import com.iflytek.vivian.traffic.android.client.UserClient;
 import com.iflytek.vivian.traffic.android.core.BaseActivity;
 import com.iflytek.vivian.traffic.android.core.BaseFragment;
 import com.iflytek.vivian.traffic.android.event.user.UserLoginEvent;
@@ -49,6 +52,7 @@ import com.xuexiang.xutil.common.ClickUtils;
 import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.display.Colors;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -173,13 +177,15 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
             }
         }
 
-        ivAvatar.setImageResource(R.drawable.ic_default_head);
-        try {
-            ivAvatar.setImageBitmap(DataProvider.getBitmap(imageUrl));
-        } catch (IOException e) {
-            ivAvatar.setImageResource(R.drawable.ic_default_head);
-            Log.e(TAG, "加载头像图片错误" + imageUrl + e.getMessage());
-        }
+//        ivAvatar.setImageResource(R.drawable.ic_default_head);
+//        try {
+//            ivAvatar.setImageBitmap(DataProvider.getBitmap(imageUrl));
+//        } catch (IOException e) {
+//            ivAvatar.setImageResource(R.drawable.ic_default_head);
+//            Log.e(TAG, "加载头像图片错误" + imageUrl + e.getMessage());
+//        }
+        Glide.with(this).load(imageUrl).skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE).into(ivAvatar);
 //        ImageLoader.get().loadImage(findViewById(R.id.iv_avatar), imageUrl, DiskCacheStrategyEnum.AUTOMATIC);
         tvId.setText(userId);
         tvAvatar.setText(userName);
@@ -194,6 +200,7 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
 
         //侧边栏点击事件
         navView.setNavigationItemSelectedListener(menuItem -> {
+            UserClient.getUserImage(getString(R.string.server_url), userId);
             if (menuItem.isCheckable()) {
                 drawerLayout.closeDrawers();
                 return handleNavigationItemSelected(menuItem);
@@ -335,12 +342,5 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onExit() {
         XUtil.exitApp();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUserLogin(UserLoginEvent event) {
-        if (event.isSuccess()) {
-
-        }
     }
 }

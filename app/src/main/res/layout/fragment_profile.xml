@@ -22,7 +22,7 @@
                     app:sLeftTextString="头像">
 
                     <com.xuexiang.xui.widget.imageview.RadiusImageView
-                        android:id="@+id/riv_head_pic"
+                        android:id="@+id/profile_head_pic"
                         style="@style/RadiusImageView.Circle"
                         android:layout_width="38dp"
                         android:layout_height="38dp"

@@ -47,7 +47,7 @@ public interface UserService {
     Call<Result<String>> getUserImage(@Path("userId") String userId);
 
     @POST("/traffic-server/user/image/update")
-    Call<Result<User>> changeUserImage(@Body User user);
+    Call<Result<User>> updateUserImage(@Body User user);
 
     @POST("/traffic-server/user/password/check")
     Call<Result<Boolean>> checkOldPassword(@Body User user);

@@ -10,6 +10,7 @@ import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.iflytek.vivian.traffic.android.R;
 import com.iflytek.vivian.traffic.android.adapter.base.broccoli.BroccoliSimpleDelegateAdapter;
 import com.iflytek.vivian.traffic.android.client.EventClient;
@@ -106,7 +107,8 @@ public class UserDetailFragment extends BaseFragment {
             age.setText(user.getAge());
             role.setText(user.getRole());
             department.setText(user.getDepartment());
-            Glide.with(getContext()).load(user.getImageUrl()).into(image);
+            Glide.with(getContext()).load(user.getImageUrl()).skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE).into(image);
         } else {
             XToastUtils.error("加载用户详情信息错误！");
             Log.e(TAG, "加载用户详情信息错误" + event.getErrorMessage());

@@ -358,7 +358,7 @@ public class UserClient {
     public static void updateUserImage(String serverUrl, User user) {
         new Retrofit.Builder()
                 .baseUrl(serverUrl).addConverterFactory(FastJsonConverterFactory.create()).build()
-                .create(UserService.class).changeUserImage(user).enqueue(new Callback<Result<User>>() {
+                .create(UserService.class).updateUserImage(user).enqueue(new Callback<Result<User>>() {
             @Override
             public void onResponse(Call<Result<User>> call, Response<Result<User>> response) {
                 try {
