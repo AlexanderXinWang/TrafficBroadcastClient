@@ -179,6 +179,7 @@ public class UserManagerDetailFragment extends BaseFragment {
             age.setText(user.getAge());
             role.setText(user.getRole());
             department.setText(user.getDepartment());
+            imageUrl = user.getImageUrl();
 //            try {
 //                image.setImageBitmap(DataProvider.getBitmap(user.getImageUrl()));
 //            } catch (IOException e) {

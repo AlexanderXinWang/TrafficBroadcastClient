@@ -294,9 +294,9 @@ public class UserMainActivity extends BaseActivity implements View.OnClickListen
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search:
-                Utils.showPrivacyDialog(this, null);
-                break;
+//            case R.id.action_search:
+//                Utils.showPrivacyDialog(this, null);
+//                break;
             default:
                 break;
         }

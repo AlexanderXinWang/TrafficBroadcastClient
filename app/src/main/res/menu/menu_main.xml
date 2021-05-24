@@ -3,11 +3,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
+    <!--<item
         android:id="@+id/action_search"
-        android:icon="@drawable/ic_menu_search"
+        &lt;!&ndash;android:icon="@drawable/ic_menu_search"&ndash;&gt;
         android:orderInCategory="100"
         android:title="搜索"
-        app:showAsAction="always" />
+        app:showAsAction="always" />-->
 
 </menu>

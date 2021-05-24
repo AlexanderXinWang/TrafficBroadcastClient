@@ -244,13 +244,13 @@ public class AdminMainActivity extends BaseActivity implements View.OnClickListe
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search:
+//            case R.id.action_search:
 //                Utils.showPrivacyDialog(this, null);
 //                startActivity(new Intent(AdminMainActivity.this, SearchViewActivity.class));
 //                toolbar.inflateMenu(R.layout.fragment_searchview);
 //                mSearchView.showSearch();
-                openNewPage(SearchViewFragment.class);
-                break;
+//                openNewPage(SearchViewFragment.class);
+//                break;
             default:
                 break;
         }
